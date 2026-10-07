@@ -9,7 +9,7 @@ Requires **SimHub 9.12 or newer** on Windows and a working telemetry connection 
    - `APEX 27.simhubdash` — companion layout for wheel or external RPM, gear and flag displays. Includes a large square map, wide pedal graphs and compact fuel information; omits RPM, gear and the general flag panel in every session mode.
    - `APEX 27 Full.simhubdash` — for rigs that need driving instruments on screen, with an analogue tachometer, speed, gear and top-row flags.
 3. Open the dashboard on the intended display. The layout is **1920 × 1080, 16:9**.
-4. Choose a language in **Language / Язык** and adjust the dashboard settings.
+4. Choose a language in **Language** and adjust the dashboard settings.
 5. Start the game and enter a driving session. Panels follow the session type and telemetry supplied by the game.
 
 Both variants retain automatic session views, lap prediction, traffic, the field ribbon, ratings and individual opponent flags when available. You may install both variants. Each keeps its own settings. Reimporting a dashboard file updates the matching dashboard.
@@ -21,15 +21,15 @@ Manual language selection works without a plugin. You can ignore the archive's `
 1. Close SimHub.
 2. Copy only `Apex27LanguagePlugin.dll` from the archive's `plugins` folder into the SimHub installation folder, beside `SimHubWPF.exe`. Do not copy the entire `plugins` folder.
 3. Restart SimHub and enable **APEX 27 language bridge** in SimHub's plugin settings.
-4. In the dashboard's **Language / Язык** setting, select **Auto — SimHub**.
+4. In the dashboard's **Language** setting, select **Auto — SimHub**.
 
 Auto uses English if the bridge is unavailable or SimHub's language is not included. Manual selection always takes priority. The standard and Full dashboards have separate language settings.
 
 ## Display settings
 
-- **Traffic / Трафик:** seven rows or five rows with larger text. The bottom field ribbon remains in place.
-- **Palette / Палитра:** standard or dim colours.
-- **Lower right / Справа внизу:** pedal history and ABS, or **Car / tyres** information.
+- **Traffic:** seven rows or five rows with larger text. The bottom field ribbon remains in place.
+- **Palette:** standard or dim colours.
+- **Lower right:** pedal history and ABS, or **Car / tyres** information.
 
 Pedal colours are green for throttle, red for brake and blue for clutch. The amber history strip records ABS activity. **ABS —** means unavailable; **ABS ≈** identifies an estimated signal.
 

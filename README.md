@@ -57,7 +57,7 @@ Previews labelled **SimHub / Demo track** use SimHub's built-in demonstration ma
 
 English, Russian, German, Spanish, French, Italian, Brazilian Portuguese, Polish, Czech, Turkish, Japanese, Korean and Simplified Chinese.
 
-Choose a language in **Language / Язык**. Manual selection needs no plugin and always takes priority. The optional `Apex27LanguagePlugin.dll` lets **Auto — SimHub** follow SimHub's interface language. Auto falls back to English if the bridge is unavailable or the language is unsupported.
+Choose a language in **Language**. Manual selection needs no plugin and always takes priority. The optional `Apex27LanguagePlugin.dll` lets **Auto — SimHub** follow SimHub's interface language. Auto falls back to English if the bridge is unavailable or the language is unsupported.
 
 ## Installation
 
