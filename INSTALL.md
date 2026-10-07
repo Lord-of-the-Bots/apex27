@@ -6,13 +6,13 @@ Requires **SimHub 9.12 or newer** on Windows and a working telemetry connection 
 
 1. Extract the release archive.
 2. Open either dashboard file and confirm the import in SimHub:
-   - `APEX 27.simhubdash` — tachometer, speed, gear and the complete layout.
-   - `APEX 27 Full.simhubdash` — the same layout with additional top-row flags.
+   - `APEX 27.simhubdash` — companion layout for wheel or external RPM, gear and flag displays. Includes a large square map, wide pedal graphs and compact fuel information; omits RPM, gear and the general flag panel in every session mode.
+   - `APEX 27 Full.simhubdash` — for rigs that need driving instruments on screen, with an analogue tachometer, speed, gear and top-row flags.
 3. Open the dashboard on the intended display. The layout is **1920 × 1080, 16:9**.
 4. Choose a language in **Language / Язык** and adjust the dashboard settings.
 5. Start the game and enter a driving session. Panels follow the session type and telemetry supplied by the game.
 
-You may install both variants. Each keeps its own settings. Reimporting a dashboard file updates the matching dashboard.
+Both variants retain automatic session views, lap prediction, traffic, the field ribbon, ratings and individual opponent flags when available. You may install both variants. Each keeps its own settings. Reimporting a dashboard file updates the matching dashboard.
 
 ## Optional automatic language selection
 

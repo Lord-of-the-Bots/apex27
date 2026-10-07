@@ -1,23 +1,23 @@
 # APEX 27
 
-A free SimHub dashboard for a dedicated 16:9 fourth monitor. The 1920 × 1080 layout brings together an analogue tachometer, speed, gear, lap timing, nearby traffic, a track map, fuel information and pedal history. Race, practice and qualifying views adapt to the session and available telemetry.
+A free SimHub dashboard for a dedicated 16:9 fourth monitor. The 1920 × 1080 layout brings together lap timing, nearby traffic, a track map, fuel information and pedal history. Race, practice and qualifying views adapt to the session and available telemetry. Choose a companion layout for existing wheel or external displays, or Full with driving instruments on screen.
 
 [Download](https://github.com/Lord-of-the-Bots/apex27/releases/latest) · [Installation](INSTALL.md) · [Report a bug or suggest a change](https://github.com/Lord-of-the-Bots/apex27/issues)
 
-![APEX 27 standard race view](assets/standard-race.png)
+![APEX 27](assets/standard-map.png)
 
 ## Two variants
 
-| Variant | Contents |
+| Variant | Purpose |
 | --- | --- |
-| **APEX 27** | Tachometer, speed, gear and the complete layout. |
-| **APEX 27 Full** | The same layout, with an additional flag display in the top row. |
+| **APEX 27** | For rigs with RPM, gear and flag indicators on the wheel or external displays. A large square map, wide pedal graphs and compact fuel panel use the space; RPM, gear and the general flag panel are omitted in every session mode. |
+| **APEX 27 Full** | For rigs that need driving instruments on screen. Includes an analogue tachometer, speed, gear and top-row flags alongside lap timing, traffic, a square map, fuel and pedal history. |
 
-Both variants include all 13 languages. They install separately and keep separate settings. Importing an update replaces the matching dashboard.
+Both variants retain automatic session views, lap prediction, the field ribbon, ratings and individual opponent flags where telemetry allows. Both include all 13 languages. They install separately and keep separate settings. Importing an update replaces the matching dashboard.
 
 ## Features
 
-- **Driving information:** an analogue tachometer, speed and gear in the upper-right panel; pit speed limit and limiter status when available.
+- **Full driving instruments:** an analogue tachometer, speed and gear in the upper-right panel, with general flags in the top row. Both variants support pit speed information when available.
 - **Lap timing:** compact lap times and a predicted lap time in a consistent position across race, practice and qualifying views.
 - **Practice and qualifying:** current lap and sector timing replaces the race table. Completed-sector comparison uses the matching sector from the best complete lap of the session; the full-lap delta remains separate.
 - **Multiclass traffic:** the closest rivals ahead and behind in your class occupy fixed table rows, with nearby track traffic and your car between them. Labels distinguish race gaps from track intervals. Choose seven rows or five rows with larger text.
@@ -47,11 +47,11 @@ Game-specific behaviour includes:
 - **F1 2017:** the table shows neighbouring race positions; physical track intervals are not shown.
 - **Forza:** fuel is shown as a tank percentage, without refuelling-volume or per-lap consumption calculations.
 - **Assetto Corsa EVO:** a card of available telemetry replaces the unsupported track map.
-- **Rally:** the central card shows RPM, speed and gear, with pedal history at the lower right.
+- **Rally:** panels follow the available stage telemetry. Full includes RPM, speed and gear; both variants retain pedal history.
 
 Previews labelled **SimHub / Demo track** use SimHub's built-in demonstration map.
 
-![APEX 27 Full race view with additional top-row flags](assets/full-race.png)
+![APEX 27 Full race view with RPM, speed, gear and top-row flags](assets/full-race.png)
 
 ## Languages
 
