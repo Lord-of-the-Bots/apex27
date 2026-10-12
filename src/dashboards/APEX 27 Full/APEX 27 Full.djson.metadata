@@ -2,7 +2,7 @@
   "SimHubVersion": "9.12.6",
   "Title": "APEX 27 Full",
   "Author": "Lord-of-the-Bots",
-  "Description": "lap prediction / multiclass relative with class rivals / iRating and safety rating / lap and sector timing / analogue RPM, speed and gear / square map / compact fuel and pedal history / flags",
+  "Description": "v1.1.0 / lap prediction / multiclass relative with class rivals / iRating and safety rating / lap and sector timing / analogue RPM, speed and gear / square map / compact fuel and pedal history / flags",
   "ScreenCount": 1.0,
   "InGameScreensIndexs": [
     0

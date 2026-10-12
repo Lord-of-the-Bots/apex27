@@ -153,6 +153,14 @@
                     "Expression": "return a27font();"
                   },
                   "Mode": 2
+                },
+                "Width": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return h2timingMode()?620:410;"
+                  },
+                  "Mode": 2
                 }
               }
             },
@@ -197,6 +205,14 @@
                     "JSExt": 1,
                     "Interpreter": 1,
                     "Expression": "return a27font();"
+                  },
+                  "Mode": 2
+                },
+                "Width": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return h2timingMode()?620:410;"
                   },
                   "Mode": 2
                 }
@@ -254,6 +270,14 @@
                     "Expression": "return a27font();"
                   },
                   "Mode": 2
+                },
+                "Visible": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return !h2timingMode()&&(true);"
+                  },
+                  "Mode": 2
                 }
               }
             },
@@ -307,6 +331,14 @@
                     "JSExt": 1,
                     "Interpreter": 1,
                     "Expression": "return a27font();"
+                  },
+                  "Mode": 2
+                },
+                "Visible": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return !h2timingMode()&&(true);"
                   },
                   "Mode": 2
                 }
@@ -490,6 +522,14 @@
                     "Expression": "return a27font();"
                   },
                   "Mode": 2
+                },
+                "Visible": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return !h2timingMode()&&(true);"
+                  },
+                  "Mode": 2
                 }
               }
             },
@@ -543,6 +583,14 @@
                     "JSExt": 1,
                     "Interpreter": 1,
                     "Expression": "return a27font();"
+                  },
+                  "Mode": 2
+                },
+                "Visible": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return !h2timingMode()&&(true);"
                   },
                   "Mode": 2
                 }
@@ -816,7 +864,7 @@
                   "Formula": {
                     "JSExt": 1,
                     "Interpreter": 1,
-                    "Expression": "return !a27stage();"
+                    "Expression": "return !h2timingMode()&&(!a27stage());"
                   },
                   "Mode": 2
                 }
@@ -870,7 +918,7 @@
                   "Formula": {
                     "JSExt": 1,
                     "Interpreter": 1,
-                    "Expression": "return !a27stage();"
+                    "Expression": "return !h2timingMode()&&(!a27stage());"
                   },
                   "Mode": 2
                 }
@@ -10066,10 +10114,10 @@
                 {
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.RectangleItem, SimHub.Plugins",
                   "Name": "Practice card",
-                  "Left": 24.0,
-                  "Top": 360.0,
-                  "Width": 1054.0,
-                  "Height": 636.0,
+                  "Left": 24,
+                  "Top": 122,
+                  "Width": 1054,
+                  "Height": 874,
                   "Visible": true,
                   "RenderingSkip": 0,
                   "MinimumRefreshIntervalMS": 100.0,
@@ -10095,10 +10143,10 @@
                 {
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
                   "Name": "Practice title",
-                  "Left": 50.0,
-                  "Top": 379.0,
-                  "Width": 1002.0,
-                  "Height": 37.0,
+                  "Left": 50,
+                  "Top": 140,
+                  "Width": 510,
+                  "Height": 35,
                   "Visible": true,
                   "RenderingSkip": 0,
                   "MinimumRefreshIntervalMS": 100.0,
@@ -10106,12 +10154,12 @@
                   "IsTextItem": true,
                   "Font": "Segoe UI",
                   "FontWeight": "Bold",
-                  "FontSize": 27.0,
+                  "FontSize": 24,
                   "Text": "CURRENT LAP",
                   "TextColor": "#FF96A6B4",
                   "HorizontalAlignment": 0,
                   "VerticalAlignment": 1,
-                  "TextWrapping": 0,
+                  "TextWrapping": 1,
                   "Bindings": {
                     "TextColor": {
                       "Formula": {
@@ -10150,10 +10198,10 @@
                 {
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
                   "Name": "Current lap time",
-                  "Left": 46.0,
-                  "Top": 418.0,
-                  "Width": 1008.0,
-                  "Height": 166.0,
+                  "Left": 44,
+                  "Top": 188,
+                  "Width": 540,
+                  "Height": 139,
                   "Visible": true,
                   "RenderingSkip": 0,
                   "MinimumRefreshIntervalMS": 100.0,
@@ -10161,12 +10209,12 @@
                   "IsTextItem": true,
                   "Font": "Segoe UI",
                   "FontWeight": "Bold",
-                  "FontSize": 140.0,
+                  "FontSize": 108,
                   "Text": "—",
                   "TextColor": "#FFDEE6EC",
                   "HorizontalAlignment": 0,
                   "VerticalAlignment": 1,
-                  "TextWrapping": 0,
+                  "TextWrapping": 1,
                   "Bindings": {
                     "Text": {
                       "Formula": {
@@ -10180,125 +10228,7 @@
                       "Formula": {
                         "JSExt": 1,
                         "Interpreter": 1,
-                        "Expression": "return a27color(\"#FFDEE6EC\");"
-                      },
-                      "Mode": 2
-                    },
-                    "BackgroundColor": {
-                      "Formula": {
-                        "JSExt": 1,
-                        "Interpreter": 1,
-                        "Expression": "return a27color(\"#00FFFFFF\");"
-                      },
-                      "Mode": 2
-                    },
-                    "Font": {
-                      "Formula": {
-                        "JSExt": 1,
-                        "Interpreter": 1,
-                        "Expression": "return a27font();"
-                      },
-                      "Mode": 2
-                    }
-                  }
-                },
-                {
-                  "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
-                  "Name": "Practice best label",
-                  "Left": 50.0,
-                  "Top": 599.0,
-                  "Width": 476.0,
-                  "Height": 28.0,
-                  "Visible": true,
-                  "RenderingSkip": 0,
-                  "MinimumRefreshIntervalMS": 100.0,
-                  "BackgroundColor": "#00FFFFFF",
-                  "IsTextItem": true,
-                  "Font": "Segoe UI",
-                  "FontWeight": "Bold",
-                  "FontSize": 20.0,
-                  "Text": "SESSION BEST",
-                  "TextColor": "#FF96A6B4",
-                  "HorizontalAlignment": 0,
-                  "VerticalAlignment": 1,
-                  "TextWrapping": 0,
-                  "Bindings": {
-                    "TextColor": {
-                      "Formula": {
-                        "JSExt": 1,
-                        "Interpreter": 1,
-                        "Expression": "return a27color(\"#FF96A6B4\");"
-                      },
-                      "Mode": 2
-                    },
-                    "BackgroundColor": {
-                      "Formula": {
-                        "JSExt": 1,
-                        "Interpreter": 1,
-                        "Expression": "return a27color(\"#00FFFFFF\");"
-                      },
-                      "Mode": 2
-                    },
-                    "Text": {
-                      "Formula": {
-                        "JSExt": 1,
-                        "Interpreter": 1,
-                        "Expression": "return a27t(92);"
-                      },
-                      "Mode": 2
-                    },
-                    "Font": {
-                      "Formula": {
-                        "JSExt": 1,
-                        "Interpreter": 1,
-                        "Expression": "return a27font();"
-                      },
-                      "Mode": 2
-                    },
-                    "Visible": {
-                      "Formula": {
-                        "JSExt": 1,
-                        "Interpreter": 1,
-                        "Expression": "return !h2sectorData().available;"
-                      },
-                      "Mode": 2
-                    }
-                  }
-                },
-                {
-                  "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
-                  "Name": "Practice best",
-                  "Left": 50.0,
-                  "Top": 628.0,
-                  "Width": 476.0,
-                  "Height": 62.0,
-                  "Visible": true,
-                  "RenderingSkip": 0,
-                  "MinimumRefreshIntervalMS": 100.0,
-                  "BackgroundColor": "#00FFFFFF",
-                  "IsTextItem": true,
-                  "Font": "Segoe UI",
-                  "FontWeight": "Bold",
-                  "FontSize": 42.0,
-                  "Text": "—",
-                  "TextColor": "#FF64E3B1",
-                  "HorizontalAlignment": 0,
-                  "VerticalAlignment": 1,
-                  "TextWrapping": 0,
-                  "Bindings": {
-                    "Text": {
-                      "Formula": {
-                        "JSExt": 1,
-                        "Interpreter": 1,
-                        "Expression": "return a27time(a27d('BestLapTime'), true);"
-                      },
-                      "Mode": 2
-                    },
-                    "TextColor": {
-                      "Formula": {
-                        "JSExt": 1,
-                        "Interpreter": 1,
-                        "Expression": "return a27color(\"#FF64E3B1\");"
+                        "Expression": "return a27color(a27invalid()?\"#FFFFB35C\":\"#FFDEE6EC\");"
                       },
                       "Mode": 2
                     },
@@ -10318,137 +10248,11 @@
                       },
                       "Mode": 2
                     },
-                    "Visible": {
+                    "FontSize": {
                       "Formula": {
                         "JSExt": 1,
                         "Interpreter": 1,
-                        "Expression": "return !h2sectorData().available;"
-                      },
-                      "Mode": 2
-                    }
-                  }
-                },
-                {
-                  "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
-                  "Name": "Practice last label",
-                  "Left": 568.0,
-                  "Top": 599.0,
-                  "Width": 484.0,
-                  "Height": 28.0,
-                  "Visible": true,
-                  "RenderingSkip": 0,
-                  "MinimumRefreshIntervalMS": 100.0,
-                  "BackgroundColor": "#00FFFFFF",
-                  "IsTextItem": true,
-                  "Font": "Segoe UI",
-                  "FontWeight": "Bold",
-                  "FontSize": 20.0,
-                  "Text": "LAST",
-                  "TextColor": "#FF96A6B4",
-                  "HorizontalAlignment": 0,
-                  "VerticalAlignment": 1,
-                  "TextWrapping": 0,
-                  "Bindings": {
-                    "TextColor": {
-                      "Formula": {
-                        "JSExt": 1,
-                        "Interpreter": 1,
-                        "Expression": "return a27color(\"#FF96A6B4\");"
-                      },
-                      "Mode": 2
-                    },
-                    "BackgroundColor": {
-                      "Formula": {
-                        "JSExt": 1,
-                        "Interpreter": 1,
-                        "Expression": "return a27color(\"#00FFFFFF\");"
-                      },
-                      "Mode": 2
-                    },
-                    "Text": {
-                      "Formula": {
-                        "JSExt": 1,
-                        "Interpreter": 1,
-                        "Expression": "return a27t(143);"
-                      },
-                      "Mode": 2
-                    },
-                    "Font": {
-                      "Formula": {
-                        "JSExt": 1,
-                        "Interpreter": 1,
-                        "Expression": "return a27font();"
-                      },
-                      "Mode": 2
-                    },
-                    "Visible": {
-                      "Formula": {
-                        "JSExt": 1,
-                        "Interpreter": 1,
-                        "Expression": "return !h2sectorData().available;"
-                      },
-                      "Mode": 2
-                    }
-                  }
-                },
-                {
-                  "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
-                  "Name": "Practice last",
-                  "Left": 568.0,
-                  "Top": 628.0,
-                  "Width": 484.0,
-                  "Height": 62.0,
-                  "Visible": true,
-                  "RenderingSkip": 0,
-                  "MinimumRefreshIntervalMS": 100.0,
-                  "BackgroundColor": "#00FFFFFF",
-                  "IsTextItem": true,
-                  "Font": "Segoe UI",
-                  "FontWeight": "Bold",
-                  "FontSize": 42.0,
-                  "Text": "—",
-                  "TextColor": "#FFDEE6EC",
-                  "HorizontalAlignment": 0,
-                  "VerticalAlignment": 1,
-                  "TextWrapping": 0,
-                  "Bindings": {
-                    "Text": {
-                      "Formula": {
-                        "JSExt": 1,
-                        "Interpreter": 1,
-                        "Expression": "return a27time(a27d('LastLapTime'), true);"
-                      },
-                      "Mode": 2
-                    },
-                    "TextColor": {
-                      "Formula": {
-                        "JSExt": 1,
-                        "Interpreter": 1,
-                        "Expression": "return a27color(\"#FFDEE6EC\");"
-                      },
-                      "Mode": 2
-                    },
-                    "BackgroundColor": {
-                      "Formula": {
-                        "JSExt": 1,
-                        "Interpreter": 1,
-                        "Expression": "return a27color(\"#00FFFFFF\");"
-                      },
-                      "Mode": 2
-                    },
-                    "Font": {
-                      "Formula": {
-                        "JSExt": 1,
-                        "Interpreter": 1,
-                        "Expression": "return a27font();"
-                      },
-                      "Mode": 2
-                    },
-                    "Visible": {
-                      "Formula": {
-                        "JSExt": 1,
-                        "Interpreter": 1,
-                        "Expression": "return !h2sectorData().available;"
+                        "Expression": "return a27time(a27d('CurrentLapTime'),true).length>8?90:108;"
                       },
                       "Mode": 2
                     }
@@ -10457,10 +10261,10 @@
                 {
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.RectangleItem, SimHub.Plugins",
                   "Name": "History divider",
-                  "Left": 50.0,
-                  "Top": 729.0,
-                  "Width": 1002.0,
-                  "Height": 1.0,
+                  "Left": 50,
+                  "Top": 635,
+                  "Width": 1002,
+                  "Height": 1,
                   "Visible": true,
                   "RenderingSkip": 0,
                   "MinimumRefreshIntervalMS": 100.0,
@@ -10486,10 +10290,10 @@
                 {
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
                   "Name": "History label",
-                  "Left": 50.0,
-                  "Top": 738.0,
-                  "Width": 1002.0,
-                  "Height": 29.0,
+                  "Left": 50,
+                  "Top": 649,
+                  "Width": 1002,
+                  "Height": 35,
                   "Visible": true,
                   "RenderingSkip": 0,
                   "MinimumRefreshIntervalMS": 100.0,
@@ -10497,12 +10301,12 @@
                   "IsTextItem": true,
                   "Font": "Segoe UI",
                   "FontWeight": "Bold",
-                  "FontSize": 23.0,
+                  "FontSize": 23,
                   "Text": "RECENT LAPS   /   DELTA TO BEST",
                   "TextColor": "#FF96A6B4",
                   "HorizontalAlignment": 0,
                   "VerticalAlignment": 1,
-                  "TextWrapping": 0,
+                  "TextWrapping": 1,
                   "Bindings": {
                     "TextColor": {
                       "Formula": {
@@ -10542,7 +10346,7 @@
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
                   "Name": "History lap 0",
                   "Left": 50.0,
-                  "Top": 775.0,
+                  "Top": 704,
                   "Width": 214.0,
                   "Height": 44.0,
                   "Visible": true,
@@ -10597,7 +10401,7 @@
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
                   "Name": "History time 0",
                   "Left": 350.0,
-                  "Top": 775.0,
+                  "Top": 704,
                   "Width": 374.0,
                   "Height": 44.0,
                   "Visible": true,
@@ -10652,7 +10456,7 @@
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
                   "Name": "History delta 0",
                   "Left": 838.0,
-                  "Top": 775.0,
+                  "Top": 704,
                   "Width": 214.0,
                   "Height": 44.0,
                   "Visible": true,
@@ -10707,7 +10511,7 @@
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
                   "Name": "History lap 1",
                   "Left": 50.0,
-                  "Top": 819.0,
+                  "Top": 762,
                   "Width": 214.0,
                   "Height": 44.0,
                   "Visible": true,
@@ -10762,7 +10566,7 @@
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
                   "Name": "History time 1",
                   "Left": 350.0,
-                  "Top": 819.0,
+                  "Top": 762,
                   "Width": 374.0,
                   "Height": 44.0,
                   "Visible": true,
@@ -10817,7 +10621,7 @@
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
                   "Name": "History delta 1",
                   "Left": 838.0,
-                  "Top": 819.0,
+                  "Top": 762,
                   "Width": 214.0,
                   "Height": 44.0,
                   "Visible": true,
@@ -10872,7 +10676,7 @@
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
                   "Name": "History lap 2",
                   "Left": 50.0,
-                  "Top": 863.0,
+                  "Top": 820,
                   "Width": 214.0,
                   "Height": 44.0,
                   "Visible": true,
@@ -10927,7 +10731,7 @@
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
                   "Name": "History time 2",
                   "Left": 350.0,
-                  "Top": 863.0,
+                  "Top": 820,
                   "Width": 374.0,
                   "Height": 44.0,
                   "Visible": true,
@@ -10982,7 +10786,7 @@
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
                   "Name": "History delta 2",
                   "Left": 838.0,
-                  "Top": 863.0,
+                  "Top": 820,
                   "Width": 214.0,
                   "Height": 44.0,
                   "Visible": true,
@@ -11037,7 +10841,7 @@
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
                   "Name": "History lap 3",
                   "Left": 50.0,
-                  "Top": 907.0,
+                  "Top": 878,
                   "Width": 214.0,
                   "Height": 44.0,
                   "Visible": true,
@@ -11092,7 +10896,7 @@
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
                   "Name": "History time 3",
                   "Left": 350.0,
-                  "Top": 907.0,
+                  "Top": 878,
                   "Width": 374.0,
                   "Height": 44.0,
                   "Visible": true,
@@ -11147,7 +10951,7 @@
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
                   "Name": "History delta 3",
                   "Left": 838.0,
-                  "Top": 907.0,
+                  "Top": 878,
                   "Width": 214.0,
                   "Height": 44.0,
                   "Visible": true,
@@ -11257,7 +11061,7 @@
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
                   "Name": "Current sector label",
                   "Left": 50,
-                  "Top": 599,
+                  "Top": 482,
                   "Width": 476,
                   "Height": 28,
                   "Visible": true,
@@ -11311,7 +11115,7 @@
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
                   "Name": "Current sector clock",
                   "Left": 50,
-                  "Top": 629,
+                  "Top": 520,
                   "Width": 290,
                   "Height": 61,
                   "Visible": true,
@@ -11365,7 +11169,7 @@
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
                   "Name": "Current sector live delta",
                   "Left": 350,
-                  "Top": 637,
+                  "Top": 525,
                   "Width": 176,
                   "Height": 48,
                   "Visible": true,
@@ -11419,7 +11223,7 @@
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
                   "Name": "Last completed sector label",
                   "Left": 568,
-                  "Top": 599,
+                  "Top": 482,
                   "Width": 484,
                   "Height": 28,
                   "Visible": true,
@@ -11473,7 +11277,7 @@
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
                   "Name": "Last completed sector clock",
                   "Left": 568,
-                  "Top": 635,
+                  "Top": 520,
                   "Width": 278,
                   "Height": 52,
                   "Visible": true,
@@ -11527,7 +11331,7 @@
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
                   "Name": "Last completed sector delta",
                   "Left": 872,
-                  "Top": 637,
+                  "Top": 525,
                   "Width": 180,
                   "Height": 48,
                   "Visible": true,
@@ -11581,7 +11385,7 @@
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
                   "Name": "Sector reference note",
                   "Left": 568,
-                  "Top": 690,
+                  "Top": 584,
                   "Width": 484,
                   "Height": 28,
                   "Visible": true,
@@ -11601,7 +11405,7 @@
                       "Formula": {
                         "JSExt": 1,
                         "Interpreter": 1,
-                        "Expression": "return h2t(\"sectorReference\");"
+                        "Expression": "return h2sectorReferenceNote(false);"
                       },
                       "Mode": 2
                     },
@@ -11635,7 +11439,7 @@
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
                   "Name": "Sector live reference note",
                   "Left": 50,
-                  "Top": 690,
+                  "Top": 584,
                   "Width": 476,
                   "Height": 28,
                   "Visible": true,
@@ -11655,7 +11459,7 @@
                       "Formula": {
                         "JSExt": 1,
                         "Interpreter": 1,
-                        "Expression": "return h2t(\"sectorLiveDelta\");"
+                        "Expression": "return h2sectorReferenceNote(true);"
                       },
                       "Mode": 2
                     },
@@ -11689,7 +11493,7 @@
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
                   "Name": "Sector invalid note",
                   "Left": 50,
-                  "Top": 690,
+                  "Top": 584,
                   "Width": 476,
                   "Height": 28,
                   "Visible": true,
@@ -11743,7 +11547,7 @@
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
                   "Name": "Sector unavailable note",
                   "Left": 50,
-                  "Top": 694,
+                  "Top": 584,
                   "Width": 1002,
                   "Height": 26,
                   "Visible": true,
@@ -11788,6 +11592,390 @@
                         "JSExt": 1,
                         "Interpreter": 1,
                         "Expression": "return !h2sectorData().available;"
+                      },
+                      "Mode": 2
+                    }
+                  }
+                },
+                {
+                  "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
+                  "Name": "Practice prediction label",
+                  "Left": 50,
+                  "Top": 339,
+                  "Width": 510,
+                  "Height": 28,
+                  "Visible": true,
+                  "BackgroundColor": "#00000000",
+                  "Font": "Segoe UI",
+                  "FontSize": 19,
+                  "FontWeight": "Bold",
+                  "Text": "",
+                  "TextColor": "#FFDEE6EC",
+                  "HorizontalAlignment": 0,
+                  "VerticalAlignment": 1,
+                  "TextWrapping": 1,
+                  "RenderingSkip": 0,
+                  "MinimumRefreshIntervalMS": 100.0,
+                  "Bindings": {
+                    "Font": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27font();"
+                      },
+                      "Mode": 2
+                    },
+                    "Text": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27t(144);"
+                      },
+                      "Mode": 2
+                    },
+                    "TextColor": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27color(\"#FF96A6B4\");"
+                      },
+                      "Mode": 2
+                    }
+                  }
+                },
+                {
+                  "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
+                  "Name": "Practice prediction",
+                  "Left": 48,
+                  "Top": 375,
+                  "Width": 530,
+                  "Height": 70,
+                  "Visible": true,
+                  "BackgroundColor": "#00000000",
+                  "Font": "Segoe UI",
+                  "FontSize": 52,
+                  "FontWeight": "Bold",
+                  "Text": "",
+                  "TextColor": "#FFDEE6EC",
+                  "HorizontalAlignment": 0,
+                  "VerticalAlignment": 1,
+                  "TextWrapping": 1,
+                  "RenderingSkip": 0,
+                  "MinimumRefreshIntervalMS": 100.0,
+                  "Bindings": {
+                    "Font": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27font();"
+                      },
+                      "Mode": 2
+                    },
+                    "Text": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27prediction();"
+                      },
+                      "Mode": 2
+                    },
+                    "TextColor": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27color(\"#FF8CCEFF\");"
+                      },
+                      "Mode": 2
+                    }
+                  }
+                },
+                {
+                  "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
+                  "Name": "Practice personal label",
+                  "Left": 610,
+                  "Top": 146,
+                  "Width": 438,
+                  "Height": 29,
+                  "Visible": true,
+                  "BackgroundColor": "#00000000",
+                  "Font": "Segoe UI",
+                  "FontSize": 20,
+                  "FontWeight": "Bold",
+                  "Text": "",
+                  "TextColor": "#FFDEE6EC",
+                  "HorizontalAlignment": 0,
+                  "VerticalAlignment": 1,
+                  "TextWrapping": 1,
+                  "RenderingSkip": 0,
+                  "MinimumRefreshIntervalMS": 100.0,
+                  "Bindings": {
+                    "Font": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27font();"
+                      },
+                      "Mode": 2
+                    },
+                    "Text": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return h2t(\"allTimeBest\");"
+                      },
+                      "Mode": 2
+                    },
+                    "TextColor": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27color(\"#FF96A6B4\");"
+                      },
+                      "Mode": 2
+                    }
+                  }
+                },
+                {
+                  "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
+                  "Name": "Practice personal time",
+                  "Left": 608,
+                  "Top": 183,
+                  "Width": 280,
+                  "Height": 63,
+                  "Visible": true,
+                  "BackgroundColor": "#00000000",
+                  "Font": "Segoe UI",
+                  "FontSize": 43,
+                  "FontWeight": "Bold",
+                  "Text": "",
+                  "TextColor": "#FFDEE6EC",
+                  "HorizontalAlignment": 0,
+                  "VerticalAlignment": 1,
+                  "TextWrapping": 1,
+                  "RenderingSkip": 0,
+                  "MinimumRefreshIntervalMS": 100.0,
+                  "Bindings": {
+                    "Font": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27font();"
+                      },
+                      "Mode": 2
+                    },
+                    "Text": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return h2lapReferenceText(\"personal\");"
+                      },
+                      "Mode": 2
+                    },
+                    "TextColor": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27color(\"#FFDEE6EC\");"
+                      },
+                      "Mode": 2
+                    }
+                  }
+                },
+                {
+                  "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
+                  "Name": "Practice personal delta",
+                  "Left": 890,
+                  "Top": 187,
+                  "Width": 162,
+                  "Height": 54,
+                  "Visible": true,
+                  "BackgroundColor": "#00000000",
+                  "Font": "Segoe UI",
+                  "FontSize": 32,
+                  "FontWeight": "Bold",
+                  "Text": "",
+                  "TextColor": "#FFDEE6EC",
+                  "HorizontalAlignment": 2,
+                  "VerticalAlignment": 1,
+                  "TextWrapping": 1,
+                  "RenderingSkip": 0,
+                  "MinimumRefreshIntervalMS": 100.0,
+                  "Bindings": {
+                    "Font": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27font();"
+                      },
+                      "Mode": 2
+                    },
+                    "Text": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return h2lapDeltaText(\"personal\");"
+                      },
+                      "Mode": 2
+                    },
+                    "TextColor": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27color(h2lapDeltaColor(\"personal\"));"
+                      },
+                      "Mode": 2
+                    },
+                    "FontSize": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return h2lapDeltaText(\"personal\").length>8?25:32;"
+                      },
+                      "Mode": 2
+                    }
+                  }
+                },
+                {
+                  "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
+                  "Name": "Practice session label",
+                  "Left": 610,
+                  "Top": 299,
+                  "Width": 438,
+                  "Height": 29,
+                  "Visible": true,
+                  "BackgroundColor": "#00000000",
+                  "Font": "Segoe UI",
+                  "FontSize": 20,
+                  "FontWeight": "Bold",
+                  "Text": "",
+                  "TextColor": "#FFDEE6EC",
+                  "HorizontalAlignment": 0,
+                  "VerticalAlignment": 1,
+                  "TextWrapping": 1,
+                  "RenderingSkip": 0,
+                  "MinimumRefreshIntervalMS": 100.0,
+                  "Bindings": {
+                    "Font": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27font();"
+                      },
+                      "Mode": 2
+                    },
+                    "Text": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return h2t(\"sessionBest\");"
+                      },
+                      "Mode": 2
+                    },
+                    "TextColor": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27color(\"#FF96A6B4\");"
+                      },
+                      "Mode": 2
+                    }
+                  }
+                },
+                {
+                  "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
+                  "Name": "Practice session time",
+                  "Left": 608,
+                  "Top": 336,
+                  "Width": 280,
+                  "Height": 63,
+                  "Visible": true,
+                  "BackgroundColor": "#00000000",
+                  "Font": "Segoe UI",
+                  "FontSize": 43,
+                  "FontWeight": "Bold",
+                  "Text": "",
+                  "TextColor": "#FFDEE6EC",
+                  "HorizontalAlignment": 0,
+                  "VerticalAlignment": 1,
+                  "TextWrapping": 1,
+                  "RenderingSkip": 0,
+                  "MinimumRefreshIntervalMS": 100.0,
+                  "Bindings": {
+                    "Font": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27font();"
+                      },
+                      "Mode": 2
+                    },
+                    "Text": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return h2lapReferenceText(\"session\");"
+                      },
+                      "Mode": 2
+                    },
+                    "TextColor": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27color(\"#FFDEE6EC\");"
+                      },
+                      "Mode": 2
+                    }
+                  }
+                },
+                {
+                  "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
+                  "Name": "Practice session delta",
+                  "Left": 890,
+                  "Top": 340,
+                  "Width": 162,
+                  "Height": 54,
+                  "Visible": true,
+                  "BackgroundColor": "#00000000",
+                  "Font": "Segoe UI",
+                  "FontSize": 32,
+                  "FontWeight": "Bold",
+                  "Text": "",
+                  "TextColor": "#FFDEE6EC",
+                  "HorizontalAlignment": 2,
+                  "VerticalAlignment": 1,
+                  "TextWrapping": 1,
+                  "RenderingSkip": 0,
+                  "MinimumRefreshIntervalMS": 100.0,
+                  "Bindings": {
+                    "Font": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27font();"
+                      },
+                      "Mode": 2
+                    },
+                    "Text": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return h2lapDeltaText(\"session\");"
+                      },
+                      "Mode": 2
+                    },
+                    "TextColor": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27color(h2lapDeltaColor(\"session\"));"
+                      },
+                      "Mode": 2
+                    },
+                    "FontSize": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return h2lapDeltaText(\"session\").length>8?25:32;"
                       },
                       "Mode": 2
                     }
@@ -11898,7 +12086,7 @@
                   "Visible": true,
                   "BackgroundColor": "#00000000",
                   "Font": "Segoe UI",
-                  "FontSize": 14,
+                  "FontSize": 13,
                   "FontWeight": "Normal",
                   "Text": "",
                   "TextColor": "#FF96A6B4",
@@ -11912,7 +12100,7 @@
                       "Formula": {
                         "JSExt": 1,
                         "Interpreter": 1,
-                        "Expression": "return a27t(33);"
+                        "Expression": "return a27t(33)+' / '+a27unit();"
                       },
                       "Mode": 2
                     },
@@ -11929,6 +12117,14 @@
                         "JSExt": 1,
                         "Interpreter": 1,
                         "Expression": "return a27font();"
+                      },
+                      "Mode": 2
+                    },
+                    "FontSize": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27t(33).length>14?11:13;"
                       },
                       "Mode": 2
                     }
@@ -11958,7 +12154,7 @@
                       "Formula": {
                         "JSExt": 1,
                         "Interpreter": 1,
-                        "Expression": "return a27num(a27fuel().fuel,1,' '+a27unit());"
+                        "Expression": "return a27num(a27fuel().fuel,1);"
                       },
                       "Mode": 2
                     },
@@ -15077,7 +15273,7 @@
                   "Formula": {
                     "JSExt": 1,
                     "Interpreter": 1,
-                    "Expression": "return !a27stage()&&(!a27stage());"
+                    "Expression": "return !h2timingMode()&&(!a27stage()&&(!a27stage()));"
                   },
                   "Mode": 2
                 },
@@ -15124,7 +15320,7 @@
                   "Formula": {
                     "JSExt": 1,
                     "Interpreter": 1,
-                    "Expression": "return !a27stage()&&(!a27stage());"
+                    "Expression": "return !h2timingMode()&&(!a27stage()&&(!a27stage()));"
                   },
                   "Mode": 2
                 },
@@ -15195,7 +15391,7 @@
                   "Formula": {
                     "JSExt": 1,
                     "Interpreter": 1,
-                    "Expression": "return !a27stage()&&(!a27stage());"
+                    "Expression": "return !h2timingMode()&&(!a27stage()&&(!a27stage()));"
                   },
                   "Mode": 2
                 },
@@ -15250,7 +15446,7 @@
                   "Formula": {
                     "JSExt": 1,
                     "Interpreter": 1,
-                    "Expression": "return !a27stage()&&(!a27stage());"
+                    "Expression": "return !h2timingMode()&&(!a27stage()&&(!a27stage()));"
                   },
                   "Mode": 2
                 },
@@ -15303,7 +15499,7 @@
                   "Formula": {
                     "JSExt": 1,
                     "Interpreter": 1,
-                    "Expression": "return h2timingMode()&&h2sectorData().available?(true):(!a27stage()&&((!a27stage())&&(!a27strategy())));"
+                    "Expression": "return !h2timingMode()&&(h2timingMode()&&h2sectorData().available?(true):(!a27stage()&&((!a27stage())&&(!a27strategy()))));"
                   },
                   "Mode": 2
                 },
@@ -15350,7 +15546,7 @@
                   "Formula": {
                     "JSExt": 1,
                     "Interpreter": 1,
-                    "Expression": "return h2timingMode()&&h2sectorData().available?(true):(!a27stage()&&((!a27stage())&&(!a27strategy())));"
+                    "Expression": "return !h2timingMode()&&(h2timingMode()&&h2sectorData().available?(true):(!a27stage()&&((!a27stage())&&(!a27strategy()))));"
                   },
                   "Mode": 2
                 },
@@ -15413,7 +15609,7 @@
                   "Formula": {
                     "JSExt": 1,
                     "Interpreter": 1,
-                    "Expression": "return h2timingMode()&&h2sectorData().available?(true):(!a27stage()&&((!a27stage())&&(!a27strategy())));"
+                    "Expression": "return !h2timingMode()&&(h2timingMode()&&h2sectorData().available?(true):(!a27stage()&&((!a27stage())&&(!a27strategy()))));"
                   },
                   "Mode": 2
                 },
@@ -15476,7 +15672,7 @@
                   "Formula": {
                     "JSExt": 1,
                     "Interpreter": 1,
-                    "Expression": "return h2timingMode()&&h2sectorData().available?(true):(!a27stage()&&((!a27stage())&&(!a27strategy())));"
+                    "Expression": "return !h2timingMode()&&(h2timingMode()&&h2sectorData().available?(true):(!a27stage()&&((!a27stage())&&(!a27strategy()))));"
                   },
                   "Mode": 2
                 },
@@ -15539,7 +15735,7 @@
                   "Formula": {
                     "JSExt": 1,
                     "Interpreter": 1,
-                    "Expression": "return h2timingMode()&&h2sectorData().available?(true):(!a27stage()&&((!a27stage())&&(!a27strategy())));"
+                    "Expression": "return !h2timingMode()&&(h2timingMode()&&h2sectorData().available?(true):(!a27stage()&&((!a27stage())&&(!a27strategy()))));"
                   },
                   "Mode": 2
                 },
@@ -15602,7 +15798,7 @@
                   "Formula": {
                     "JSExt": 1,
                     "Interpreter": 1,
-                    "Expression": "return h2timingMode()&&h2sectorData().available?(true):(!a27stage()&&((!a27stage())&&(!a27strategy())));"
+                    "Expression": "return !h2timingMode()&&(h2timingMode()&&h2sectorData().available?(true):(!a27stage()&&((!a27stage())&&(!a27strategy()))));"
                   },
                   "Mode": 2
                 },
@@ -15896,7 +16092,7 @@
                   "Formula": {
                     "JSExt": 1,
                     "Interpreter": 1,
-                    "Expression": "return !(h2timingMode()&&h2sectorData().available)&&(!a27stage()&&(a27strategy()&&!a27stage()));"
+                    "Expression": "return !h2timingMode()&&(!(h2timingMode()&&h2sectorData().available)&&(!a27stage()&&(a27strategy()&&!a27stage())));"
                   },
                   "Mode": 2
                 }
@@ -19214,185 +19410,12 @@
               }
             },
             {
-              "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
-              "Name": "Footer left",
-              "Left": 25,
-              "Top": 1033,
-              "Width": 1540,
-              "Height": 28,
-              "Visible": true,
-              "RenderingSkip": 0,
-              "MinimumRefreshIntervalMS": 100.0,
-              "BackgroundColor": "#00FFFFFF",
-              "IsTextItem": true,
-              "Font": "Segoe UI",
-              "FontWeight": "Normal",
-              "FontSize": 18.0,
-              "Text": "APEX 27  /  1.2",
-              "TextColor": "#FF96A6B4",
-              "HorizontalAlignment": 0,
-              "VerticalAlignment": 1,
-              "TextWrapping": 0,
-              "Bindings": {
-                "Text": {
-                  "Formula": {
-                    "JSExt": 1,
-                    "Interpreter": 1,
-                    "Expression": "return \"APEX 27\"+' / '+a27str(a27p('DataCorePlugin.CurrentGame'))+' / '+a27classNote();"
-                  },
-                  "Mode": 2
-                },
-                "Visible": {
-                  "Formula": {
-                    "JSExt": 1,
-                    "Interpreter": 1,
-                    "Expression": "return !a27fieldEnabled();"
-                  },
-                  "Mode": 2
-                },
-                "TextColor": {
-                  "Formula": {
-                    "JSExt": 1,
-                    "Interpreter": 1,
-                    "Expression": "return a27color(\"#FF96A6B4\");"
-                  },
-                  "Mode": 2
-                },
-                "BackgroundColor": {
-                  "Formula": {
-                    "JSExt": 1,
-                    "Interpreter": 1,
-                    "Expression": "return a27color(\"#00FFFFFF\");"
-                  },
-                  "Mode": 2
-                },
-                "Font": {
-                  "Formula": {
-                    "JSExt": 1,
-                    "Interpreter": 1,
-                    "Expression": "return a27font();"
-                  },
-                  "Mode": 2
-                }
-              }
-            },
-            {
-              "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
-              "Name": "Footer right",
-              "Left": 1580,
-              "Top": 1033,
-              "Width": 314,
-              "Height": 28,
-              "Visible": true,
-              "RenderingSkip": 0,
-              "MinimumRefreshIntervalMS": 100.0,
-              "BackgroundColor": "#00FFFFFF",
-              "IsTextItem": true,
-              "Font": "Segoe UI",
-              "FontWeight": "Normal",
-              "FontSize": 18.0,
-              "Text": "16:9",
-              "TextColor": "#FF96A6B4",
-              "HorizontalAlignment": 2,
-              "VerticalAlignment": 1,
-              "TextWrapping": 0,
-              "Bindings": {
-                "Visible": {
-                  "Formula": {
-                    "JSExt": 1,
-                    "Interpreter": 1,
-                    "Expression": "return !a27fieldEnabled();"
-                  },
-                  "Mode": 2
-                },
-                "TextColor": {
-                  "Formula": {
-                    "JSExt": 1,
-                    "Interpreter": 1,
-                    "Expression": "return a27color(\"#FF96A6B4\");"
-                  },
-                  "Mode": 2
-                },
-                "BackgroundColor": {
-                  "Formula": {
-                    "JSExt": 1,
-                    "Interpreter": 1,
-                    "Expression": "return a27color(\"#00FFFFFF\");"
-                  },
-                  "Mode": 2
-                },
-                "Font": {
-                  "Formula": {
-                    "JSExt": 1,
-                    "Interpreter": 1,
-                    "Expression": "return a27font();"
-                  },
-                  "Mode": 2
-                }
-              }
-            },
-            {
               "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.Layer, SimHub.Plugins",
               "Name": "RACE / complete peloton ribbon",
               "Group": false,
               "Repetitions": 0,
               "Visible": true,
               "Childrens": [
-                {
-                  "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
-                  "Name": "Field title",
-                  "Left": 32,
-                  "Top": 1018,
-                  "Width": 680,
-                  "Height": 24,
-                  "Visible": true,
-                  "RenderingSkip": 0,
-                  "MinimumRefreshIntervalMS": 100.0,
-                  "BackgroundColor": "#00FFFFFF",
-                  "IsTextItem": true,
-                  "Font": "Segoe UI",
-                  "FontWeight": "Bold",
-                  "FontSize": 17.0,
-                  "Text": "FULL FIELD / FULL LAP",
-                  "TextColor": "#FF96A6B4",
-                  "HorizontalAlignment": 0,
-                  "VerticalAlignment": 1,
-                  "TextWrapping": 0,
-                  "Bindings": {
-                    "TextColor": {
-                      "Formula": {
-                        "JSExt": 1,
-                        "Interpreter": 1,
-                        "Expression": "return a27color(\"#FF96A6B4\");"
-                      },
-                      "Mode": 2
-                    },
-                    "BackgroundColor": {
-                      "Formula": {
-                        "JSExt": 1,
-                        "Interpreter": 1,
-                        "Expression": "return a27color(\"#00FFFFFF\");"
-                      },
-                      "Mode": 2
-                    },
-                    "Text": {
-                      "Formula": {
-                        "JSExt": 1,
-                        "Interpreter": 1,
-                        "Expression": "return a27t(121);"
-                      },
-                      "Mode": 2
-                    },
-                    "Font": {
-                      "Formula": {
-                        "JSExt": 1,
-                        "Interpreter": 1,
-                        "Expression": "return a27font();"
-                      },
-                      "Mode": 2
-                    }
-                  }
-                },
                 {
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
                   "Name": "Field legend",
@@ -23242,6 +23265,114 @@
                   "Mode": 2
                 }
               }
+            },
+            {
+              "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
+              "Name": "Timing header last label",
+              "Left": 828,
+              "Top": 24,
+              "Width": 440,
+              "Height": 25,
+              "Visible": true,
+              "BackgroundColor": "#00000000",
+              "Font": "Segoe UI",
+              "FontSize": 17,
+              "FontWeight": "Bold",
+              "Text": "",
+              "TextColor": "#FFDEE6EC",
+              "HorizontalAlignment": 0,
+              "VerticalAlignment": 1,
+              "TextWrapping": 1,
+              "RenderingSkip": 0,
+              "MinimumRefreshIntervalMS": 100.0,
+              "Bindings": {
+                "Font": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27font();"
+                  },
+                  "Mode": 2
+                },
+                "Text": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27t(143);"
+                  },
+                  "Mode": 2
+                },
+                "TextColor": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27color(\"#FF96A6B4\");"
+                  },
+                  "Mode": 2
+                },
+                "Visible": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return h2timingMode();"
+                  },
+                  "Mode": 2
+                }
+              }
+            },
+            {
+              "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
+              "Name": "Timing header last lap",
+              "Left": 828,
+              "Top": 49,
+              "Width": 440,
+              "Height": 54,
+              "Visible": true,
+              "BackgroundColor": "#00000000",
+              "Font": "Segoe UI",
+              "FontSize": 39,
+              "FontWeight": "Bold",
+              "Text": "",
+              "TextColor": "#FFDEE6EC",
+              "HorizontalAlignment": 0,
+              "VerticalAlignment": 1,
+              "TextWrapping": 1,
+              "RenderingSkip": 0,
+              "MinimumRefreshIntervalMS": 100.0,
+              "Bindings": {
+                "Font": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27font();"
+                  },
+                  "Mode": 2
+                },
+                "Text": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27time(a27d('LastLapTime'),true);"
+                  },
+                  "Mode": 2
+                },
+                "TextColor": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27color(\"#FFDEE6EC\");"
+                  },
+                  "Mode": 2
+                },
+                "Visible": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return h2timingMode();"
+                  },
+                  "Mode": 2
+                }
+              }
             }
           ],
           "RenderingSkip": 0,
@@ -23567,6 +23698,52 @@
           ],
           "RenderingSkip": 0,
           "MinimumRefreshIntervalMS": 0.0
+        },
+        {
+          "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
+          "Name": "Local clock and session countdown",
+          "Left": 25,
+          "Top": 1014,
+          "Width": 865,
+          "Height": 30,
+          "Visible": true,
+          "BackgroundColor": "#00000000",
+          "Font": "Segoe UI",
+          "FontSize": 21,
+          "FontWeight": "Normal",
+          "Text": "",
+          "TextColor": "#FFDEE6EC",
+          "HorizontalAlignment": 0,
+          "VerticalAlignment": 1,
+          "TextWrapping": 1,
+          "RenderingSkip": 0,
+          "MinimumRefreshIntervalMS": 100.0,
+          "Bindings": {
+            "Font": {
+              "Formula": {
+                "JSExt": 1,
+                "Interpreter": 1,
+                "Expression": "return a27font();"
+              },
+              "Mode": 2
+            },
+            "Text": {
+              "Formula": {
+                "JSExt": 1,
+                "Interpreter": 1,
+                "Expression": "return h2footerTime();"
+              },
+              "Mode": 2
+            },
+            "TextColor": {
+              "Formula": {
+                "JSExt": 1,
+                "Interpreter": 1,
+                "Expression": "return a27color(\"#FF96A6B4\");"
+              },
+              "Mode": 2
+            }
+          }
         }
       ],
       "MinimumRefreshIntervalMS": 0.0
@@ -23585,7 +23762,7 @@
     "SimHubVersion": "9.12.6",
     "Title": "APEX 27",
     "Author": "Lord-of-the-Bots",
-    "Description": "Companion dashboard for external RPM, gear and flag displays / expanded map and pedal history / adaptive session views / multiclass traffic / lap and sector timing",
+    "Description": "v1.1.0 / Companion dashboard for external RPM, gear and flag displays / expanded map and pedal history / adaptive session views / multiclass traffic / lap and sector timing",
     "ScreenCount": 1.0,
     "InGameScreensIndexs": [
       0

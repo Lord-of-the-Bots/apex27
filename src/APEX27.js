@@ -117,7 +117,7 @@ function a27fuelState() {
   return [a27t(62), a27t(151), '#FF8CCEFF'];
 }
 function a27fuelColor() { return a27fuelState()[2]; }
-function a27unit() { return a27f1()?a27t(225):a27str(a27d('FuelUnit'), 'L'); }
+function a27unit() { if(a27f1())return a27t(225);var u=a27str(a27d('FuelUnit'),'L');return /^(l|liters?|litres?)$/i.test(u)?'L':/^(gal|gallons?)$/i.test(u)?'gal':u; }
 function a27fuelUsed(name) { var v=a27live()?a27n('DataCorePlugin.Computed.'+name):null; return v!==null && v>=0 && !a27electric() && !a27wrc() ? v*a27fuelScale() : null; }
 function a27relative(side, index, field) {
   if (!a27live()) return null;
@@ -443,7 +443,7 @@ function a27absBadge() {
 function a27absBadgeFill() { return a27absActive() ? '#FFFFB35C' : '#FF15202A'; }
 function a27absBadgeInk() { return a27absActive() ? '#FF080C10' : '#FF96A6B4'; }
 
-var H2_TIMING_LABELS={"ru":{"fuelRange":"ЗАПАС, КРУГИ","toLine":"До линии: ","pedals":"ПЕДАЛИ","sectorLiveDelta":"≈ Δ с начала сектора","currentSector":"ТЕКУЩИЙ СЕКТОР","lastSector":"ПОСЛЕДНИЙ СЕКТОР","sectorReference":"Δ к сектору лучшего круга","sectorUnavailable":"Секторы не передаются","sectorShort":"СЕКТОР","progressShort":"ПРОГРЕСС","tyresShort":"ШИНЫ"},"en":{"fuelRange":"RANGE, LAPS","toLine":"To timing line: ","pedals":"PEDALS","sectorLiveDelta":"≈ Δ since sector start","currentSector":"CURRENT SECTOR","lastSector":"LAST SECTOR","sectorReference":"Δ vs best-lap sector","sectorUnavailable":"Sector data unavailable","sectorShort":"SECTOR","progressShort":"PROGRESS","tyresShort":"TYRES"},"de":{"fuelRange":"REICHWEITE, RD.","toLine":"Bis zur Zeitlinie: ","pedals":"PEDALE","sectorLiveDelta":"≈ Δ seit Sektorbeginn","currentSector":"AKTUELLER SEKTOR","lastSector":"LETZTER SEKTOR","sectorReference":"Δ zum Sektor der Bestzeit","sectorUnavailable":"Keine Sektordaten","sectorShort":"SEKTOR","progressShort":"FORTSCHRITT","tyresShort":"REIFEN"},"es":{"fuelRange":"AUTONOMÍA, VUEL.","toLine":"Hasta la línea: ","pedals":"PEDALES","sectorLiveDelta":"≈ Δ desde inicio del sector","currentSector":"SECTOR ACTUAL","lastSector":"ÚLTIMO SECTOR","sectorReference":"Δ vs. sector de la mejor vuelta","sectorUnavailable":"Sin datos de sectores","sectorShort":"SECTOR","progressShort":"AVANCE","tyresShort":"NEUMÁTICOS"},"fr":{"fuelRange":"AUTONOMIE, TOURS","toLine":"Jusqu’à la ligne: ","pedals":"PÉDALES","sectorLiveDelta":"≈ Δ depuis le début du secteur","currentSector":"SECTEUR ACTUEL","lastSector":"DERNIER SECTEUR","sectorReference":"Δ secteur du meilleur tour","sectorUnavailable":"Données de secteurs indisponibles","sectorShort":"SECTEUR","progressShort":"PROGRESSION","tyresShort":"PNEUS"},"it":{"fuelRange":"AUTONOMIA, GIRI","toLine":"Alla linea: ","pedals":"PEDALI","sectorLiveDelta":"≈ Δ dall’inizio del settore","currentSector":"SETTORE ATTUALE","lastSector":"ULTIMO SETTORE","sectorReference":"Δ dal settore del miglior giro","sectorUnavailable":"Dati settori non disponibili","sectorShort":"SETTORE","progressShort":"AVANZAMENTO","tyresShort":"PNEUMATICI"},"pt-BR":{"fuelRange":"AUTONOMIA, VOLTAS","toLine":"Até a linha: ","pedals":"PEDAIS","sectorLiveDelta":"≈ Δ desde o início do setor","currentSector":"SETOR ATUAL","lastSector":"ÚLTIMO SETOR","sectorReference":"Δ vs. setor da melhor volta","sectorUnavailable":"Dados de setores indisponíveis","sectorShort":"SETOR","progressShort":"PROGRESSO","tyresShort":"PNEUS"},"pl":{"fuelRange":"ZASIĘG, OKR.","toLine":"Do linii: ","pedals":"PEDAŁY","sectorLiveDelta":"≈ Δ od początku sektora","currentSector":"BIEŻĄCY SEKTOR","lastSector":"OSTATNI SEKTOR","sectorReference":"Δ do sektora najlepszego okrążenia","sectorUnavailable":"Brak danych sektorów","sectorShort":"SEKTOR","progressShort":"POSTĘP","tyresShort":"OPONY"},"cs":{"fuelRange":"DOJEZD, KOLA","toLine":"K časoměrné čáře: ","pedals":"PEDÁLY","sectorLiveDelta":"≈ Δ od začátku sektoru","currentSector":"AKTUÁLNÍ SEKTOR","lastSector":"POSLEDNÍ SEKTOR","sectorReference":"Δ vůči sektoru nejlepšího kola","sectorUnavailable":"Data sektorů nejsou dostupná","sectorShort":"SEKTOR","progressShort":"POSTUP","tyresShort":"PNEUMATIKY"},"tr":{"fuelRange":"MENZİL, TUR","toLine":"Zaman çizgisine: ","pedals":"PEDALLAR","sectorLiveDelta":"≈ Δ sektör başlangıcından beri","currentSector":"MEVCUT SEKTÖR","lastSector":"SON SEKTÖR","sectorReference":"Δ en iyi turun sektörüne göre","sectorUnavailable":"Sektör verisi yok","sectorShort":"SEKTÖR","progressShort":"İLERLEME","tyresShort":"LASTİKLER"},"ja":{"fuelRange":"航続周回数","toLine":"計測ラインまで: ","pedals":"ペダル","sectorLiveDelta":"≈ セクター開始からのΔ","currentSector":"現在のセクター","lastSector":"直前のセクター","sectorReference":"Δ ベストラップの同一セクター比","sectorUnavailable":"セクターデータなし","sectorShort":"セクター","progressShort":"進行","tyresShort":"タイヤ"},"ko":{"fuelRange":"주행 가능 랩","toLine":"계측선까지: ","pedals":"페달","sectorLiveDelta":"≈ 섹터 시작 이후 Δ","currentSector":"현재 섹터","lastSector":"직전 섹터","sectorReference":"Δ 베스트 랩의 동일 섹터 대비","sectorUnavailable":"섹터 데이터 없음","sectorShort":"섹터","progressShort":"진행률","tyresShort":"타이어"},"zh":{"fuelRange":"可跑圈数","toLine":"距计时线: ","pedals":"踏板","sectorLiveDelta":"≈ 自分段起点的Δ","currentSector":"当前分段","lastSector":"上一分段","sectorReference":"Δ 对比最佳圈同一分段","sectorUnavailable":"无分段数据","sectorShort":"分段","progressShort":"进度","tyresShort":"轮胎"}};
+var H2_TIMING_LABELS={"ru":{"fuelRange":"ЗАПАС, КРУГИ","toLine":"До линии: ","pedals":"ПЕДАЛИ","sectorLiveDelta":"Δ к лучшему сектору сессии","currentSector":"ТЕКУЩИЙ СЕКТОР","lastSector":"ПОСЛЕДНИЙ СЕКТОР","sectorReference":"Δ к лучшему сектору сессии","sectorUnavailable":"Секторы не передаются","sectorShort":"СЕКТОР","progressShort":"ПРОГРЕСС","tyresShort":"ШИНЫ","allTimeBest":"ЛУЧШИЙ ЗА ВСЁ ВРЕМЯ","sessionBest":"ЛУЧШИЙ В СЕССИИ","sectorLearning":"Δ по сессии · запись эталона"},"en":{"fuelRange":"RANGE, LAPS","toLine":"To timing line: ","pedals":"PEDALS","sectorLiveDelta":"Δ vs session-best sector","currentSector":"CURRENT SECTOR","lastSector":"LAST SECTOR","sectorReference":"Δ vs session-best sector","sectorUnavailable":"Sector data unavailable","sectorShort":"SECTOR","progressShort":"PROGRESS","tyresShort":"TYRES","allTimeBest":"ALL-TIME BEST","sessionBest":"SESSION BEST","sectorLearning":"Δ vs session best · recording reference"},"de":{"fuelRange":"REICHWEITE, RD.","toLine":"Bis zur Zeitlinie: ","pedals":"PEDALE","sectorLiveDelta":"Δ zum besten Sektor der Session","currentSector":"AKTUELLER SEKTOR","lastSector":"LETZTER SEKTOR","sectorReference":"Δ zum besten Sektor der Session","sectorUnavailable":"Keine Sektordaten","sectorShort":"SEKTOR","progressShort":"FORTSCHRITT","tyresShort":"REIFEN","allTimeBest":"PERSÖNLICHE BESTZEIT","sessionBest":"SESSION-BESTZEIT","sectorLearning":"Δ zur Session-Bestzeit · Referenzaufzeichnung"},"es":{"fuelRange":"AUTONOMÍA, VUEL.","toLine":"Hasta la línea: ","pedals":"PEDALES","sectorLiveDelta":"Δ al mejor sector de la sesión","currentSector":"SECTOR ACTUAL","lastSector":"ÚLTIMO SECTOR","sectorReference":"Δ al mejor sector de la sesión","sectorUnavailable":"Sin datos de sectores","sectorShort":"SECTOR","progressShort":"AVANCE","tyresShort":"NEUMÁTICOS","allTimeBest":"MEJOR HISTÓRICO","sessionBest":"MEJOR DE LA SESIÓN","sectorLearning":"Δ de sesión · grabando referencia"},"fr":{"fuelRange":"AUTONOMIE, TOURS","toLine":"Jusqu’à la ligne: ","pedals":"PÉDALES","sectorLiveDelta":"Δ au meilleur secteur de la session","currentSector":"SECTEUR ACTUEL","lastSector":"DERNIER SECTEUR","sectorReference":"Δ au meilleur secteur de la session","sectorUnavailable":"Données de secteurs indisponibles","sectorShort":"SECTEUR","progressShort":"PROGRESSION","tyresShort":"PNEUS","allTimeBest":"RECORD PERSONNEL","sessionBest":"MEILLEUR DE LA SESSION","sectorLearning":"Δ de session · référence en cours"},"it":{"fuelRange":"AUTONOMIA, GIRI","toLine":"Alla linea: ","pedals":"PEDALI","sectorLiveDelta":"Δ al miglior settore della sessione","currentSector":"SETTORE ATTUALE","lastSector":"ULTIMO SETTORE","sectorReference":"Δ al miglior settore della sessione","sectorUnavailable":"Dati settori non disponibili","sectorShort":"SETTORE","progressShort":"AVANZAMENTO","tyresShort":"PNEUMATICI","allTimeBest":"MIGLIORE DI SEMPRE","sessionBest":"MIGLIORE SESSIONE","sectorLearning":"Δ sessione · registrazione riferimento"},"pt-BR":{"fuelRange":"AUTONOMIA, VOLTAS","toLine":"Até a linha: ","pedals":"PEDAIS","sectorLiveDelta":"Δ para o melhor setor da sessão","currentSector":"SETOR ATUAL","lastSector":"ÚLTIMO SETOR","sectorReference":"Δ para o melhor setor da sessão","sectorUnavailable":"Dados de setores indisponíveis","sectorShort":"SETOR","progressShort":"PROGRESSO","tyresShort":"PNEUS","allTimeBest":"MELHOR DE TODOS OS TEMPOS","sessionBest":"MELHOR DA SESSÃO","sectorLearning":"Δ da sessão · gravando referência"},"pl":{"fuelRange":"ZASIĘG, OKR.","toLine":"Do linii: ","pedals":"PEDAŁY","sectorLiveDelta":"Δ do najlepszego sektora sesji","currentSector":"BIEŻĄCY SEKTOR","lastSector":"OSTATNI SEKTOR","sectorReference":"Δ do najlepszego sektora sesji","sectorUnavailable":"Brak danych sektorów","sectorShort":"SEKTOR","progressShort":"POSTĘP","tyresShort":"OPONY","allTimeBest":"REKORD OSOBISTY","sessionBest":"NAJLEPSZY W SESJI","sectorLearning":"Δ w sesji · zapis odniesienia"},"cs":{"fuelRange":"DOJEZD, KOLA","toLine":"K časoměrné čáře: ","pedals":"PEDÁLY","sectorLiveDelta":"Δ k nejlepšímu sektoru relace","currentSector":"AKTUÁLNÍ SEKTOR","lastSector":"POSLEDNÍ SEKTOR","sectorReference":"Δ k nejlepšímu sektoru relace","sectorUnavailable":"Data sektorů nejsou dostupná","sectorShort":"SEKTOR","progressShort":"POSTUP","tyresShort":"PNEUMATIKY","allTimeBest":"OSOBNÍ REKORD","sessionBest":"NEJLEPŠÍ V RELACI","sectorLearning":"Δ v relaci · záznam reference"},"tr":{"fuelRange":"MENZİL, TUR","toLine":"Zaman çizgisine: ","pedals":"PEDALLAR","sectorLiveDelta":"Δ seansın en iyi sektörüne göre","currentSector":"MEVCUT SEKTÖR","lastSector":"SON SEKTÖR","sectorReference":"Δ seansın en iyi sektörüne göre","sectorUnavailable":"Sektör verisi yok","sectorShort":"SEKTÖR","progressShort":"İLERLEME","tyresShort":"LASTİKLER","allTimeBest":"TÜM ZAMANLARIN EN İYİSİ","sessionBest":"SEANSIN EN İYİSİ","sectorLearning":"Δ seans · referans kaydediliyor"},"ja":{"fuelRange":"航続周回数","toLine":"計測ラインまで: ","pedals":"ペダル","sectorLiveDelta":"Δ セッション最速セクターとの差","currentSector":"現在のセクター","lastSector":"直前のセクター","sectorReference":"Δ セッション最速セクターとの差","sectorUnavailable":"セクターデータなし","sectorShort":"セクター","progressShort":"進行","tyresShort":"タイヤ","allTimeBest":"自己ベスト","sessionBest":"セッションベスト","sectorLearning":"Δ セッション · 基準を記録中"},"ko":{"fuelRange":"주행 가능 랩","toLine":"계측선까지: ","pedals":"페달","sectorLiveDelta":"Δ 세션 최고 섹터 대비","currentSector":"현재 섹터","lastSector":"직전 섹터","sectorReference":"Δ 세션 최고 섹터 대비","sectorUnavailable":"섹터 데이터 없음","sectorShort":"섹터","progressShort":"진행률","tyresShort":"타이어","allTimeBest":"개인 최고 기록","sessionBest":"세션 최고 기록","sectorLearning":"Δ 세션 · 기준 기록 중"},"zh":{"fuelRange":"可跑圈数","toLine":"距计时线: ","pedals":"踏板","sectorLiveDelta":"Δ 对比本节最佳赛段","currentSector":"当前分段","lastSector":"上一分段","sectorReference":"Δ 对比本节最佳赛段","sectorUnavailable":"无分段数据","sectorShort":"分段","progressShort":"进度","tyresShort":"轮胎","allTimeBest":"历史最佳","sessionBest":"本节最佳","sectorLearning":"Δ 本节 · 正在记录参考"}};
 // Lap and sector timing. Normalized SimHub sector times are durations, not cumulative splits.
 function h2t(key) {
   var catalog=H2_TIMING_LABELS[a27lang()]||H2_TIMING_LABELS.en;
@@ -469,7 +469,8 @@ function h2sectorData() {
   if(index===null||index<1||index>100||Math.floor(index)!==index)return result;
   if(count===null||count<index||count>100||Math.floor(count)!==count)count=null;
   result.available=true;result.current=index;
-  var lapTime=h2positiveTime('CurrentLapTime'),s1=h2positiveTime('Sector1Time'),s2=h2positiveTime('Sector2Time');
+  var lapTime=a27seconds(a27d('CurrentLapTime')),s1=h2positiveTime('Sector1Time'),s2=h2positiveTime('Sector2Time');
+  if(lapTime!==null&&(!isFinite(lapTime)||lapTime<0||lapTime>=864000))lapTime=null;
   var start=index===1?0:index===2?s1:index===3&&s1!==null&&s2!==null?s1+s2:null;
   if(start===null)start=h2sectorCheckpoint(index-1);
   if(a27driving()&&lapTime!==null&&start!==null&&lapTime>=start)result.currentTime=lapTime-start;
@@ -477,15 +478,16 @@ function h2sectorData() {
   // recently completed sector in this SimHub version. Use numbered splits.
   if(index===2){result.last=1;result.lastTime=s1;}
   else if(index===3){result.last=2;result.lastTime=s2;}
-  else if(index===1&&count!==null&&count<=3&&a27dn('CurrentLap')>1&&h2positiveTime('LastLapTime')!==null){
-    result.last=count;result.lastTime=h2positiveTime('Sector'+count+'LastLapTime');
+  else if(index===1&&count!==null&&a27dn('CurrentLap')>1&&h2positiveTime('LastLapTime')!==null){
+    result.last=count;result.lastTime=count<=3?h2positiveTime('Sector'+count+'LastLapTime'):null;
+    if(result.lastTime===null)try {var previous=a27seconds(lastlapgetsectortime(count,false));if(previous!==null&&previous>0)result.lastTime=previous;}catch(e){}
   }
   if(index>1&&result.lastTime===null){
     result.last=index-1;
     var end=h2sectorCheckpoint(index-1),begin=h2sectorCheckpoint(index-2);
     if(end!==null&&begin!==null&&end>begin)result.lastTime=end-begin;
   }
-  if(result.last!==null&&result.last<=3)result.reference=h2positiveTime('Sector'+result.last+'BestLapTime');
+  if(result.last!==null)result.reference=h2bestSector(result.last);
   if(!a27invalid()&&result.lastTime!==null&&result.reference!==null)result.delta=result.lastTime-result.reference;
   return result;
 }
@@ -545,36 +547,123 @@ function a27reference() { return h2lapTiming(); }
 function a27delta() { return h2lapTiming().delta; }
 function a27prediction() { var value=h2lapTiming().prediction;return value===null?'—':a27time({TotalSeconds:value},true); }
 
-// The formula-local root persists across refreshes. No best-sector times are
-// mixed into a whole-lap reference: observe the boundary on the same source.
-function h2sectorLiveDelta() {
+function h2lapComparison(kind) {
+  var value={seconds:null,delta:null,prediction:null};
+  if(!a27live()||a27stage()||!a27knownTrack())return value;
+  if(kind==='session') {
+    value.seconds=h2positiveTime('BestLapTime');
+    var session=h2lapTiming();
+    if(session.kind==='session')value=session;
+  }else {
+    value.seconds=h2timingSpan('AllTimeBest');
+    var pair=h2timingPair('all-time-record','personal',value.seconds,
+      a27n('PersistantTrackerPlugin.AllTimeBestLiveDeltaSeconds'),h2timingSpan('EstimatedLapTime_AllTimeBestBased'));
+    if(pair)value=pair;
+  }
+  if(!a27driving()||a27pit()||a27invalid()||a27progress()===null){value.delta=null;value.prediction=null;}
+  return value;
+}
+function h2lapReferenceText(kind) { var v=h2lapComparison(kind).seconds;return v===null?'—':a27time({TotalSeconds:v},true); }
+function h2lapDeltaText(kind) { return a27signed(h2lapComparison(kind).delta,3); }
+function h2deltaColor(v) { return v===null?'#FF96A6B4':v<=0?'#FF64E3B1':'#FFFFB35C'; }
+function h2lapDeltaColor(kind) { return h2deltaColor(h2lapComparison(kind).delta); }
+function h2bestSector(index) {
+  // Independent fastest sectors from valid laps in this session, not the
+  // sector splits belonging to a single fastest complete lap.
+  try { var v=a27seconds(bestsectortime(index,false));if(v!==null&&v>0&&v<864000)return v; }catch(e){}
+  return index<=3?h2positiveTime('Sector'+index+'BestTime'):null;
+}
+function h2sectorSessionKey() {
+  return [a27game(),a27d('TrackIdWithConfig'),a27d('TrackCode'),a27d('TrackName'),a27d('CarId'),a27d('CarModel'),
+    a27p('DataCorePlugin.GameData.SessionId'),a27d('SessionTypeName'),a27p('GameRawData.Telemetry.SessionNum'),
+    a27p('GameRawData.StaticInfo.session_id'),a27p('GameRawData.StaticInfo.event_id')].join('|');
+}
+function h2traceAt(trace,value,axis) {
+  if(!trace||trace.length<2||value<trace[0][axis]||value>trace[trace.length-1][axis])return null;
+  var lo=0,hi=trace.length-1;
+  while(hi-lo>1){var mid=Math.floor((lo+hi)/2);if(trace[mid][axis]<=value)lo=mid;else hi=mid;}
+  var a=trace[lo],b=trace[hi],width=b[axis]-a[axis];
+  return width>0?a[1-axis]+(b[1-axis]-a[1-axis])*(value-a[axis])/width:null;
+}
+function h2sectorTraceState(s) {
   if(typeof root==='undefined'||!root)return null;
-  var timing=h2lapTiming(),sector=h2sectorData(),lap=a27dn('CurrentLap'),clock=a27seconds(a27d('CurrentLapTime'));
-  var key=[a27game(),a27d('TrackCode'),a27d('TrackName'),a27d('CarId'),a27d('CarModel'),a27d('SessionTypeName'),a27p('GameRawData.Telemetry.SessionNum'),a27p('GameRawData.StaticInfo.session_id'),a27p('GameRawData.StaticInfo.event_id')].join('|');
-  var restart=a27yes(a27d('IsSessionRestart'));
-  if(!a27driving()||a27pit()||a27invalid()||a27stage()||!sector.available||timing.delta===null||!(timing.seconds>0)||lap===null||lap<1||Math.floor(lap)!==lap||clock===null||clock<0||clock>864000){root.h2sectorLive=null;return null;}
-  var now=Date.now(),sample={key:key,source:timing.source,reference:timing.seconds,lap:lap,index:sector.current,count:a27dn('SectorsCount'),clock:clock,delta:timing.delta,stamp:now,restart:restart,baseline:null};
-  var previous=root.h2sectorLive;
-  if(previous&&previous.key===key&&previous.source===sample.source&&Math.abs(previous.reference-sample.reference)<0.0005&&!(restart&&!previous.restart)&&now>=previous.stamp&&now-previous.stamp<=1500){
-    if(lap===previous.lap&&sample.index===previous.index&&clock>=previous.clock&&clock-previous.clock<=1.5){
-      sample.baseline=previous.baseline;
-    }else if(lap===previous.lap&&sample.index===previous.index+1&&clock>previous.clock&&clock-previous.clock<=1.5&&sector.currentTime!==null){
-      var boundary=clock-sector.currentTime;
-      if(boundary>=previous.clock&&boundary<=clock){
-        var portion=(boundary-previous.clock)/(clock-previous.clock);
-        sample.baseline=previous.delta+(sample.delta-previous.delta)*portion;
+  var key=h2sectorSessionKey(),clock=a27seconds(a27d('CurrentLapTime')),lap=a27dn('CurrentLap'),p=a27progress(),now=Date.now();
+  var restart=a27yes(a27d('IsSessionRestart')),state=root.h2sectorSession;
+  if(!state||state.key!==key||(restart&&!state.restart)||(state.previous&&lap<state.previous.lap))
+    state=root.h2sectorSession={key:key,records:{},previous:null,trace:[],ends:{},complete:false};
+  state.restart=restart;
+  if(!a27driving()||a27stage()||!s.available||clock===null||clock<0||p===null||lap===null||lap<1){state.previous=null;state.complete=false;return state;}
+  var previous=state.previous,count=a27dn('SectorsCount'),valid=!a27pit()&&!a27invalid();
+  var sample={lap:lap,clock:clock,p:p,index:s.current,count:count,stamp:now,valid:valid};
+  var close=previous&&now>=previous.stamp&&now-previous.stamp<=1500;
+  var wrap=close&&lap===previous.lap+1&&s.current===1&&previous.index===previous.count&&clock<=1.5;
+  if(wrap&&valid&&previous.valid) {
+    var last=h2positiveTime('LastLapTime');
+    if(state.complete&&last!==null&&last>=previous.clock&&last-previous.clock+clock<=1.5&&previous.p>0.95) {
+      state.trace.push([1,last]);state.ends[previous.count]=last;
+      var start=0;
+      for(var index=1;index<=previous.count;index++) {
+        var end=state.ends[index],beginPos=start===0?0:h2traceAt(state.trace,start,1),endPos=h2traceAt(state.trace,end,1);
+        if(typeof end!=='number'||end<=start||beginPos===null||endPos===null||endPos<=beginPos)break;
+        var duration=end-start,old=state.records[index];
+        if(!old||duration<old.seconds) {
+          var trace=[[beginPos,0]];
+          for(var j=0;j<state.trace.length;j++){var point=state.trace[j];if(point[1]>start&&point[1]<end)trace.push([point[0],point[1]-start]);}
+          trace.push([endPos,duration]);state.records[index]={seconds:duration,trace:trace};
+        }
+        start=end;
       }
-    }else if(lap===previous.lap+1&&sample.index===1&&previous.count!==null&&previous.index===previous.count&&clock<=1.5){
-      var last=h2positiveTime('LastLapTime');
-      if(last!==null&&last>=previous.clock&&last-previous.clock+clock<=1.5)sample.baseline=0;
     }
   }
-  root.h2sectorLive=sample;
-  if(sample.baseline===null)return null;
-  var difference=sample.delta-sample.baseline;return Math.abs(difference)<0.000000001?0:difference;
+  var continuous=close&&lap===previous.lap&&clock>=previous.clock&&clock-previous.clock<=1.5&&p>=previous.p&&s.current>=previous.index&&s.current<=previous.index+1;
+  if(!continuous) {
+    state.trace=[];state.ends={};state.complete=valid&&s.current===1&&p<0.01&&((!previous&&clock<=0.25)||wrap);
+    if(state.complete)state.trace.push([0,0]);
+  }
+  if(!valid)state.complete=false;
+  for(var n=1;n<s.current;n++){var checkpoint=h2sectorCheckpoint(n);if(n===1)checkpoint=h2positiveTime('Sector1Time')||checkpoint;if(checkpoint!==null&&checkpoint>0&&checkpoint<=clock)state.ends[n]=checkpoint;}
+  if(s.current===3){var one=h2positiveTime('Sector1Time'),two=h2positiveTime('Sector2Time');if(one!==null&&two!==null)state.ends[2]=one+two;}
+  if(state.complete&&state.trace.length<100000) {
+    var tail=state.trace[state.trace.length-1];
+    if(clock-tail[1]>=0.1&&p>tail[0])state.trace.push([p,clock]);
+  }else if(state.trace.length>=100000)state.complete=false;
+  state.previous=sample;return state;
 }
-function h2sectorLiveDeltaText() { var value=h2sectorLiveDelta();return value===null?'—':'≈'+a27signed(value,3); }
-function h2sectorLiveDeltaColor() { var value=h2sectorLiveDelta();return value===null?'#FF96A6B4':value<=0?'#FF64E3B1':'#FFFFB35C'; }
+function h2sectorLiveDelta() {
+  var s=h2sectorData(),state=h2sectorTraceState(s);
+  if(!state||!a27driving()||a27pit()||a27invalid()||s.currentTime===null)return null;
+  var record=state.records[s.current],best=h2bestSector(s.current),p=a27progress();
+  // A faster sector set before this dashboard was opened has no recorded
+  // trace here. Never silently compare it against a different, slower lap.
+  if(!record||best===null||Math.abs(record.seconds-best)>0.005||p===null)return null;
+  var reference=h2traceAt(record.trace,p,0);
+  return reference===null?null:s.currentTime-reference;
+}
+function h2sectorLiveDeltaText() { var v=h2sectorLiveDelta();return v===null?'—':'≈'+a27signed(v,3); }
+function h2sectorLiveDeltaColor() { return h2deltaColor(h2sectorLiveDelta()); }
+function h2sectorReferenceNote(current) {
+  return current&&h2sectorLiveDelta()===null&&!a27invalid()?h2t('sectorLearning'):h2t('sectorReference');
+}
+function h2footerTime() {
+  var now=new Date(),clock=('0'+now.getHours()).slice(-2)+':'+('0'+now.getMinutes()).slice(-2);
+  if(!a27live())return clock;
+  var seconds=a27seconds(a27d('SessionTimeLeft')),key=h2sectorSessionKey();
+  if(typeof root!=='undefined'&&root) {
+    if(root.h2timerKey!==key){root.h2timerKey=key;root.h2timerSeen=false;}
+    if(seconds>0&&seconds<864000)root.h2timerSeen=true;
+  }
+  var remaining='—';
+  if(seconds!==null&&seconds>=0&&seconds<864000&&(seconds>0||(typeof root!=='undefined'&&root.h2timerSeen))) {
+    var t=Math.ceil(seconds),h=Math.floor(t/3600),m=Math.floor(t%3600/60),s=t%60;
+    remaining=(h>0?h+':'+('0'+m).slice(-2):String(m))+':'+('0'+s).slice(-2);
+  }
+  return clock+'   ·   '+a27session()+'  '+remaining;
+}
+function a27unit() {
+  if(a27f1())return a27t(225);
+  var u=a27str(a27d('FuelUnit'),'L');
+  return /^(l|liters?|litres?)$/i.test(u)?'L':/^(gal|gallons?)$/i.test(u)?'gal':u;
+}
 
 
 var H2_RACE_LABELS={"ru":{"title":"УЧАСТНИКИ","driver":"ПИЛОТ","gap":"ОТРЫВ","lobby":"ВСЕГО","ownClass":"СВОЙ КЛАСС","meanIr":"СР. iR","pinnedAhead":"КЛАСС: ВПЕРЕДИ","pinnedBehind":"КЛАСС: ПОЗАДИ","physicalAhead":"НА ТРАССЕ ВПЕРЕДИ","physicalBehind":"НА ТРАССЕ ПОЗАДИ","player":"ВЫ","pinnedNote":"Крайние строки — ближайшие позиции своего класса","trafficNote":"− впереди на трассе · + позади на трассе","lastLap":"ПОСЛ. КРУГ","raceGap":"ЗАЧЁТ","trackGap":"НА ТРАССЕ","classificationOnlyNote":"Гоночные позиции · интервалы на трассе недоступны"},"en":{"title":"DRIVERS","driver":"DRIVER","gap":"GAP","lobby":"TOTAL","ownClass":"YOUR CLASS","meanIr":"AVG iR","pinnedAhead":"CLASS: AHEAD","pinnedBehind":"CLASS: BEHIND","physicalAhead":"AHEAD ON TRACK","physicalBehind":"BEHIND ON TRACK","player":"YOU","pinnedNote":"Outer rows: nearest positions in your class","trafficNote":"− ahead on track · + behind on track","lastLap":"LAST LAP","raceGap":"RACE","trackGap":"TRACK","classificationOnlyNote":"Race positions · track intervals unavailable"},"de":{"title":"FAHRER","driver":"FAHRER","gap":"ABSTAND","lobby":"GESAMT","ownClass":"EIGENE KLASSE","meanIr":"Ø iR","pinnedAhead":"KLASSE: DAVOR","pinnedBehind":"KLASSE: DAHINTER","physicalAhead":"AUF DER STRECKE DAVOR","physicalBehind":"AUF DER STRECKE DAHINTER","player":"DU","pinnedNote":"Äußere Zeilen: nächste Positionen in deiner Klasse","trafficNote":"− auf der Strecke davor · + auf der Strecke dahinter","lastLap":"LETZTE RUNDE","raceGap":"RENNEN","trackGap":"STRECKE","classificationOnlyNote":"Rennpositionen · Streckenabstände nicht verfügbar"},"es":{"title":"PILOTOS","driver":"PILOTO","gap":"DIF.","lobby":"TOTAL","ownClass":"TU CLASE","meanIr":"iR MEDIO","pinnedAhead":"CLASE: DELANTE","pinnedBehind":"CLASE: DETRÁS","physicalAhead":"DELANTE EN PISTA","physicalBehind":"DETRÁS EN PISTA","player":"TÚ","pinnedNote":"Filas exteriores: posiciones más cercanas de tu clase","trafficNote":"− delante en pista · + detrás en pista","lastLap":"ÚLT. VUELTA","raceGap":"CARRERA","trackGap":"PISTA","classificationOnlyNote":"Posiciones de carrera · intervalos en pista no disponibles"},"fr":{"title":"PILOTES","driver":"PILOTE","gap":"ÉCART","lobby":"TOTAL","ownClass":"VOTRE CATÉGORIE","meanIr":"iR MOYEN","pinnedAhead":"CATÉGORIE : DEVANT","pinnedBehind":"CATÉGORIE : DERRIÈRE","physicalAhead":"DEVANT EN PISTE","physicalBehind":"DERRIÈRE EN PISTE","player":"VOUS","pinnedNote":"Lignes extérieures : positions voisines de votre catégorie","trafficNote":"− devant en piste · + derrière en piste","lastLap":"DERNIER TOUR","raceGap":"COURSE","trackGap":"PISTE","classificationOnlyNote":"Positions de course · écarts sur la piste indisponibles"},"it":{"title":"PILOTI","driver":"PILOTA","gap":"DISTACCO","lobby":"TOTALE","ownClass":"TUA CLASSE","meanIr":"iR MEDIO","pinnedAhead":"CLASSE: DAVANTI","pinnedBehind":"CLASSE: DIETRO","physicalAhead":"DAVANTI IN PISTA","physicalBehind":"DIETRO IN PISTA","player":"TU","pinnedNote":"Righe esterne: posizioni più vicine nella tua classe","trafficNote":"− davanti in pista · + dietro in pista","lastLap":"ULTIMO GIRO","raceGap":"GARA","trackGap":"PISTA","classificationOnlyNote":"Posizioni di gara · distacchi in pista non disponibili"},"pt-BR":{"title":"PILOTOS","driver":"PILOTO","gap":"DIF.","lobby":"TOTAL","ownClass":"SUA CLASSE","meanIr":"iR MÉDIO","pinnedAhead":"CLASSE: À FRENTE","pinnedBehind":"CLASSE: ATRÁS","physicalAhead":"À FRENTE NA PISTA","physicalBehind":"ATRÁS NA PISTA","player":"VOCÊ","pinnedNote":"Linhas externas: posições mais próximas na sua classe","trafficNote":"− à frente na pista · + atrás na pista","lastLap":"ÚLT. VOLTA","raceGap":"CORRIDA","trackGap":"PISTA","classificationOnlyNote":"Posições de corrida · intervalos na pista indisponíveis"},"pl":{"title":"KIEROWCY","driver":"KIEROWCA","gap":"RÓŻNICA","lobby":"ŁĄCZNIE","ownClass":"TWOJA KLASA","meanIr":"ŚR. iR","pinnedAhead":"KLASA: PRZED","pinnedBehind":"KLASA: ZA","physicalAhead":"PRZED TOBĄ NA TORZE","physicalBehind":"ZA TOBĄ NA TORZE","player":"TY","pinnedNote":"Skrajne wiersze: sąsiednie pozycje w twojej klasie","trafficNote":"− przed tobą na torze · + za tobą na torze","lastLap":"OST. OKRĄŻENIE","raceGap":"WYŚCIG","trackGap":"TOR","classificationOnlyNote":"Pozycje w wyścigu · odstępy na torze niedostępne"},"cs":{"title":"JEZDCI","driver":"JEZDEC","gap":"ODSTUP","lobby":"CELKEM","ownClass":"VAŠE TŘÍDA","meanIr":"PRŮM. iR","pinnedAhead":"TŘÍDA: VPŘEDU","pinnedBehind":"TŘÍDA: VZADU","physicalAhead":"VPŘEDU NA TRATI","physicalBehind":"VZADU NA TRATI","player":"VY","pinnedNote":"Krajní řádky: sousední pozice ve vaší třídě","trafficNote":"− vpředu na trati · + vzadu na trati","lastLap":"POSLEDNÍ KOLO","raceGap":"ZÁVOD","trackGap":"TRAŤ","classificationOnlyNote":"Pořadí v závodě · rozestupy na trati nejsou dostupné"},"tr":{"title":"SÜRÜCÜLER","driver":"SÜRÜCÜ","gap":"FARK","lobby":"TOPLAM","ownClass":"SINIFINIZ","meanIr":"ORT. iR","pinnedAhead":"SINIF: ÖNDE","pinnedBehind":"SINIF: ARKADA","physicalAhead":"PİSTTE ÖNDE","physicalBehind":"PİSTTE ARKADA","player":"SİZ","pinnedNote":"Dış satırlar: sınıfınızdaki en yakın sıralamalar","trafficNote":"− pistte önde · + pistte arkada","lastLap":"SON TUR","raceGap":"YARIŞ","trackGap":"PİST","classificationOnlyNote":"Yarış sıralaması · pistteki aralıklar kullanılamıyor"},"ja":{"title":"ドライバー","driver":"ドライバー","gap":"差","lobby":"合計","ownClass":"自分のクラス","meanIr":"平均 iR","pinnedAhead":"クラス順位：前","pinnedBehind":"クラス順位：後","physicalAhead":"コース上で前方","physicalBehind":"コース上で後方","player":"自分","pinnedNote":"上下端の行：同じクラスで直前・直後の順位","trafficNote":"− コース上で前方 · + コース上で後方","lastLap":"前のラップ","raceGap":"レース","trackGap":"コース上","classificationOnlyNote":"レース順位 · コース上の間隔は取得できません"},"ko":{"title":"드라이버","driver":"드라이버","gap":"격차","lobby":"전체","ownClass":"내 클래스","meanIr":"평균 iR","pinnedAhead":"클래스 순위: 앞","pinnedBehind":"클래스 순위: 뒤","physicalAhead":"트랙에서 앞","physicalBehind":"트랙에서 뒤","player":"나","pinnedNote":"맨 위와 아래 행: 같은 클래스의 바로 앞뒤 순위","trafficNote":"− 트랙에서 앞 · + 트랙에서 뒤","lastLap":"이전 랩","raceGap":"레이스","trackGap":"트랙","classificationOnlyNote":"레이스 순위 · 트랙 간격 정보 없음"},"zh":{"title":"车手","driver":"车手","gap":"差距","lobby":"总人数","ownClass":"本组别","meanIr":"平均 iR","pinnedAhead":"组别排名：前方","pinnedBehind":"组别排名：后方","physicalAhead":"赛道前方","physicalBehind":"赛道后方","player":"你","pinnedNote":"首尾行：本组别中紧邻你的前后名次","trafficNote":"− 赛道前方 · + 赛道后方","lastLap":"上一圈","raceGap":"比赛","trackGap":"赛道","classificationOnlyNote":"比赛排名 · 赛道间隔数据不可用"}};
