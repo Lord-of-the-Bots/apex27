@@ -530,6 +530,14 @@
                     "Expression": "return !h2timingMode()&&(true);"
                   },
                   "Mode": 2
+                },
+                "Width": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27race()?(486):(246.0);"
+                  },
+                  "Mode": 2
                 }
               }
             },
@@ -591,6 +599,14 @@
                     "JSExt": 1,
                     "Interpreter": 1,
                     "Expression": "return !h2timingMode()&&(true);"
+                  },
+                  "Mode": 2
+                },
+                "Width": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27race()?(486):(246.0);"
                   },
                   "Mode": 2
                 }
@@ -864,7 +880,7 @@
                   "Formula": {
                     "JSExt": 1,
                     "Interpreter": 1,
-                    "Expression": "return !h2timingMode()&&(!a27stage());"
+                    "Expression": "return !a27race()&&(!h2timingMode()&&(!a27stage()));"
                   },
                   "Mode": 2
                 }
@@ -918,7 +934,7 @@
                   "Formula": {
                     "JSExt": 1,
                     "Interpreter": 1,
-                    "Expression": "return !h2timingMode()&&(!a27stage());"
+                    "Expression": "return !a27race()&&(!h2timingMode()&&(!a27stage()));"
                   },
                   "Mode": 2
                 }
@@ -2000,7 +2016,7 @@
                   "Name": "Class -3",
                   "Left": 130,
                   "Top": 498,
-                  "Width": 548,
+                  "Width": 324,
                   "Height": 24,
                   "Visible": true,
                   "BackgroundColor": "#00000000",
@@ -2019,7 +2035,7 @@
                       "Formula": {
                         "JSExt": 1,
                         "Interpreter": 1,
-                        "Expression": "return a27trafficShort(h2raceRow(-3).kind==='class'?h2raceRole(-3)+(h2raceText(-3,'meta')!==''?' · '+h2raceText(-3,'meta'):''):h2raceRow(-3).available?h2raceText(-3,'meta'):h2raceRole(-3),a27largeTraffic()?28:31);"
+                        "Expression": "return a27trafficShort(h2raceText(-3,'meta')||h2raceRole(-3),a27largeTraffic()?20:23);"
                       },
                       "Mode": 2
                     },
@@ -3221,7 +3237,7 @@
                   "Name": "Class -2",
                   "Left": 130,
                   "Top": 568,
-                  "Width": 548,
+                  "Width": 324,
                   "Height": 24,
                   "Visible": true,
                   "BackgroundColor": "#00000000",
@@ -3240,7 +3256,7 @@
                       "Formula": {
                         "JSExt": 1,
                         "Interpreter": 1,
-                        "Expression": "return a27trafficShort(h2raceRow(-2).kind==='class'?h2raceRole(-2)+(h2raceText(-2,'meta')!==''?' · '+h2raceText(-2,'meta'):''):h2raceRow(-2).available?h2raceText(-2,'meta'):h2raceRole(-2),a27largeTraffic()?28:31);"
+                        "Expression": "return a27trafficShort(h2raceText(-2,'meta')||h2raceRole(-2),a27largeTraffic()?20:23);"
                       },
                       "Mode": 2
                     },
@@ -4434,7 +4450,7 @@
                   "Name": "Class -1",
                   "Left": 130,
                   "Top": 638,
-                  "Width": 548,
+                  "Width": 324,
                   "Height": 24,
                   "Visible": true,
                   "BackgroundColor": "#00000000",
@@ -4453,7 +4469,7 @@
                       "Formula": {
                         "JSExt": 1,
                         "Interpreter": 1,
-                        "Expression": "return a27trafficShort(h2raceRow(-1).kind==='class'?h2raceRole(-1)+(h2raceText(-1,'meta')!==''?' · '+h2raceText(-1,'meta'):''):h2raceRow(-1).available?h2raceText(-1,'meta'):h2raceRole(-1),a27largeTraffic()?28:31);"
+                        "Expression": "return a27trafficShort(h2raceText(-1,'meta')||h2raceRole(-1),a27largeTraffic()?20:23);"
                       },
                       "Mode": 2
                     },
@@ -5691,7 +5707,7 @@
                   "Name": "Class 0",
                   "Left": 130,
                   "Top": 708,
-                  "Width": 548,
+                  "Width": 324,
                   "Height": 24,
                   "Visible": true,
                   "BackgroundColor": "#00000000",
@@ -5710,7 +5726,7 @@
                       "Formula": {
                         "JSExt": 1,
                         "Interpreter": 1,
-                        "Expression": "return a27trafficShort(h2raceRow(0).kind==='class'?h2raceRole(0)+(h2raceText(0,'meta')!==''?' · '+h2raceText(0,'meta'):''):h2raceRow(0).available?h2raceText(0,'meta'):h2raceRole(0),a27largeTraffic()?28:31);"
+                        "Expression": "return a27trafficShort(h2raceText(0,'meta')||h2raceRole(0),a27largeTraffic()?20:23);"
                       },
                       "Mode": 2
                     },
@@ -6904,7 +6920,7 @@
                   "Name": "Class 1",
                   "Left": 130,
                   "Top": 778,
-                  "Width": 548,
+                  "Width": 324,
                   "Height": 24,
                   "Visible": true,
                   "BackgroundColor": "#00000000",
@@ -6923,7 +6939,7 @@
                       "Formula": {
                         "JSExt": 1,
                         "Interpreter": 1,
-                        "Expression": "return a27trafficShort(h2raceRow(1).kind==='class'?h2raceRole(1)+(h2raceText(1,'meta')!==''?' · '+h2raceText(1,'meta'):''):h2raceRow(1).available?h2raceText(1,'meta'):h2raceRole(1),a27largeTraffic()?28:31);"
+                        "Expression": "return a27trafficShort(h2raceText(1,'meta')||h2raceRole(1),a27largeTraffic()?20:23);"
                       },
                       "Mode": 2
                     },
@@ -8117,7 +8133,7 @@
                   "Name": "Class 2",
                   "Left": 130,
                   "Top": 848,
-                  "Width": 548,
+                  "Width": 324,
                   "Height": 24,
                   "Visible": true,
                   "BackgroundColor": "#00000000",
@@ -8136,7 +8152,7 @@
                       "Formula": {
                         "JSExt": 1,
                         "Interpreter": 1,
-                        "Expression": "return a27trafficShort(h2raceRow(2).kind==='class'?h2raceRole(2)+(h2raceText(2,'meta')!==''?' · '+h2raceText(2,'meta'):''):h2raceRow(2).available?h2raceText(2,'meta'):h2raceRole(2),a27largeTraffic()?28:31);"
+                        "Expression": "return a27trafficShort(h2raceText(2,'meta')||h2raceRole(2),a27largeTraffic()?20:23);"
                       },
                       "Mode": 2
                     },
@@ -9378,7 +9394,7 @@
                   "Name": "Class 3",
                   "Left": 130,
                   "Top": 918,
-                  "Width": 548,
+                  "Width": 324,
                   "Height": 24,
                   "Visible": true,
                   "BackgroundColor": "#00000000",
@@ -9397,7 +9413,7 @@
                       "Formula": {
                         "JSExt": 1,
                         "Interpreter": 1,
-                        "Expression": "return a27trafficShort(h2raceRow(3).kind==='class'?h2raceRole(3)+(h2raceText(3,'meta')!==''?' · '+h2raceText(3,'meta'):''):h2raceRow(3).available?h2raceText(3,'meta'):h2raceRole(3),a27largeTraffic()?28:31);"
+                        "Expression": "return a27trafficShort(h2raceText(3,'meta')||h2raceRole(3),a27largeTraffic()?20:23);"
                       },
                       "Mode": 2
                     },
@@ -10085,6 +10101,552 @@
                         "JSExt": 1,
                         "Interpreter": 1,
                         "Expression": "return a27font();"
+                      },
+                      "Mode": 2
+                    }
+                  }
+                },
+                {
+                  "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
+                  "Name": "Driver projected iRating -3",
+                  "Left": 464,
+                  "Top": 498,
+                  "Width": 206,
+                  "Height": 24,
+                  "Visible": true,
+                  "BackgroundColor": "#00000000",
+                  "Font": "Segoe UI",
+                  "FontSize": 17,
+                  "FontWeight": "Normal",
+                  "Text": "—",
+                  "TextColor": "#FF96A6B4",
+                  "HorizontalAlignment": 2,
+                  "VerticalAlignment": 1,
+                  "TextWrapping": 1,
+                  "RenderingSkip": 0,
+                  "MinimumRefreshIntervalMS": 1000.0,
+                  "Bindings": {
+                    "Text": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return 'ΔiR '+h2raceIRText(-3);"
+                      },
+                      "Mode": 2
+                    },
+                    "TextColor": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27color(h2raceIRColor(-3));"
+                      },
+                      "Mode": 2
+                    },
+                    "Font": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27font();"
+                      },
+                      "Mode": 2
+                    },
+                    "FontSize": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27largeTraffic()?19:17;"
+                      },
+                      "Mode": 2
+                    },
+                    "Top": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return (a27largeTraffic()?360:460)+(a27largeTraffic()?52:38);"
+                      },
+                      "Mode": 2
+                    },
+                    "Height": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27largeTraffic()?27:24;"
+                      },
+                      "Mode": 2
+                    },
+                    "Visible": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return !a27largeTraffic()&&(a27ir());"
+                      },
+                      "Mode": 2
+                    }
+                  }
+                },
+                {
+                  "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
+                  "Name": "Driver projected iRating -2",
+                  "Left": 464,
+                  "Top": 568,
+                  "Width": 206,
+                  "Height": 24,
+                  "Visible": true,
+                  "BackgroundColor": "#00000000",
+                  "Font": "Segoe UI",
+                  "FontSize": 17,
+                  "FontWeight": "Normal",
+                  "Text": "—",
+                  "TextColor": "#FF96A6B4",
+                  "HorizontalAlignment": 2,
+                  "VerticalAlignment": 1,
+                  "TextWrapping": 1,
+                  "RenderingSkip": 0,
+                  "MinimumRefreshIntervalMS": 1000.0,
+                  "Bindings": {
+                    "Text": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return 'ΔiR '+h2raceIRText(-2);"
+                      },
+                      "Mode": 2
+                    },
+                    "TextColor": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27color(h2raceIRColor(-2));"
+                      },
+                      "Mode": 2
+                    },
+                    "Font": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27font();"
+                      },
+                      "Mode": 2
+                    },
+                    "FontSize": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27largeTraffic()?19:17;"
+                      },
+                      "Mode": 2
+                    },
+                    "Top": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return (a27largeTraffic()?460:530)+(a27largeTraffic()?52:38);"
+                      },
+                      "Mode": 2
+                    },
+                    "Height": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27largeTraffic()?27:24;"
+                      },
+                      "Mode": 2
+                    },
+                    "Visible": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27ir();"
+                      },
+                      "Mode": 2
+                    }
+                  }
+                },
+                {
+                  "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
+                  "Name": "Driver projected iRating -1",
+                  "Left": 464,
+                  "Top": 638,
+                  "Width": 206,
+                  "Height": 24,
+                  "Visible": true,
+                  "BackgroundColor": "#00000000",
+                  "Font": "Segoe UI",
+                  "FontSize": 17,
+                  "FontWeight": "Normal",
+                  "Text": "—",
+                  "TextColor": "#FF96A6B4",
+                  "HorizontalAlignment": 2,
+                  "VerticalAlignment": 1,
+                  "TextWrapping": 1,
+                  "RenderingSkip": 0,
+                  "MinimumRefreshIntervalMS": 1000.0,
+                  "Bindings": {
+                    "Text": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return 'ΔiR '+h2raceIRText(-1);"
+                      },
+                      "Mode": 2
+                    },
+                    "TextColor": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27color(h2raceIRColor(-1));"
+                      },
+                      "Mode": 2
+                    },
+                    "Font": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27font();"
+                      },
+                      "Mode": 2
+                    },
+                    "FontSize": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27largeTraffic()?19:17;"
+                      },
+                      "Mode": 2
+                    },
+                    "Top": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return (a27largeTraffic()?560:600)+(a27largeTraffic()?52:38);"
+                      },
+                      "Mode": 2
+                    },
+                    "Height": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27largeTraffic()?27:24;"
+                      },
+                      "Mode": 2
+                    },
+                    "Visible": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27ir();"
+                      },
+                      "Mode": 2
+                    }
+                  }
+                },
+                {
+                  "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
+                  "Name": "Driver projected iRating 0",
+                  "Left": 464,
+                  "Top": 708,
+                  "Width": 206,
+                  "Height": 24,
+                  "Visible": true,
+                  "BackgroundColor": "#00000000",
+                  "Font": "Segoe UI",
+                  "FontSize": 17,
+                  "FontWeight": "Normal",
+                  "Text": "—",
+                  "TextColor": "#FF96A6B4",
+                  "HorizontalAlignment": 2,
+                  "VerticalAlignment": 1,
+                  "TextWrapping": 1,
+                  "RenderingSkip": 0,
+                  "MinimumRefreshIntervalMS": 1000.0,
+                  "Bindings": {
+                    "Text": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return 'ΔiR '+h2raceIRText(0);"
+                      },
+                      "Mode": 2
+                    },
+                    "TextColor": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27color(h2raceIRColor(0));"
+                      },
+                      "Mode": 2
+                    },
+                    "Font": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27font();"
+                      },
+                      "Mode": 2
+                    },
+                    "FontSize": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27largeTraffic()?19:17;"
+                      },
+                      "Mode": 2
+                    },
+                    "Top": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return (a27largeTraffic()?660:670)+(a27largeTraffic()?52:38);"
+                      },
+                      "Mode": 2
+                    },
+                    "Height": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27largeTraffic()?27:24;"
+                      },
+                      "Mode": 2
+                    },
+                    "Visible": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27ir();"
+                      },
+                      "Mode": 2
+                    }
+                  }
+                },
+                {
+                  "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
+                  "Name": "Driver projected iRating 1",
+                  "Left": 464,
+                  "Top": 778,
+                  "Width": 206,
+                  "Height": 24,
+                  "Visible": true,
+                  "BackgroundColor": "#00000000",
+                  "Font": "Segoe UI",
+                  "FontSize": 17,
+                  "FontWeight": "Normal",
+                  "Text": "—",
+                  "TextColor": "#FF96A6B4",
+                  "HorizontalAlignment": 2,
+                  "VerticalAlignment": 1,
+                  "TextWrapping": 1,
+                  "RenderingSkip": 0,
+                  "MinimumRefreshIntervalMS": 1000.0,
+                  "Bindings": {
+                    "Text": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return 'ΔiR '+h2raceIRText(1);"
+                      },
+                      "Mode": 2
+                    },
+                    "TextColor": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27color(h2raceIRColor(1));"
+                      },
+                      "Mode": 2
+                    },
+                    "Font": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27font();"
+                      },
+                      "Mode": 2
+                    },
+                    "FontSize": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27largeTraffic()?19:17;"
+                      },
+                      "Mode": 2
+                    },
+                    "Top": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return (a27largeTraffic()?760:740)+(a27largeTraffic()?52:38);"
+                      },
+                      "Mode": 2
+                    },
+                    "Height": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27largeTraffic()?27:24;"
+                      },
+                      "Mode": 2
+                    },
+                    "Visible": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27ir();"
+                      },
+                      "Mode": 2
+                    }
+                  }
+                },
+                {
+                  "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
+                  "Name": "Driver projected iRating 2",
+                  "Left": 464,
+                  "Top": 848,
+                  "Width": 206,
+                  "Height": 24,
+                  "Visible": true,
+                  "BackgroundColor": "#00000000",
+                  "Font": "Segoe UI",
+                  "FontSize": 17,
+                  "FontWeight": "Normal",
+                  "Text": "—",
+                  "TextColor": "#FF96A6B4",
+                  "HorizontalAlignment": 2,
+                  "VerticalAlignment": 1,
+                  "TextWrapping": 1,
+                  "RenderingSkip": 0,
+                  "MinimumRefreshIntervalMS": 1000.0,
+                  "Bindings": {
+                    "Text": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return 'ΔiR '+h2raceIRText(2);"
+                      },
+                      "Mode": 2
+                    },
+                    "TextColor": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27color(h2raceIRColor(2));"
+                      },
+                      "Mode": 2
+                    },
+                    "Font": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27font();"
+                      },
+                      "Mode": 2
+                    },
+                    "FontSize": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27largeTraffic()?19:17;"
+                      },
+                      "Mode": 2
+                    },
+                    "Top": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return (a27largeTraffic()?860:810)+(a27largeTraffic()?52:38);"
+                      },
+                      "Mode": 2
+                    },
+                    "Height": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27largeTraffic()?27:24;"
+                      },
+                      "Mode": 2
+                    },
+                    "Visible": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27ir();"
+                      },
+                      "Mode": 2
+                    }
+                  }
+                },
+                {
+                  "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
+                  "Name": "Driver projected iRating 3",
+                  "Left": 464,
+                  "Top": 918,
+                  "Width": 206,
+                  "Height": 24,
+                  "Visible": true,
+                  "BackgroundColor": "#00000000",
+                  "Font": "Segoe UI",
+                  "FontSize": 17,
+                  "FontWeight": "Normal",
+                  "Text": "—",
+                  "TextColor": "#FF96A6B4",
+                  "HorizontalAlignment": 2,
+                  "VerticalAlignment": 1,
+                  "TextWrapping": 1,
+                  "RenderingSkip": 0,
+                  "MinimumRefreshIntervalMS": 1000.0,
+                  "Bindings": {
+                    "Text": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return 'ΔiR '+h2raceIRText(3);"
+                      },
+                      "Mode": 2
+                    },
+                    "TextColor": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27color(h2raceIRColor(3));"
+                      },
+                      "Mode": 2
+                    },
+                    "Font": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27font();"
+                      },
+                      "Mode": 2
+                    },
+                    "FontSize": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27largeTraffic()?19:17;"
+                      },
+                      "Mode": 2
+                    },
+                    "Top": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return (a27largeTraffic()?960:880)+(a27largeTraffic()?52:38);"
+                      },
+                      "Mode": 2
+                    },
+                    "Height": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return a27largeTraffic()?27:24;"
+                      },
+                      "Mode": 2
+                    },
+                    "Visible": {
+                      "Formula": {
+                        "JSExt": 1,
+                        "Interpreter": 1,
+                        "Expression": "return !a27largeTraffic()&&(a27ir());"
                       },
                       "Mode": 2
                     }
@@ -12784,21 +13346,21 @@
                   "MinimumTrackWidth": 4,
                   "OpponentStyle": {
                     "LabelFont": "Segoe UI",
-                    "LabelFontSize": 12,
+                    "LabelFontSize": 24,
                     "LabelColor": "#FF000000",
                     "DotColor": "#FFDEE6EC",
-                    "DotBorderThickness": 2.0,
+                    "DotBorderThickness": 2,
                     "DotBordercolor": "#FF000000",
-                    "DotRadius": 12
+                    "DotRadius": 36
                   },
                   "PlayerStyle": {
                     "LabelFont": "Segoe UI",
-                    "LabelFontSize": 14,
+                    "LabelFontSize": 26,
                     "LabelColor": "#FF000000",
                     "DotColor": "#FF8CCEFF",
-                    "DotBorderThickness": 2.0,
+                    "DotBorderThickness": 2,
                     "DotBordercolor": "#FF000000",
-                    "DotRadius": 17
+                    "DotRadius": 42
                   },
                   "RenderImageHeight": 500,
                   "RenderImageWidth": 500,
@@ -15312,7 +15874,7 @@
                   "Formula": {
                     "JSExt": 1,
                     "Interpreter": 1,
-                    "Expression": "return !a27stage()&&a27reference().kind===\"tracker\"?('Δ / SIMHUB'):(a27stage()?a27t(146):!a27knownTrack()?a27t(27):a27reference().session ? a27t(26) : a27t(25));"
+                    "Expression": "return a27race()&&a27reference().session?h2raceDeltaTitle():(!a27stage()&&a27reference().kind===\"tracker\"?('Δ / SIMHUB'):(a27stage()?a27t(146):!a27knownTrack()?a27t(27):a27reference().session ? a27t(26) : a27t(25)));"
                   },
                   "Mode": 2
                 },
@@ -15345,6 +15907,14 @@
                     "JSExt": 1,
                     "Interpreter": 1,
                     "Expression": "return a27font();"
+                  },
+                  "Mode": 2
+                },
+                "FontSize": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27race()?(19):(23.5);"
                   },
                   "Mode": 2
                 }
@@ -15410,6 +15980,30 @@
                     "Expression": "return a27font();"
                   },
                   "Mode": 2
+                },
+                "Top": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27race()?(167):(176.0);"
+                  },
+                  "Mode": 2
+                },
+                "Height": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27race()?(69):(116.0);"
+                  },
+                  "Mode": 2
+                },
+                "FontSize": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27race()?(57):(88.16);"
+                  },
+                  "Mode": 2
                 }
               }
             },
@@ -15446,7 +16040,7 @@
                   "Formula": {
                     "JSExt": 1,
                     "Interpreter": 1,
-                    "Expression": "return !h2timingMode()&&(!a27stage()&&(!a27stage()));"
+                    "Expression": "return !a27race()&&(!h2timingMode()&&(!a27stage()&&(!a27stage())));"
                   },
                   "Mode": 2
                 },
@@ -15591,7 +16185,7 @@
               "Font": "Segoe UI",
               "FontWeight": "Normal",
               "FontSize": 19.648275862068967,
-              "Text": "LAST",
+              "Text": "LAST VALID",
               "TextColor": "#FF96A6B4",
               "HorizontalAlignment": 0,
               "VerticalAlignment": 1,
@@ -15601,7 +16195,7 @@
                   "Formula": {
                     "JSExt": 1,
                     "Interpreter": 1,
-                    "Expression": "return h2timingMode()&&h2sectorData().available?(a27t(143)):(a27stage()?a27t(33):a27electric()||a27race() ? a27t(143) : a27t(188));"
+                    "Expression": "return a27race()?h2lastValidLabel():(h2timingMode()&&h2sectorData().available?(a27t(143)):(a27stage()?a27t(33):a27electric()||a27race() ? a27t(143) : a27t(188)));"
                   },
                   "Mode": 2
                 },
@@ -15636,6 +16230,14 @@
                     "Expression": "return a27font();"
                   },
                   "Mode": 2
+                },
+                "FontSize": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27race()?(h2lastValidLabel().length>17?15:18):19.65;"
+                  },
+                  "Mode": 2
                 }
               }
             },
@@ -15664,7 +16266,7 @@
                   "Formula": {
                     "JSExt": 1,
                     "Interpreter": 1,
-                    "Expression": "return h2timingMode()&&h2sectorData().available?(a27time(a27d('LastLapTime'),true)):(a27stage()?a27num(a27fuel().fuel,1,' '+a27unit()):a27electric()||a27race() ? a27time(a27d('LastLapTime'),true) : a27num(a27fuelUsed('Fuel_CurrentLapConsumption'),2,' '+a27unit()));"
+                    "Expression": "return a27race()?h2lastValidLapText():(h2timingMode()&&h2sectorData().available?(a27time(a27d('LastLapTime'),true)):(a27stage()?a27num(a27fuel().fuel,1,' '+a27unit()):a27electric()||a27race() ? a27time(a27d('LastLapTime'),true) : a27num(a27fuelUsed('Fuel_CurrentLapConsumption'),2,' '+a27unit())));"
                   },
                   "Mode": 2
                 },
@@ -15717,7 +16319,7 @@
               "Font": "Segoe UI",
               "FontWeight": "Normal",
               "FontSize": 19.648275862068967,
-              "Text": "BEST",
+              "Text": "BEST VALID",
               "TextColor": "#FF96A6B4",
               "HorizontalAlignment": 0,
               "VerticalAlignment": 1,
@@ -15727,7 +16329,7 @@
                   "Formula": {
                     "JSExt": 1,
                     "Interpreter": 1,
-                    "Expression": "return h2timingMode()&&h2sectorData().available?(a27t(92)):(a27stage()?a27t(174):a27electric()||a27race() ? a27t(92) : a27t(143));"
+                    "Expression": "return a27race()?h2raceValidLabel():(h2timingMode()&&h2sectorData().available?(a27t(92)):(a27stage()?a27t(174):a27electric()||a27race() ? a27t(92) : a27t(143)));"
                   },
                   "Mode": 2
                 },
@@ -15760,6 +16362,14 @@
                     "JSExt": 1,
                     "Interpreter": 1,
                     "Expression": "return a27font();"
+                  },
+                  "Mode": 2
+                },
+                "FontSize": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27race()?18:19.65;"
                   },
                   "Mode": 2
                 }
@@ -19477,7 +20087,7 @@
                   "Left": 48,
                   "Top": 1057,
                   "Width": 1824,
-                  "Height": 3,
+                  "Height": 2,
                   "Visible": true,
                   "RenderingSkip": 0,
                   "MinimumRefreshIntervalMS": 100.0,
@@ -19504,9 +20114,9 @@
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.RectangleItem, SimHub.Plugins",
                   "Name": "Field tick 48",
                   "Left": 48,
-                  "Top": 1046,
+                  "Top": 1044,
                   "Width": 2,
-                  "Height": 27,
+                  "Height": 28,
                   "Visible": true,
                   "RenderingSkip": 0,
                   "MinimumRefreshIntervalMS": 100.0,
@@ -19533,9 +20143,9 @@
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.RectangleItem, SimHub.Plugins",
                   "Name": "Field tick 504",
                   "Left": 504,
-                  "Top": 1046,
+                  "Top": 1044,
                   "Width": 2,
-                  "Height": 27,
+                  "Height": 28,
                   "Visible": true,
                   "RenderingSkip": 0,
                   "MinimumRefreshIntervalMS": 100.0,
@@ -19562,9 +20172,9 @@
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.RectangleItem, SimHub.Plugins",
                   "Name": "Field tick 960",
                   "Left": 960,
-                  "Top": 1046,
+                  "Top": 1044,
                   "Width": 2,
-                  "Height": 27,
+                  "Height": 28,
                   "Visible": true,
                   "RenderingSkip": 0,
                   "MinimumRefreshIntervalMS": 100.0,
@@ -19591,9 +20201,9 @@
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.RectangleItem, SimHub.Plugins",
                   "Name": "Field tick 1416",
                   "Left": 1416,
-                  "Top": 1046,
+                  "Top": 1044,
                   "Width": 2,
-                  "Height": 27,
+                  "Height": 28,
                   "Visible": true,
                   "RenderingSkip": 0,
                   "MinimumRefreshIntervalMS": 100.0,
@@ -19620,9 +20230,9 @@
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.RectangleItem, SimHub.Plugins",
                   "Name": "Field tick 1872",
                   "Left": 1872,
-                  "Top": 1046,
+                  "Top": 1044,
                   "Width": 2,
-                  "Height": 27,
+                  "Height": 28,
                   "Visible": true,
                   "RenderingSkip": 0,
                   "MinimumRefreshIntervalMS": 100.0,
@@ -19656,7 +20266,7 @@
                       "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
                       "Name": "Field car",
                       "Left": 32,
-                      "Top": 1045,
+                      "Top": 1044.0,
                       "Width": 32,
                       "Height": 28,
                       "Visible": true,
@@ -19696,7 +20306,7 @@
                           "Formula": {
                             "JSExt": 1,
                             "Interpreter": 1,
-                            "Expression": "return a27field(repeatindex(),'left');"
+                            "Expression": "return h2fieldLeft(repeatindex());"
                           },
                           "Mode": 2
                         },
@@ -19724,14 +20334,6 @@
                           },
                           "Mode": 2
                         },
-                        "Top": {
-                          "Formula": {
-                            "JSExt": 1,
-                            "Interpreter": 1,
-                            "Expression": "return repeatindex() % 2 ? 1043 : 1049;"
-                          },
-                          "Mode": 2
-                        },
                         "Font": {
                           "Formula": {
                             "JSExt": 1,
@@ -19754,13 +20356,16 @@
                       },
                       "Mode": 2
                     }
-                  }
+                  },
+                  "RepeatTopOffset": 0,
+                  "RepeatLeftOffset": 0,
+                  "RepetitionsBound": true
                 },
                 {
                   "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
                   "Name": "Field player",
                   "Left": 31,
-                  "Top": 1040,
+                  "Top": 1041.0,
                   "Width": 34,
                   "Height": 34,
                   "Visible": true,
@@ -19781,7 +20386,7 @@
                       "Formula": {
                         "JSExt": 1,
                         "Interpreter": 1,
-                        "Expression": "return a27position().replace('P','');"
+                        "Expression": "return h2fieldPlayer('label');"
                       },
                       "Mode": 2
                     },
@@ -19789,7 +20394,7 @@
                       "Formula": {
                         "JSExt": 1,
                         "Interpreter": 1,
-                        "Expression": "return 31 + (a27progress() || 0) * 1824;"
+                        "Expression": "return h2fieldLeft(a27playerIndex())-1;"
                       },
                       "Mode": 2
                     },
@@ -19797,7 +20402,7 @@
                       "Formula": {
                         "JSExt": 1,
                         "Interpreter": 1,
-                        "Expression": "return a27progress() !== null;"
+                        "Expression": "return h2fieldPlayer('visible');"
                       },
                       "Mode": 2
                     },
@@ -20050,21 +20655,21 @@
                   "MinimumTrackWidth": 4,
                   "OpponentStyle": {
                     "LabelFont": "Segoe UI",
-                    "LabelFontSize": 12,
+                    "LabelFontSize": 24,
                     "LabelColor": "#FF000000",
                     "DotColor": "#FFDEE6EC",
-                    "DotBorderThickness": 2.0,
+                    "DotBorderThickness": 2,
                     "DotBordercolor": "#FF000000",
-                    "DotRadius": 12
+                    "DotRadius": 36
                   },
                   "PlayerStyle": {
                     "LabelFont": "Segoe UI",
-                    "LabelFontSize": 14,
+                    "LabelFontSize": 26,
                     "LabelColor": "#FF000000",
                     "DotColor": "#FF8CCEFF",
-                    "DotBorderThickness": 2.0,
+                    "DotBorderThickness": 2,
                     "DotBordercolor": "#FF000000",
-                    "DotRadius": 17
+                    "DotRadius": 42
                   },
                   "RenderImageHeight": 500,
                   "RenderImageWidth": 500,
@@ -23373,6 +23978,230 @@
                   "Mode": 2
                 }
               }
+            },
+            {
+              "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
+              "Name": "Race session best label",
+              "Left": 48,
+              "Top": 245,
+              "Width": 243,
+              "Height": 27,
+              "Visible": true,
+              "BackgroundColor": "#00000000",
+              "Font": "Segoe UI",
+              "FontSize": 16,
+              "FontWeight": "Bold",
+              "Text": "",
+              "TextColor": "#FFDEE6EC",
+              "HorizontalAlignment": 0,
+              "VerticalAlignment": 1,
+              "TextWrapping": 1,
+              "RenderingSkip": 0,
+              "MinimumRefreshIntervalMS": 100.0,
+              "Bindings": {
+                "Font": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27font();"
+                  },
+                  "Mode": 2
+                },
+                "Visible": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27race()&&!a27stage();"
+                  },
+                  "Mode": 2
+                },
+                "Text": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return h2raceBestLabel();"
+                  },
+                  "Mode": 2
+                },
+                "TextColor": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27color(h2raceBestColor());"
+                  },
+                  "Mode": 2
+                },
+                "FontSize": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return h2raceBestLabel().length>30?13:h2raceBestLabel().length>24?14:16;"
+                  },
+                  "Mode": 2
+                }
+              }
+            },
+            {
+              "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
+              "Name": "Race session best",
+              "Left": 47,
+              "Top": 279,
+              "Width": 244,
+              "Height": 48,
+              "Visible": true,
+              "BackgroundColor": "#00000000",
+              "Font": "Segoe UI",
+              "FontSize": 32,
+              "FontWeight": "Bold",
+              "Text": "",
+              "TextColor": "#FFDEE6EC",
+              "HorizontalAlignment": 0,
+              "VerticalAlignment": 1,
+              "TextWrapping": 1,
+              "RenderingSkip": 0,
+              "MinimumRefreshIntervalMS": 100.0,
+              "Bindings": {
+                "Font": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27font();"
+                  },
+                  "Mode": 2
+                },
+                "Visible": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27race()&&!a27stage();"
+                  },
+                  "Mode": 2
+                },
+                "Text": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return h2raceBestText();"
+                  },
+                  "Mode": 2
+                },
+                "TextColor": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27color(h2raceBestColor());"
+                  },
+                  "Mode": 2
+                }
+              }
+            },
+            {
+              "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
+              "Name": "Race prediction label",
+              "Left": 304,
+              "Top": 245,
+              "Width": 220,
+              "Height": 27,
+              "Visible": true,
+              "BackgroundColor": "#00000000",
+              "Font": "Segoe UI",
+              "FontSize": 16,
+              "FontWeight": "Bold",
+              "Text": "",
+              "TextColor": "#FFDEE6EC",
+              "HorizontalAlignment": 0,
+              "VerticalAlignment": 1,
+              "TextWrapping": 1,
+              "RenderingSkip": 0,
+              "MinimumRefreshIntervalMS": 100.0,
+              "Bindings": {
+                "Font": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27font();"
+                  },
+                  "Mode": 2
+                },
+                "Visible": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27race()&&!a27stage();"
+                  },
+                  "Mode": 2
+                },
+                "Text": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27t(144);"
+                  },
+                  "Mode": 2
+                },
+                "TextColor": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27color(\"#FF96A6B4\");"
+                  },
+                  "Mode": 2
+                }
+              }
+            },
+            {
+              "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
+              "Name": "Race prediction",
+              "Left": 303,
+              "Top": 279,
+              "Width": 222,
+              "Height": 48,
+              "Visible": true,
+              "BackgroundColor": "#00000000",
+              "Font": "Segoe UI",
+              "FontSize": 32,
+              "FontWeight": "Bold",
+              "Text": "",
+              "TextColor": "#FFDEE6EC",
+              "HorizontalAlignment": 0,
+              "VerticalAlignment": 1,
+              "TextWrapping": 1,
+              "RenderingSkip": 0,
+              "MinimumRefreshIntervalMS": 100.0,
+              "Bindings": {
+                "Font": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27font();"
+                  },
+                  "Mode": 2
+                },
+                "Visible": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27race()&&!a27stage();"
+                  },
+                  "Mode": 2
+                },
+                "Text": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27prediction();"
+                  },
+                  "Mode": 2
+                },
+                "TextColor": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27color(\"#FF8CCEFF\");"
+                  },
+                  "Mode": 2
+                }
+              }
             }
           ],
           "RenderingSkip": 0,
@@ -23483,7 +24312,7 @@
               "UseMaximum": true,
               "LineColor": "#FF8CCEFF",
               "LineTickness": 2,
-              "PointsCount": 800.0,
+              "PointsCount": 2.0,
               "BackgroundColor": "#00FFFFFF",
               "Left": 1138.0,
               "Top": 830.0,
@@ -23491,7 +24320,7 @@
               "Height": 142.0,
               "Visible": true,
               "RenderingSkip": 0,
-              "MinimumRefreshIntervalMS": 0.0,
+              "MinimumRefreshIntervalMS": 50.0,
               "Bindings": {
                 "CurrentValue": {
                   "Formula": {
@@ -23524,6 +24353,14 @@
                     "Expression": "return a27color(\"#00FFFFFF\");"
                   },
                   "Mode": 2
+                },
+                "PointsCount": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27pedalTraceLimit('Clutch');"
+                  },
+                  "Mode": 2
                 }
               }
             },
@@ -23539,7 +24376,7 @@
               "UseMaximum": true,
               "LineColor": "#FF64E3B1",
               "LineTickness": 3,
-              "PointsCount": 800.0,
+              "PointsCount": 2.0,
               "BackgroundColor": "#00FFFFFF",
               "Left": 1138.0,
               "Top": 830.0,
@@ -23547,7 +24384,7 @@
               "Height": 142.0,
               "Visible": true,
               "RenderingSkip": 0,
-              "MinimumRefreshIntervalMS": 0.0,
+              "MinimumRefreshIntervalMS": 50.0,
               "Bindings": {
                 "CurrentValue": {
                   "Formula": {
@@ -23580,6 +24417,14 @@
                     "Expression": "return a27color(\"#00FFFFFF\");"
                   },
                   "Mode": 2
+                },
+                "PointsCount": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27pedalTraceLimit('Throttle');"
+                  },
+                  "Mode": 2
                 }
               }
             },
@@ -23595,7 +24440,7 @@
               "UseMaximum": true,
               "LineColor": "#FFFF6B70",
               "LineTickness": 3,
-              "PointsCount": 800.0,
+              "PointsCount": 2.0,
               "BackgroundColor": "#00FFFFFF",
               "Left": 1138.0,
               "Top": 830.0,
@@ -23603,7 +24448,7 @@
               "Height": 142.0,
               "Visible": true,
               "RenderingSkip": 0,
-              "MinimumRefreshIntervalMS": 0.0,
+              "MinimumRefreshIntervalMS": 50.0,
               "Bindings": {
                 "CurrentValue": {
                   "Formula": {
@@ -23636,6 +24481,14 @@
                     "Expression": "return a27color(\"#00FFFFFF\");"
                   },
                   "Mode": 2
+                },
+                "PointsCount": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27pedalTraceLimit('Brake');"
+                  },
+                  "Mode": 2
                 }
               }
             },
@@ -23651,7 +24504,7 @@
               "UseMaximum": true,
               "LineColor": "#FFFFB35C",
               "LineTickness": 2,
-              "PointsCount": 800.0,
+              "PointsCount": 2.0,
               "BackgroundColor": "#00FFFFFF",
               "Left": 1138.0,
               "Top": 800.0,
@@ -23659,7 +24512,7 @@
               "Height": 30.0,
               "Visible": true,
               "RenderingSkip": 0,
-              "MinimumRefreshIntervalMS": 0.0,
+              "MinimumRefreshIntervalMS": 50.0,
               "Bindings": {
                 "CurrentValue": {
                   "Formula": {
@@ -23690,6 +24543,14 @@
                     "JSExt": 1,
                     "Interpreter": 1,
                     "Expression": "return a27color(\"#00FFFFFF\");"
+                  },
+                  "Mode": 2
+                },
+                "PointsCount": {
+                  "Formula": {
+                    "JSExt": 1,
+                    "Interpreter": 1,
+                    "Expression": "return a27pedalTraceLimit('ABS');"
                   },
                   "Mode": 2
                 }
@@ -23762,7 +24623,7 @@
     "SimHubVersion": "9.12.6",
     "Title": "APEX 27",
     "Author": "Lord-of-the-Bots",
-    "Description": "v1.1.0 / Companion dashboard for external RPM, gear and flag displays / expanded map and pedal history / adaptive session views / multiclass traffic / lap and sector timing",
+    "Description": "v1.1.1 / Companion dashboard for external RPM, gear and flag displays / expanded map and pedal history / adaptive session views / multiclass traffic / lap and sector timing",
     "ScreenCount": 1.0,
     "InGameScreensIndexs": [
       0

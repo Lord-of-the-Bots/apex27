@@ -4,7 +4,7 @@ A free SimHub dashboard for a dedicated 16:9 fourth monitor. The 1920 × 1080 la
 
 [Download](https://github.com/Lord-of-the-Bots/apex27/releases/latest) · [Installation](INSTALL.md) · [Report a bug or suggest a change](https://github.com/Lord-of-the-Bots/apex27/issues)
 
-![APEX 27](assets/standard-map.png)
+![APEX 27](assets/standard-race.png)
 
 ## Two variants
 
@@ -18,13 +18,13 @@ Both variants retain automatic session views, lap prediction, the field ribbon, 
 ## Features
 
 - **Full driving instruments:** an analogue tachometer, speed and gear in the upper-right panel, with general flags in the top row. Both variants support pit speed information when available.
-- **Lap timing:** current, previous and predicted lap times, with all-time and session best references where available.
+- **Lap timing:** current, previous and predicted lap times, with all-time and session best references where available. The race view also keeps the fastest observed session lap, including invalid laps with an explicit INVALID label. BEST VALID remains the delta reference.
 - **Practice and qualifying:** a large current lap with its prediction below. All-time best and session best appear alongside, each with its own live delta. Sector deltas compare each sector with its independent best in the current session.
 - **Multiclass traffic:** the closest rivals ahead and behind in your class occupy fixed table rows, with nearby track traffic and your car between them. Labels distinguish race gaps from track intervals. Choose seven rows or five rows with larger text.
 - **Field overview:** a bottom ribbon shows cars around the lap when opponent track positions are available. The table includes each driver's last completed lap and individual flags when supplied by the game.
-- **iRacing information:** participant iRating, licence/SR, field size and mean iRating for the session and your class. Ratings come from session data; no post-race rating change is predicted.
+- **iRacing information:** participant iRating, licence/SR, field size and mean iRating for the session and your class. Includes an approximate ΔiR for the current class finishing order when the session status and participant ratings allow it. Eligibility follows the official/unofficial flags supplied by iRacing; the dashboard does not independently determine the minimum field size of each series.
 - **Track map:** a square map beside the table uses SimHub's track geometry and stays visible in the pits. Tyre information or lap progress can take its place when a map is unavailable.
-- **Fuel and pedals:** compact fuel information and throttle, brake and clutch history, with ABS activity. The lower-right panel can also show car and tyre information.
+- **Fuel and pedals:** compact fuel information and throttle, brake and clutch history, with ABS activity and approximately ten seconds of recent history. The lower-right panel can also show car and tyre information.
 - **Display settings:** manual or automatic language selection, standard or dim palette, table text size and lower-right panel choice.
 - **Session clock:** local time and the remaining time of the current session phase in the lower-left corner, alongside the field ribbon.
 

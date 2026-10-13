@@ -12,7 +12,7 @@ Requires **SimHub 9.12 or newer** on Windows and a working telemetry connection 
 4. Choose a language in **Language** and adjust the dashboard settings.
 5. Start the game and enter a driving session. Panels follow the session type and telemetry supplied by the game.
 
-Both variants retain automatic session views, lap prediction, traffic, the field ribbon, ratings and individual opponent flags when available. You may install both variants. Each keeps its own settings. Reimporting a dashboard file updates the matching dashboard.
+Both variants retain automatic session views, lap prediction, traffic, the field ribbon, ratings and individual opponent flags when available. You may install both variants. Each keeps its own settings. Reimporting a dashboard file updates the matching dashboard. After an update, close and reopen the running dashboard to reload its scripts.
 
 ## Optional automatic language selection
 
@@ -33,7 +33,11 @@ Auto uses English if the bridge is unavailable or SimHub's language is not inclu
 
 Pedal colours are green for throttle, red for brake and blue for clutch. The amber history strip records ABS activity. **ABS —** means unavailable; **ABS ≈** identifies an estimated signal.
 
+Pedal and ABS graphs keep approximately ten seconds of recent input. Older samples expire by time, regardless of session length or dashboard refresh rate. The native graph fills after opening or resuming; unavailable input is not replaced with invented readings.
+
 Practice and qualifying automatically replace race-focused information with lap and sector timing. In practice and qualifying, the predicted lap sits below the large current lap time. All-time and session best laps appear beside it, each with its own live delta when available.
+
+In a race, the session best and predicted lap sit below the live delta. The best is marked **VALID** or **INVALID**. Invalid laps are recorded while the dashboard is open, using the supplied lap time or timing-line crossings; no additional plugin is needed. Pit laps are excluded. **≈** marks a measured lap when the game does not supply a matching completed lap time. **BEST VALID** remains the session delta reference. **LAST VALID** retains the most recent confirmed valid lap; a lap with unknown validity is not labelled valid. Replay observations are separate and reset when seeking backwards.
 
 ## Missing information
 
@@ -42,8 +46,12 @@ Practice and qualifying automatically replace race-focused information with lap 
 - Fuel predictions need usable consumption data. Forza shows fuel as a percentage without refuelling-volume or per-lap consumption estimates.
 - Sector timing depends on the game's data. Sector deltas compare each sector with its own fastest valid sector in the current session. Live sector delta needs the matching reference trace recorded while the dashboard is open; its first-sector timer starts at the lap start. A dash is shown until that reference is available. Missing times and deltas appear as a dash.
 - The field ribbon and nearby traffic need opponent data. Individual flags need participant-specific telemetry; a missing flag is left blank.
-- iRacing mean iRating is hidden when participant ratings are incomplete. Licence/SR and iRating describe the participants, without predicting post-race changes.
+- iRacing positions follow current completed laps and track progress between timing lines. If iRacing Extra Properties is installed, its live class tracker and iRating estimate are used, matched by car number. The dashboard has its own calculation when the plugin is unavailable. Blue rows identify cars a lap ahead or approaching to lap you; red rows identify cars you are lapping. Other classes remain dimmed. Field markers share a centerline and overlap at close track positions.
+- Nearby iRacing intervals use the SDK's estimated time at each car's track location. Cross-class intervals and the fallback calculation are marked **≈**. In multiclass races, the fixed outer rows show the nearest classified rivals in your class, with race gaps; the inner rows show physical traffic intervals.
+- ΔiR estimates the change for the current class finishing order. It is hidden when the supplied official/unofficial flags do not identify an official race, or the class has only one entrant. This relies on the session flags; the dashboard does not independently determine the minimum field size of each series. This also applies to estimates supplied by iRacing Extra Properties. Non-starters and disconnected cars remain in the class roster. Replays use their recorded running order when participant ratings are available. The built-in calculation does not calculate team-race splits. It is not an official result or an SR prediction.
+- iRacing mean iRating is hidden when participant ratings are incomplete.
+- The footer uses SimHub's native SessionTimeLeft countdown for the current phase. Lap-limited races show laps and an approximate time based on the leader's last lap when no timer is supplied. Gridding and formation show a supplied pre-start countdown when available, otherwise a waiting message. A recorded countdown is labelled **REPLAY**; unavailable replay timing stays blank.
 
 [Report technical issues on GitHub](https://github.com/Lord-of-the-Bots/apex27/issues) so they can be investigated and fixed. Include the game, SimHub version, dashboard variant and steps to reproduce. Suggestions for information, layout and element sizes are welcome on GitHub, Reddit or in the comments.
 
-[Back to APEX 27](README.md)
+[APEX 27](https://github.com/Lord-of-the-Bots/apex27)

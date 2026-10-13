@@ -2,7 +2,7 @@
   "SimHubVersion": "9.12.6",
   "Title": "APEX 27",
   "Author": "Lord-of-the-Bots",
-  "Description": "v1.1.0 / Companion dashboard for external RPM, gear and flag displays / expanded map and pedal history / adaptive session views / multiclass traffic / lap and sector timing",
+  "Description": "v1.1.1 / Companion dashboard for external RPM, gear and flag displays / expanded map and pedal history / adaptive session views / multiclass traffic / lap and sector timing",
   "ScreenCount": 1.0,
   "InGameScreensIndexs": [
     0

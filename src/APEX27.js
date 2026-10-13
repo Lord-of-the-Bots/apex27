@@ -1040,3 +1040,711 @@ function h2raceCriticalInk(slot) {
   var ink=row.laps>0?(row.sameClass?'#FF8CCEFF':'#FF517A96'):row.laps<0?(row.sameClass?'#FFFF9398':'#FF98666D'):row.sameClass?'#FFDEE6EC':'#FF61717C';
   return a27color(ink);
 }
+
+// Race classification and session-phase update.
+var H2_LIVE_LABELS={"en":{"leader":"LEADER","classLeader":"CLASS LEADER","lapping":"LAPPING YOU","lapped":"YOU ARE LAPPING","grid":"GRID","formation":"FORMATION","waiting":"WAITING FOR START","noLimit":"NO TIME LIMIT"},"ru":{"leader":"ЛИДЕР","classLeader":"ЛИДЕР КЛАССА","lapping":"ОБГОНЯЕТ НА КРУГ","lapped":"КРУГОВОЙ","grid":"СТАРТОВАЯ РЕШЁТКА","formation":"ПРОГРЕВОЧНЫЙ КРУГ","waiting":"ОЖИДАНИЕ СТАРТА","noLimit":"БЕЗ ЛИМИТА ВРЕМЕНИ"},"de":{"leader":"FÜHRENDER","classLeader":"KLASSENFÜHRER","lapping":"ÜBERRUNDET DICH","lapped":"WIRD ÜBERRUNDET","grid":"STARTAUFSTELLUNG","formation":"EINFÜHRUNGSRUNDE","waiting":"WARTEN AUF START","noLimit":"OHNE ZEITLIMIT"},"es":{"leader":"LÍDER","classLeader":"LÍDER DE CLASE","lapping":"TE DOBLA","lapped":"LO ESTÁS DOBLANDO","grid":"PARRILLA","formation":"VUELTA DE FORMACIÓN","waiting":"ESPERANDO SALIDA","noLimit":"SIN LÍMITE DE TIEMPO"},"fr":{"leader":"LEADER","classLeader":"LEADER DE CAT.","lapping":"VOUS PREND UN TOUR","lapped":"VOUS LE DOUBLEZ","grid":"GRILLE","formation":"TOUR DE FORMATION","waiting":"EN ATTENTE DU DÉPART","noLimit":"SANS LIMITE DE TEMPS"},"it":{"leader":"LEADER","classLeader":"LEADER DI CLASSE","lapping":"TI STA DOPPIANDO","lapped":"LO STAI DOPPIANDO","grid":"GRIGLIA","formation":"GIRO DI FORMAZIONE","waiting":"ATTESA PARTENZA","noLimit":"SENZA LIMITE DI TEMPO"},"pt-BR":{"leader":"LÍDER","classLeader":"LÍDER DA CLASSE","lapping":"VAI TE DAR VOLTA","lapped":"VOCÊ DÁ UMA VOLTA","grid":"GRID","formation":"VOLTA DE FORMAÇÃO","waiting":"AGUARDANDO LARGADA","noLimit":"SEM LIMITE DE TEMPO"},"pl":{"leader":"LIDER","classLeader":"LIDER KLASY","lapping":"DUBLUJE CIĘ","lapped":"DUBLOWANY","grid":"POLA STARTOWE","formation":"OKRĄŻENIE FORMUJĄCE","waiting":"OCZEKIWANIE NA START","noLimit":"BEZ LIMITU CZASU"},"cs":{"leader":"VEDOUCÍ","classLeader":"VEDOUCÍ TŘÍDY","lapping":"PŘEDJÍŽDÍ TĚ O KOLO","lapped":"O KOLO ZPĚT","grid":"STARTOVNÍ ROŠT","formation":"ZAVÁDĚCÍ KOLO","waiting":"ČEKÁNÍ NA START","noLimit":"BEZ ČASOVÉHO LIMITU"},"tr":{"leader":"LİDER","classLeader":"SINIF LİDERİ","lapping":"SANA TUR BİNDİRİYOR","lapped":"TUR BİNDİRİYORSUN","grid":"START DİZİLİŞİ","formation":"FORMASYON TURU","waiting":"START BEKLENİYOR","noLimit":"SÜRE SINIRI YOK"},"ja":{"leader":"首位","classLeader":"クラス首位","lapping":"周回遅れにされる","lapped":"周回遅れの車","grid":"グリッド","formation":"フォーメーション","waiting":"スタート待ち","noLimit":"時間制限なし"},"ko":{"leader":"선두","classLeader":"클래스 선두","lapping":"나를 랩다운시킴","lapped":"내가 랩다운시킴","grid":"출발 그리드","formation":"포메이션 랩","waiting":"출발 대기","noLimit":"시간 제한 없음"},"zh":{"leader":"领先车手","classLeader":"组别领先","lapping":"将套你一圈","lapped":"你将套他一圈","grid":"发车位","formation":"暖胎圈","waiting":"等待发车","noLimit":"无时间限制"}};
+(function(){for(var lang in H2_LIVE_LABELS)for(var key in H2_LIVE_LABELS[lang])H2_RACE_LABELS[lang][key]=H2_LIVE_LABELS[lang][key];})();
+// iRacing race timing uses the SDK car index, independent of leaderboard order.
+function h2irRaw() { if(!a27live()||!a27ir())return null;try{return NewRawData();}catch(e){return null;} }
+function h2irGet(object,key) { try{return object?object[key]:null;}catch(e){return null;} }
+function h2irValue(raw,key) {
+  var telemetry=h2irGet(raw,'Telemetry');if(!telemetry)return null;
+  // Typed SDK getters index a dictionary and can throw CLR exceptions for
+  // variables omitted by an older recording. Check the dictionary first.
+  if(typeof telemetry.ContainsKey==='function'&&!telemetry.ContainsKey(key))return null;
+  return h2irGet(telemetry,key);
+}
+function h2irNumber(raw,key) { return h2raceNumber(h2irValue(raw,key)); }
+function h2irState(raw) {
+  var v=h2irValue(raw,'SessionState'),n=h2raceNumber(v);
+  if(n!==null)return n;
+  var names={invalid:0,getincar:1,warmup:2,paradelaps:3,racing:4,checkered:5,cooldown:6};
+  return names[String(v).toLowerCase().replace(/[^a-z]/g,'')];
+}
+function h2irArray(raw,key,car) {
+  var a=h2irValue(raw,key),n=h2raceArrayLength(a);
+  return car!==null&&car>=0&&car<n?h2raceNumber(h2irGet(a,car)):null;
+}
+function h2irDriver(index,raw) {
+  try {
+    var roster=raw.SessionData.DriverInfo.Drivers;
+    var number=h2raceString(drivercarnumber(index)),key=String(h2irNumber(raw,'SessionUniqueID'))+'|'+h2irNumber(raw,'SessionNum')+'|'+h2irNumber(raw,'SessionTick')+'|'+Math.floor(new Date().getTime()/100);
+    if(!number)return null;
+    var cache=typeof root!=='undefined'?root.h2irNumbers:null;
+    if(!cache||cache.key!==key) {
+      cache={key:key,cars:{}};
+      for(var i=0,n=h2raceArrayLength(roster);i<n;i++) {
+        var d=roster[i];if(!d||a27active(d.IsSpectator)||a27active(d.CarIsPaceCar))continue;
+        var num=h2raceString(d.CarNumber),car=h2raceNumber(d.CarIdx),id='$'+num;
+        if(!num||car===null||car<0||car>=512||Math.floor(car)!==car)continue;
+        cache.cars[id]=Object.prototype.hasOwnProperty.call(cache.cars,id)?null:car;
+      }
+      if(typeof root!=='undefined')root.h2irNumbers=cache;
+    }
+    return Object.prototype.hasOwnProperty.call(cache.cars,'$'+number)?cache.cars['$'+number]:null;
+  }catch(e){return null;}
+}
+function h2irRoster(raw) { try{return raw.SessionData.DriverInfo.Drivers;}catch(e){return null;} }
+function h2irClassId(index,raw) {
+  var car=h2irDriver(index,raw),roster=h2irRoster(raw);
+  for(var i=0,n=h2raceArrayLength(roster);i<n;i++)if(h2raceNumber(roster[i].CarIdx)===car)return h2raceString(roster[i].CarClassID);
+  return '';
+}
+function h2irDistance(raw,car) {
+  var lap=h2irArray(raw,'CarIdxLapCompleted',car),p=h2irArray(raw,'CarIdxLapDistPct',car);
+  return lap!==null&&lap>=0&&p!==null&&p>=0&&p<=1?lap+p:null;
+}
+function h2irPosition(raw,car,ownClass) {
+  var n=h2irArray(raw,ownClass?'CarIdxClassPosition':'CarIdxPosition',car);
+  return n!==null&&n>=1&&n<=512&&Math.floor(n)===n?n:null;
+}
+function h2irEstimatedLap(raw,car) {
+  var roster=h2irRoster(raw);
+  for(var i=0,n=h2raceArrayLength(roster);i<n;i++)if(h2raceNumber(roster[i].CarIdx)===car) {
+    var lap=h2raceNumber(h2irGet(roster[i],'CarClassEstLapTime'));
+    if(lap>0&&lap<86400)return lap;
+  }
+  return null;
+}
+function h2irRelative(index) {
+  var raw=h2irRaw(),car=h2irDriver(index,raw),player=h2irNumber(raw,'PlayerCarIdx');
+  var own=h2irArray(raw,'CarIdxEstTime',player),other=h2irArray(raw,'CarIdxEstTime',car);
+  var lap=h2irEstimatedLap(raw,player),otherLap=h2irEstimatedLap(raw,car);
+  var p=h2irArray(raw,'CarIdxLapDistPct',player),q=h2irArray(raw,'CarIdxLapDistPct',car);
+  if(car===null||player===null||!(lap>0&&otherLap>0)||own===null||other===null||own<0||other<0||own>lap||other>otherLap||p===null||q===null||p<0||q<0)return null;
+  if((own===0&&p>.001)||(other===0&&q>.001))return null;
+  // SDK estimated elapsed times follow the track's speed profile. Scale other
+  // classes onto the player's reference lap; this remains an approximation.
+  var seconds=other*lap/otherLap-own,distance=q-p;
+  if(distance>.5){distance-=1;seconds-=lap;}
+  else if(distance<-.5){distance+=1;seconds+=lap;}
+  // Some recordings expose zero/stale estimates. Do not turn a small physical
+  // interval into a near-full-lap gap when the timing coordinates disagree.
+  if(Math.abs(distance)>.0001&&(seconds===0||seconds*distance<0))return null;
+  return -seconds;
+}
+h2raceRead=(function(base){return function(index,field) {
+  if(!a27ir())return base(index,field);
+  if(field==='gap') { var relative=h2irRelative(index);return relative===null?base(index,field):relative; }
+  if(field!=='position'&&field!=='classPosition'&&field!=='lastLap'&&field!=='laps')return base(index,field);
+  var raw=h2irRaw(),car=h2irDriver(index,raw);
+  if(!raw||car===null)return field==='position'||field==='classPosition'?null:base(index,field);
+  if((field==='position'||field==='classPosition')&&a27race())return h2irPosition(raw,car,field==='classPosition');
+  if(field==='lastLap') {
+    var seconds=h2irArray(raw,'CarIdxLastLapTime',car);
+    if(seconds>0&&seconds<86400)return {TotalSeconds:seconds};
+  }
+  if(field==='laps'&&a27race()) {
+    var player=h2irNumber(raw,'PlayerCarIdx'),own=h2irDistance(raw,player),other=h2irDistance(raw,car);
+    if(own!==null&&other!==null) { var diff=other-own;return diff<0?Math.ceil(diff):Math.floor(diff); }
+  }
+  return base(index,field);
+};})(h2raceRead);
+h2raceClassIndex=(function(base){return function(ordinal) {
+  if(!a27ir()||!a27race())return base(ordinal);
+  if(!(ordinal>0))return null;
+  var player=a27playerIndex(),raw=h2irRaw(),own=h2irClassId(player,raw),n=h2raceCount();
+  if(!own)return null;
+  for(var i=1;i<=n;i++)if(h2raceValid(i)&&h2irClassId(i,raw)===own&&h2raceRead(i,'classPosition')===ordinal)return i;
+  return null;
+};})(h2raceClassIndex);
+h2raceClassList=(function(base){return function(player,count) {
+  var list=base(player,count);
+  if(a27ir()&&a27race())list.sort(function(a,b){return (h2raceRead(a,'classPosition')||999)-(h2raceRead(b,'classPosition')||999);});
+  return list;
+};})(h2raceClassList);
+a27position=(function(base){return function() {
+  if(!a27ir()||!a27race())return base();
+  var raw=h2irRaw(),p=h2irPosition(raw,h2irNumber(raw,'PlayerCarIdx'),false);
+  return p===null?'—':'P'+p;
+};})(a27position);
+a27class=(function(base){return function(index,part) {
+  if(a27ir()&&a27race()&&part==='position') { var p=h2raceRead(index,'classPosition');return p>0?'C'+p:''; }
+  return base(index,part);
+};})(a27class);
+
+function h2raceRelation(row) {
+  if(!row.available||row.slot===0||!a27race())return 0;
+  if(a27ir()) {
+    var raw=h2irRaw(),car=h2irDriver(row.index,raw),player=h2irNumber(raw,'PlayerCarIdx');
+    var own=h2irDistance(raw,player),other=h2irDistance(raw,car);
+    // Round around the nearest physical encounter, including an approaching lap.
+    // Adjacent cars crossing the timing line remain on the same racing lap.
+    if(own!==null&&other!==null)return Math.round(other-own);
+  }
+  return row.laps||0;
+}
+h2raceColor=(function(base){return function(slot) {
+  var row=h2raceRow(slot,false),laps=h2raceRelation(row);
+  if(laps>0)return row.sameClass?'#FF8CCEFF':'#FF517A96';
+  if(laps<0)return row.sameClass?'#FFFF9398':'#FF98666D';
+  return base(slot);
+};})(h2raceColor);
+h2raceMutedColor=h2raceColor;
+h2raceCriticalInk=function(slot) {
+  var row=h2raceRow(slot,false),relation=h2raceRelation(row);
+  if(!row.available)return a27color('#FF56616A');
+  if(a27dim()&&!row.sameClass)return relation>0?'#FF557E99':relation<0?'#FF946269':'#FF778590';
+  return a27color(relation>0?(row.sameClass?'#FF8CCEFF':'#FF517A96'):relation<0?(row.sameClass?'#FFFF9398':'#FF98666D'):row.sameClass?'#FFDEE6EC':'#FF61717C');
+};
+h2raceText=(function(base){return function(slot,field) {
+  if(field!=='meta')return base(slot,field);
+  var row=h2raceRow(slot,false);if(!row.available)return '';
+  var parts=[],relation=h2raceRelation(row);
+  if(row.kind==='class')parts.push(h2raceRole(slot));
+  else if(row.position===1)parts.push(h2raceT('leader'));
+  else if(a27multi()&&row.classPosition===1)parts.push(h2raceT('classLeader'));
+  if(relation>0)parts.push(relation===1?h2raceT('lapping'):('+'+relation+'L'));
+  if(relation<0)parts.push(relation===-1?h2raceT('lapped'):('−'+Math.abs(relation)+'L'));
+  if(a27multi()&&row.className)parts.push((row.kind==='class'?'':a27short(row.className,9)+' ')+(row.classPosition>0?'C'+row.classPosition:''));
+  if(!parts.length&&slot!==0)parts.push(row.gapNote);
+  if(a27ir()&&row.connected===false)parts.push('OFFLINE');
+  return parts.join(' · ');
+};})(h2raceText);
+
+// Projected class result, not an official post-race rating. Team splits and
+// incomplete/unranked fields are intentionally unavailable.
+function h2raceIRDelta(slot) {
+  if(!a27live()||!a27ir()||!a27race()||a27playback())return null;
+  var raw=h2irRaw(),state=h2irState(raw);
+  if(!(state>=4&&state<=5))return null;
+  var weekend;try{weekend=raw.SessionData.WeekendInfo;}catch(e){return null;}
+  if(!a27active(h2irGet(weekend,'Official'))||a27active(h2irGet(weekend,'TeamRacing')))return null;
+  var row=h2raceRow(slot,false);if(!row.available)return null;
+  var car=h2irDriver(row.index,raw),roster=h2irRoster(raw),length=h2raceArrayLength(roster),own=null,i;
+  for(i=0;i<length;i++)if(h2raceNumber(roster[i].CarIdx)===car)own=roster[i];
+  if(!own)return null;
+  var classId=h2raceString(own.CarClassID),rating=h2raceNumber(own.IRating),rank=h2irPosition(raw,car,true),entries=[],ranks={};
+  if(!classId||!(rating>0)||!(rank>0))return null;
+  for(i=0;i<length;i++) {
+    var d=roster[i];if(a27active(d.IsSpectator)||a27active(d.CarIsPaceCar)||h2raceString(d.CarClassID)!==classId)continue;
+    var id=h2raceNumber(d.CarIdx),ir=h2raceNumber(d.IRating),pos=h2irPosition(raw,id,true),completed=h2irArray(raw,'CarIdxLapCompleted',id);
+    // A disconnected car can retain a valid classification and rating. Its
+    // missing track fraction must not erase the entire class projection.
+    if(!(ir>0)||!(pos>0)||ranks[pos]||completed===null||completed<0)return null;
+    ranks[pos]=true;entries.push({car:id,rating:ir,rank:pos});
+  }
+  var n=entries.length;if(n<2||rank>n)return null;
+  var strength=Math.exp(rating*Math.LN2/1600)-1,expected=0;
+  for(i=0;i<n;i++) {
+    if(!ranks[i+1])return null;
+    if(entries[i].car!==car)expected+=strength/(strength+Math.exp(entries[i].rating*Math.LN2/1600)-1);
+  }
+  return Math.round(200/n*(n-rank-expected-(n/2-rank)/100));
+}
+function h2raceIRText(slot) { var n=h2raceIRDelta(slot);return n===null?'—':'≈'+a27signed(n,0); }
+function h2raceIRColor(slot) {
+  var n=h2raceIRDelta(slot),same=h2raceRow(slot,false).sameClass;
+  return n===null||n===0?(same?'#FF96A6B4':'#FF61717C'):n>0?(same?'#FF62DBB5':'#FF3A7968'):(same?'#FFFF9398':'#FF98666D');
+}
+
+a27fieldPoint=(function(base){return function(index) {
+  if(!a27ir())return base(index);
+  if(!a27live()||!h2raceValid(index))return null;
+  var raw=h2irRaw(),p=h2irArray(raw,'CarIdxLapDistPct',h2irDriver(index,raw));
+  return p!==null&&p>=0&&p<=1?p:null;
+};})(a27fieldPoint);
+a27field=(function(base){return function(index,field) {
+  if(field==='label'&&a27ir()) { var p=h2raceRead(index,'position');return p>0?String(p):'·'; }
+  if(field==='left')return h2fieldLeft(index);
+  return base(index,field);
+};})(a27field);
+function h2fieldLeft(index) {
+  var points=[],n=a27fieldCount(),i,p;
+  for(i=1;i<=n;i++) { p=a27fieldPoint(i);if(p!==null)points.push({index:i,x:32+p*1824}); }
+  points.sort(function(a,b){return a.x-b.x||a.index-b.index;});
+  var step=Math.min(34,1824/Math.max(1,points.length-1));
+  for(i=1;i<points.length;i++)points[i].x=Math.max(points[i].x,points[i-1].x+step);
+  if(points.length)points[points.length-1].x=Math.min(1856,points[points.length-1].x);
+  for(i=points.length-2;i>=0;i--)points[i].x=Math.min(points[i].x,points[i+1].x-step);
+  for(i=0;i<points.length;i++)if(points[i].index===index)return points[i].x;
+  return 32;
+}
+function h2fieldPlayer(part) {
+  var index=a27playerIndex(),p=a27fieldPoint(index);
+  if(part==='visible')return p!==null;
+  if(part==='left')return h2fieldLeft(index)-1;
+  return a27position().replace('P','');
+}
+
+function h2duration(seconds) {
+  var t=Math.max(0,Math.ceil(seconds)),h=Math.floor(t/3600),m=Math.floor(t%3600/60),s=t%60;
+  return (h>0?h+':'+('0'+m).slice(-2):String(m))+':'+('0'+s).slice(-2);
+}
+function h2phase() {
+  var label=a27session(),seconds=a27seconds(a27d('SessionTimeLeft')),text='—';
+  if(a27playback())return {label:a27t(133),text:'—'};
+  if(a27ir()) {
+    var raw=h2irRaw(),state=h2irState(raw),native=h2irNumber(raw,'SessionTimeRemain'),elapsed=h2irNumber(raw,'SessionTime');
+    seconds=native;
+    if(a27race()) {
+      if(state===1)label=h2raceT('grid');
+      if(state===2)label=a27t(155);
+      if(state===3)label=h2raceT('formation');
+      if(state===5||state===6)label=a27t(209);
+      // Negative session time is a supplied pre-start countdown, not a timer
+      // started on opening the dashboard. Never assume a fixed grid duration.
+      if(state>=1&&state<=3&&elapsed!==null&&elapsed<0&&elapsed>=-3600)seconds=-elapsed;
+      if(state>=1&&state<=3&&!(seconds!==null&&seconds>=0&&seconds<172800))return {label:label,text:h2raceT('waiting')};
+    }
+    // The SDK uses 604800 seconds for an unlimited session.
+    if(!(seconds!==null&&seconds>=0&&seconds<172800)) {
+      if(a27race()&&state>=4&&state<=5) {
+        var total=h2irNumber(raw,'SessionLapsTotal'),remain=h2irNumber(raw,'SessionLapsRemainEx');
+        if(!(total>0&&total<10000))total=a27dn('TotalLaps');
+        if(total>0&&total<10000) {
+          var roster=h2irRoster(raw),length=h2raceArrayLength(roster),leader=null;
+          for(var i=0;i<length;i++)if(h2irPosition(raw,h2raceNumber(roster[i].CarIdx),false)===1)leader=h2raceNumber(roster[i].CarIdx);
+          var distance=h2irDistance(raw,leader),lap=h2irArray(raw,'CarIdxLastLapTime',leader);
+          if(distance!==null)remain=Math.max(0,Math.ceil(total-distance));
+          text=remain!==null&&remain>=0&&remain<=total?remain+(remain===1&&a27lang()==='en'?' lap':a27t(5)):'—';
+          if(distance!==null&&lap>0&&lap<86400&&total>distance)text+=' · ≈'+h2duration((total-distance)*lap);
+          return {label:label,text:text};
+        }
+      }
+      return {label:label,text:seconds!==null&&seconds>=172800?h2raceT('noLimit'):'—'};
+    }
+  }
+  if(seconds!==null&&seconds>=0&&seconds<172800)text=h2duration(seconds);
+  return {label:label,text:text};
+}
+h2footerTime=function() {
+  var now=new Date(),clock=('0'+now.getHours()).slice(-2)+':'+('0'+now.getMinutes()).slice(-2);
+  if(!a27live())return clock;
+  var phase=h2phase();return clock+'   ·   '+phase.label+'  '+phase.text;
+};
+
+h2raceText=(function(base){return function(slot,field) {
+  var value=base(slot,field);
+  if(field==='gap'&&slot!==0&&a27ir()&&value!=='—') {
+    var row=h2raceRow(slot,false);
+    if(row.gapKind==='track'&&(!row.sameClass||h2irRelative(row.index)===null))return '≈'+value;
+  }
+  return value;
+};})(h2raceText);
+
+// Invalid laps are local session observations. They never replace the valid
+// reference used by the delta or the predicted lap.
+function h2raceBest() {
+  var native=h2positiveTime('BestLapTime'),empty={seconds:native,invalid:false,estimated:false};
+  if(typeof root==='undefined'||!root)return empty;
+  var raw=a27ir()?h2irRaw():null,key=h2sectorSessionKey()+'|'+h2irNumber(raw,'SessionUniqueID');
+  var lap=a27dn('CurrentLap'),p=a27progress(),clock=a27seconds(a27d('CurrentLapTime'));
+  var stamp=Date.now()/1000,sessionTime=h2irNumber(raw,'SessionTime'),state=root.h2raceBest;
+  var restart=a27yes(a27d('IsSessionRestart'));
+  if(!state||state.key!==key||(restart&&!state.restart)||(state.previous&&lap!==null&&lap<state.previous.lap)||(state.previous&&sessionTime!==null&&state.previous.sessionTime!==null&&sessionTime<state.previous.sessionTime-.05))
+    state=root.h2raceBest={key:key,best:null,previous:null,complete:false,invalid:false,pit:false};
+  state.restart=restart;
+  if(native!==null&&(!state.best||native<=state.best.seconds))state.best={seconds:native,invalid:false,estimated:false};
+  if(!a27driving()||a27stage()||lap===null||p===null||p<0) {
+    state.previous=null;state.complete=false;
+    return state.best||empty;
+  }
+  var previous=state.previous,dt=previous?(sessionTime!==null&&previous.sessionTime!==null?sessionTime-previous.sessionTime:stamp-previous.stamp):null;
+  var close=previous&&stamp-previous.stamp>=0&&stamp-previous.stamp<=2.5&&dt>=0&&dt<=2.5;
+  var wrap=close&&lap===previous.lap+1&&previous.p>.9&&p<.1;
+  if(wrap) {
+    var measured=clock!==null&&previous.clock!==null?previous.clock+dt-clock:null;
+    // At an invalid lap the exported last-lap time can still be the preceding
+    // valid lap. Accept it only when it agrees with this timing-line crossing.
+    var last=h2positiveTime('LastLapTime'),observed=measured;
+    var exact=last!==null&&measured!==null&&Math.abs(last-measured)<.15;
+    if(exact)observed=last;
+    if(state.complete&&!state.pit&&!a27pit()&&observed>0&&observed<86400&&(!state.best||observed<state.best.seconds))
+      state.best={seconds:observed,invalid:state.invalid||previous.invalid,estimated:!exact};
+    state.complete=true;state.invalid=a27invalid();state.pit=a27pit();
+  }else if(!close||lap!==previous.lap||p<previous.p-.02||(clock!==null&&previous.clock!==null&&clock<previous.clock-.2)) {
+    state.complete=clock!==null&&clock>=0&&clock<=1&&p<.01;
+    state.invalid=a27invalid();state.pit=a27pit();
+  }else {
+    state.invalid=state.invalid||a27invalid();state.pit=state.pit||a27pit();
+  }
+  state.previous={lap:lap,p:p,clock:clock,stamp:stamp,sessionTime:sessionTime,invalid:a27invalid()};
+  return state.best||empty;
+}
+function h2raceBestText() {var best=h2raceBest();return best.seconds===null?'—':(best.estimated?'≈':'')+a27time({TotalSeconds:best.seconds},true);}
+function h2raceBestLabel() {var best=h2raceBest();return h2t('sessionBest')+(best.invalid?' · '+a27t(16):'');}
+function h2raceBestColor() {return h2raceBest().invalid?'#FFFFB35C':'#FFDEE6EC';}
+function h2raceValidLabel() {
+  var labels={en:'BEST VALID',ru:'ЛУЧШИЙ ЗАЧТЁННЫЙ',de:'BESTE GÜLTIGE',es:'MEJOR VÁLIDA',fr:'MEILLEUR VALIDE',it:'MIGLIORE VALIDO','pt-BR':'MELHOR VÁLIDA',pl:'NAJLEPSZE WAŻNE',cs:'NEJLEPŠÍ PLATNÉ',tr:'EN İYİ GEÇERLİ',ja:'有効ベスト',ko:'유효 베스트',zh:'有效最佳'};
+  return labels[a27lang()]||labels.en;
+}
+function h2raceDeltaTitle() {
+  var labels={en:'DELTA TO VALID SESSION BEST',ru:'Δ К ЗАЧТЁННОМУ РЕКОРДУ СЕССИИ',de:'DELTA ZUR GÜLTIGEN SESSIONBESTZEIT',es:'DELTA A MEJOR VÁLIDA DE SESIÓN',fr:'DELTA AU MEILLEUR VALIDE DE SESSION',it:'DELTA AL MIGLIOR VALIDO DI SESSIONE','pt-BR':'DELTA À MELHOR VÁLIDA DA SESSÃO',pl:'DELTA DO WAŻNEGO REKORDU SESJI',cs:'DELTA K PLATNÉMU REKORDU RELACE',tr:'GEÇERLİ SEANS REKORUNA FARK',ja:'セッション有効ベストとの差',ko:'세션 유효 베스트 대비 델타',zh:'与本节有效最佳圈速差值'};
+  return labels[a27lang()]||labels.en;
+}
+
+// Live race tracking and valid lap history.
+// Live iRacing standings and optional iRacing Extra Properties integration.
+var h2irSnapshotPosition=h2irPosition;
+function h2irFrameKey(raw) {
+  var tick=h2irNumber(raw,'SessionTick');
+  return h2irNumber(raw,'SessionNum')+'|'+(tick===null?Math.floor(new Date().getTime()/100):tick)+'|'+h2irNumber(raw,'SessionTime')+'|'+h2irNumber(raw,'ReplaySessionTime');
+}
+function h2irExtraEntries(raw) {
+  if(!a27ir()||!a27live())return {};
+  var key=h2irFrameKey(raw),cached=typeof root!=='undefined'?root.h2irExtraEntries:null;
+  if(cached&&cached.key===key)return cached.entries;
+  var prefix='IRacingExtraProperties.iRacing_Leaderboard_Driver_',entries={},running=a27p('IRacingExtraProperties.PluginRunning');
+  if(running!==false&&running!==0&&running!=='False'&&(a27p('IRacingExtraProperties.PluginVersion')!==null||a27p(prefix+'00_CarNumber')!==null||a27p(prefix+'01_CarNumber')!==null)) {
+    var count=Math.min(512,Math.max(h2raceArrayLength(h2irRoster(raw)),h2raceCount())+1);
+    for(var i=0;i<count;i++) {
+      var path=prefix+(i<10?'0':'')+i+'_',number=h2raceString(a27p(path+'CarNumber'));
+      if(!number)continue;
+      var id='$'+number;
+      entries[id]=Object.prototype.hasOwnProperty.call(entries,id)?null:path;
+    }
+  }
+  if(typeof root!=='undefined')root.h2irExtraEntries={key:key,entries:entries};
+  return entries;
+}
+function h2irExtraCar(raw,car,field) {
+  var roster=h2irRoster(raw),number='';
+  for(var i=0,n=h2raceArrayLength(roster);i<n;i++)if(h2raceNumber(roster[i].CarIdx)===car){number=h2raceString(roster[i].CarNumber);break;}
+  var path=h2irExtraEntries(raw)['$'+number];
+  return path?a27p(path+field):null;
+}
+function h2irLiveStandings(raw) {
+  if(!raw)return {entries:[],byCar:{}};
+  var replay=a27playback(),session=h2sectorSessionKey()+'|'+h2irNumber(raw,'SessionUniqueID')+'|'+h2irNumber(raw,'SessionNum')+'|'+(replay?'replay':'live'),frame=h2irFrameKey(raw),time=h2irNumber(raw,replay?'ReplaySessionTime':'SessionTime'),state=h2irState(raw);
+  if(time===null)time=h2irNumber(raw,'SessionTime');
+  var saved=typeof root!=='undefined'?root.h2irLiveStandings:null;
+  if(!saved||saved.session!==session||(time!==null&&saved.time!==null&&time<saved.time-.5))saved={session:session,frame:null,time:time,history:{}};
+  if(saved.frame===frame)return saved;
+  var roster=h2irRoster(raw),entries=[],byCar={},classes={},i,n;
+  for(i=0,n=h2raceArrayLength(roster);i<n;i++) {
+    var d=roster[i],car=h2raceNumber(h2irGet(d,'CarIdx'));
+    if(!d||car===null||car<0||car>=512||car!==Math.floor(car)||byCar[car]||a27active(h2irGet(d,'IsSpectator'))||a27active(h2irGet(d,'CarIsPaceCar')))continue;
+    var completed=h2irArray(raw,'CarIdxLapCompleted',car),started=h2irArray(raw,'CarIdxLap',car),pct=h2irArray(raw,'CarIdxLapDistPct',car),past=saved.history[car];
+    var progress=null,located=pct!==null&&pct>=0&&pct<=1;
+    if(located) {
+      if(started!==null&&started>=0)progress=(started===0?-1:Math.max(started-1,completed===null?-1:completed))+pct;
+      else if(completed!==null&&completed>=-1)progress=completed+pct;
+    }
+    // Keep a disconnected car's last observed distance instead of resetting it
+    // to the start line. The race roster still includes non-starters and DNFs.
+    if(progress===null&&past&&completed!==null&&completed>=past.completed)progress=Math.max(past.progress,completed);
+    if(progress===null&&completed!==null&&completed>=0)progress=completed;
+    if(progress===null)progress=-2;
+    if(located&&completed!==null)saved.history[car]={progress:progress,completed:completed};
+    var entry={car:car,number:h2raceString(h2irGet(d,'CarNumber')),classId:h2raceString(h2irGet(d,'CarClassID')),rating:h2raceNumber(h2irGet(d,'IRating')),progress:progress,located:located,completed:completed,started:started,official:h2irSnapshotPosition(raw,car,false),officialClass:h2irSnapshotPosition(raw,car,true),position:null,classPosition:null};
+    entries.push(entry);byCar[car]=entry;
+  }
+  entries.sort(function(a,b) {
+    // Live in-laps must not reorder finishers. During replay SessionState and
+    // classification may still describe the finished live session, while the
+    // per-car distances describe the earlier race shown by the replay.
+    if(!replay&&state!==4) {
+      var official=(a.official||999)-(b.official||999);if(official)return official;
+    }
+    return b.progress-a.progress||(a.official||999)-(b.official||999)||a.car-b.car;
+  });
+  for(i=0;i<entries.length;i++) {
+    var e=entries[i],classKey='$'+e.classId;
+    e.position=i+1;
+    if(!classes[classKey])classes[classKey]=[];
+    classes[classKey].push(e);e.classPosition=classes[classKey].length;
+  }
+  // The original dashboard's tracker has its own live class classification.
+  // Accept a complete, unique class order, mapped by car number rather than
+  // assuming its leaderboard indices are the same as SimHub's indices.
+  // Plugin standings have no replay timestamp to match against the SDK frame.
+  // They cannot override historical distances or the final live results.
+  if(!replay&&!(state>=5))for(var classKey in classes) {
+    var group=classes[classKey],seen={},plugin=[],complete=true;
+    for(i=0;i<group.length;i++) {
+      var rank=h2raceNumber(h2irExtraCar(raw,group[i].car,'TrackerPositionInClass'));
+      if(rank===null||rank<1||rank>group.length||rank!==Math.floor(rank)||seen[rank]){complete=false;break;}
+      seen[rank]=true;plugin.push(rank);
+    }
+    if(complete)for(i=0;i<group.length;i++){group[i].classPosition=plugin[i];if(group.length===entries.length)group[i].position=plugin[i];}
+  }
+  saved.frame=frame;saved.time=time;saved.entries=entries;saved.byCar=byCar;
+  if(typeof root!=='undefined')root.h2irLiveStandings=saved;
+  return saved;
+}
+h2irPosition=function(raw,car,ownClass) {
+  if(car===null||car===undefined)return null;
+  if(!a27ir()||!a27race())return h2irSnapshotPosition(raw,car,ownClass);
+  var e=h2irLiveStandings(raw).byCar[car];
+  return e?(ownClass?e.classPosition:e.position):h2irSnapshotPosition(raw,car,ownClass);
+};
+function h2irGainNumber(value) {
+  if(value===null||value===undefined)return null;
+  var text=String(value).replace(/[\s,\u00a0]/g,'').replace(/\u2212/g,'-');
+  return /^[+-]?\d+(?:\.\d+)?$/.test(text)?Number(text):null;
+}
+function h2irRatingEligible(raw) {
+  var weekend=h2irGet(h2irGet(raw,'SessionData'),'WeekendInfo');
+  var official=h2irGet(weekend,'Official');
+  if(official===null||official===undefined)official=a27p('GameRawData.SessionData.WeekendInfo.Official');
+  var unofficial=h2irGet(h2irGet(weekend,'WeekendOptions'),'Unofficial');
+  if(unofficial===null||unofficial===undefined)unofficial=a27p('GameRawData.SessionData.WeekendInfo.WeekendOptions.Unofficial');
+  if(a27active(unofficial))return false;
+  return official===true||official===1||String(official).toLowerCase()==='true'||String(official)==='1';
+}
+h2raceIRDelta=function(slot) {
+  if(!a27live()||!a27ir()||!a27race())return null;
+  var raw=h2irRaw(),row=h2raceRow(slot,false);if(!row.available)return null;
+  // The simulator decides whether this field meets its series requirements.
+  // Apply that decision to supplied estimates as well as the local calculation.
+  if(!h2irRatingEligible(raw))return null;
+  var car=h2irDriver(row.index,raw),standings=h2irLiveStandings(raw),own=standings.byCar[car];
+  if(!own||!own.classId)return null;
+  var group=[],i;
+  for(i=0;i<standings.entries.length;i++)if(standings.entries[i].classId===own.classId)group.push(standings.entries[i]);
+  if(group.length<2)return null;
+  var plugin=a27playback()?null:h2irGainNumber(h2irExtraCar(raw,car,'iRGainEstimation'));
+  if(plugin!==null)return Math.round(plugin);
+  var state=h2irState(raw);if(!(state>=4&&state<=6))return null;
+  var weekend=h2irGet(h2irGet(raw,'SessionData'),'WeekendInfo');
+  if(a27active(h2irGet(weekend,'TeamRacing'))||!(own.rating>0))return null;
+  // Unknown ratings cannot be inferred, but an unstarted or disconnected car
+  // with a supplied rating remains part of the class and does not blank it.
+  for(i=0;i<group.length;i++)if(!(group[i].rating>0))return null;
+  var n=group.length;
+  var strength=Math.exp(own.rating*Math.LN2/1600)-1,expected=0;
+  for(i=0;i<n;i++)if(group[i].car!==car)expected+=strength/(strength+Math.exp(group[i].rating*Math.LN2/1600)-1);
+  return Math.round(200/n*(n-own.classPosition-expected-(n/2-own.classPosition)/100));
+};
+
+// SessionTimeLeft is the native countdown used by the original dashboard.
+// Read the scalar properties as well: telemetry dictionaries and normalized
+// data do not have identical availability in every game or recording.
+function h2phaseScalar(key,raw) {
+  var value=h2raceNumber(a27p('GameRawData.Telemetry.'+key));
+  return value!==null?value:h2irNumber(raw,key);
+}
+function h2phaseState(raw) {
+  var value=a27p('GameRawData.Telemetry.SessionState');
+  if(value===null)value=h2irValue(raw,'SessionState');
+  var number=h2raceNumber(value);
+  if(number!==null)return number;
+  var names={invalid:0,getincar:1,warmup:2,paradelaps:3,racing:4,checkered:5,cooldown:6};
+  return names[String(value).toLowerCase().replace(/[^a-z]/g,'')];
+}
+function h2phaseFinite(seconds) {
+  return seconds!==null&&isFinite(seconds)&&seconds>=0&&seconds<172800;
+}
+function h2phaseCountdown(raw,state) {
+  var elapsed=a27ir()?h2phaseScalar('SessionTime',raw):null;
+  if(a27race()&&state>=1&&state<=3&&elapsed!==null&&elapsed<0&&elapsed>=-3600)return -elapsed;
+  var candidates=[a27seconds(a27p('SessionTimeLeft')),a27seconds(a27d('SessionTimeLeft'))];
+  if(a27ir())candidates.push(h2phaseScalar('SessionTimeRemain',raw));
+  for(var i=0;i<candidates.length;i++)if(h2phaseFinite(candidates[i])&&candidates[i]>0)return candidates[i];
+  for(i=0;i<candidates.length;i++)if(candidates[i]===0)return 0;
+  // A timer can go slightly negative after its limit while cars finish laps.
+  if(a27ir()&&state>=4)for(i=0;i<candidates.length;i++)if(candidates[i]!==null&&candidates[i]<0&&candidates[i]>-172800)return 0;
+  return null;
+}
+function h2phaseLapFinish(raw) {
+  var total=h2phaseScalar('SessionLapsTotal',raw),remain=h2phaseScalar('SessionLapsRemainEx',raw);
+  if(!(total>0&&total<10000))total=a27dn('TotalLaps');
+  if(!(total>0&&total<10000))return null;
+  if(!(remain!==null&&remain>=0&&remain<=total))remain=a27dn('RemainingLaps');
+  var roster=h2irRoster(raw),length=h2raceArrayLength(roster),leader=null;
+  for(var i=0;i<length;i++)if(h2irPosition(raw,h2raceNumber(roster[i].CarIdx),false)===1)leader=h2raceNumber(roster[i].CarIdx);
+  var distance=h2irDistance(raw,leader),lap=h2irArray(raw,'CarIdxLastLapTime',leader);
+  if(distance!==null)remain=Math.max(0,Math.ceil(total-distance));
+  if(!(remain!==null&&remain>=0&&remain<=total))return null;
+  var text=remain+(remain===1&&a27lang()==='en'?' lap':a27t(5));
+  if(distance!==null&&lap>0&&lap<86400&&total>distance)text+=' · ≈'+h2duration((total-distance)*lap);
+  return text;
+}
+h2phase=function() {
+  var label=a27session(),replay=a27playback();
+  var raw=a27ir()?h2irRaw():null,state=a27ir()?h2phaseState(raw):null;
+  if(a27ir()&&a27race()) {
+    if(state===1)label=h2raceT('grid');
+    if(state===2)label=a27t(155);
+    if(state===3)label=h2raceT('formation');
+    if(state===5||state===6)label=a27t(209);
+  }
+  if(replay)label=a27t(133)+' / '+label;
+  var seconds=h2phaseCountdown(raw,state);
+  if(seconds!==null)return {label:label,text:h2duration(seconds)};
+  // Replays retain a supplied session clock, as the native timer does. Do not
+  // manufacture a live finish estimate when the recording has no countdown.
+  if(replay)return {label:label,text:'—'};
+  if(a27ir()&&a27race()&&state>=1&&state<=3)return {label:label,text:h2raceT('waiting')};
+  if(a27race()&&(state===null||state===undefined||state>=4&&state<=5)) {
+    var laps=h2phaseLapFinish(raw);
+    if(laps!==null)return {label:label,text:laps};
+  }
+  var supplied=a27ir()?h2phaseScalar('SessionTimeRemain',raw):a27seconds(a27d('SessionTimeLeft'));
+  return {label:label,text:supplied!==null&&supplied>=172800?h2raceT('noLimit'):'—'};
+};
+
+// Session observations are shared between display bindings. A dashboard-only
+// installation uses SimHub's built-in shared values; no plugin is required.
+function h2lapRecordsRead() {
+  if(typeof getsharedvalueordefault==='function') {
+    var value=getsharedvalueordefault('APEX27','session-laps-v2','');
+    if(value) {try{return JSON.parse(String(value));}catch(e){}}
+  }
+  return typeof root!=='undefined'?root.h2lapRecordsV2:null;
+}
+function h2lapRecordsWrite(state) {
+  if(typeof root!=='undefined')root.h2lapRecordsV2=state;
+  if(typeof setsharedvalue==='function')setsharedvalue('APEX27','session-laps-v2',JSON.stringify(state));
+  return state;
+}
+function h2lapSample() {
+  var raw=a27ir()?h2irRaw():null,clock=a27seconds(a27d('CurrentLapTime'));
+  var p=a27progress(),lap=a27dn('CurrentLap'),last=h2positiveTime('LastLapTime'),pit=a27pit();
+  var replay=a27playback(),time=h2irNumber(raw,replay?'ReplaySessionTime':'SessionTime'),incident=null,normalizedInvalid=a27invalid(),telemetryInvalid=false;
+  if(raw) {
+    var n=h2irNumber(raw,'LapCurrentLapTime');if(n!==null&&n>=0)clock=n;
+    n=h2irNumber(raw,'LapDistPct');if(n!==null&&n>=0&&n<=1)p=n;
+    n=h2irNumber(raw,'Lap');if(n!==null&&n>=0)lap=n;
+    n=h2irNumber(raw,'LapLastLapTime');if(n!==null)last=n>0&&n<86400?n:null;
+    if(replay) {
+      var car=h2irNumber(raw,'PlayerCarIdx');
+      n=h2irArray(raw,'CarIdxLapDistPct',car);if(n!==null&&n>=0&&n<=1)p=n;
+      n=h2irArray(raw,'CarIdxLap',car);if(n!==null&&n>=0)lap=n;
+      n=h2irArray(raw,'CarIdxLastLapTime',car);if(n!==null)last=n>0&&n<86400?n:null;
+      var pitRoad=h2irValue(raw,'CarIdxOnPitRoad');
+      if(car!==null&&car>=0&&car<h2raceArrayLength(pitRoad)) {
+        var onPitRoad=h2irGet(pitRoad,car);
+        if(onPitRoad!==null&&onPitRoad!==undefined)pit=a27active(onPitRoad);
+      }
+      // Player lap-clock channels can remain frozen while viewing a replay.
+      // Measured replay laps therefore use successive timing-line crossings.
+      clock=null;
+    }
+    incident=h2irNumber(raw,'PlayerCarMyIncidentCount');
+    if(incident===null) {
+      var info=h2irGet(h2irGet(raw,'SessionData'),'DriverInfo');
+      incident=h2raceNumber(h2irGet(info,'DriverIncidentCount'));
+    }
+    var surface=replay?h2irArray(raw,'CarIdxTrackSurface',h2irNumber(raw,'PlayerCarIdx')):h2irValue(raw,'PlayerTrackSurface');
+    telemetryInvalid=h2raceNumber(surface)===0||String(surface).toLowerCase()==='offtrack';
+  }
+  var now=Date.now()/1000;
+  return {lap:lap,p:p,clock:clock,last:last,time:time===null?now:time,wall:now,incident:incident,invalid:normalizedInvalid||telemetryInvalid,normalizedInvalid:normalizedInvalid,telemetryInvalid:telemetryInvalid,pit:pit};
+}
+function h2lapOffer(state,seconds,invalid,estimated) {
+  if(!(seconds>0&&seconds<86400))return;
+  var lap={seconds:seconds,invalid:!!invalid,estimated:!!estimated};
+  if(!state.best||seconds<state.best.seconds-.0005||(!invalid&&Math.abs(seconds-state.best.seconds)<.0005))state.best=lap;
+  if(!invalid)state.lastValid=lap;
+}
+function h2lapObserve() {
+  var native=h2positiveTime('BestLapTime'),empty={best:native===null?null:{seconds:native,invalid:false,estimated:false},lastValid:null};
+  if(!a27live())return empty;
+  var raw=a27ir()?h2irRaw():null,key=h2sectorSessionKey()+'|'+h2irNumber(raw,'SessionUniqueID')+'|'+(a27playback()?'replay-'+h2irNumber(raw,'ReplaySessionNum'):'live');
+  var s=h2lapSample(),state=h2lapRecordsRead(),restart=a27yes(a27d('IsSessionRestart'));
+  if(!state||state.key!==key||(restart&&!state.restart)||(state.previous&&s.time<state.previous.time-.1)) {
+    state={key:key,best:null,lastValid:null,previous:null,start:null,invalid:false,pit:false,pending:null,restart:restart};
+    // A last lap predating the dashboard has no retained validity flag. A match
+    // with the game's valid session best is sufficient to identify it safely.
+    if(s.last!==null&&native!==null&&Math.abs(s.last-native)<.001)state.lastValid={seconds:s.last,invalid:false,estimated:false};
+  }
+  state.restart=restart;
+  if(native!==null&&(!state.best||native<=state.best.seconds))state.best={seconds:native,invalid:false,estimated:false};
+  var prev=state.previous;
+  if(prev&&s.wall===prev.wall&&s.time===prev.time&&s.p===prev.p&&s.last===prev.last&&s.normalizedInvalid===prev.normalizedInvalid&&s.telemetryInvalid===prev.telemetryInvalid&&s.incident===prev.incident&&s.pit===prev.pit)return state;
+  if((!a27driving()&&!a27playback())||a27paused()||a27stage()||s.p===null||s.p<0||s.lap===null) {
+    state.previous=null;state.start=null;state.pending=null;
+    return h2lapRecordsWrite(state);
+  }
+  var dt=prev?s.time-prev.time:null,wall=prev?s.wall-prev.wall:null;
+  var close=prev&&dt>=0&&dt<=3&&wall>=0&&wall<=5;
+  var rise=prev&&s.incident!==null&&prev.incident!==null&&s.incident>prev.incident;
+  // Lap counters and lap clocks may change on adjacent packets. The actual
+  // timing-line crossing is authoritative, independent of that update order.
+  var crossed=close&&prev.p>.85&&s.p<.15&&s.p+1-prev.p<.1;
+  if(state.pending&&s.time-state.pending.time<=2&&s.last!==null&&s.last!==state.pending.previousLast&&Math.abs(s.last-state.pending.seconds)<1) {
+    var pending=state.pending;
+    // Replace a locally measured completion with the supplied lap time when
+    // the SDK publishes it one or more packets after the timing-line crossing.
+    if(state.best&&state.best.estimated&&Math.abs(state.best.seconds-pending.seconds)<.0005)state.best=pending.previousBest;
+    h2lapOffer(state,s.last,pending.invalid,false);state.pending=null;
+    if(native!==null&&(!state.best||native<=state.best.seconds))state.best={seconds:native,invalid:false,estimated:false};
+  }else if(state.pending&&s.time-state.pending.time>2)state.pending=null;
+  if(crossed) {
+    var width=s.p+1-prev.p,at=prev.time+(width>0?dt*(1-prev.p)/width:dt);
+    var observed=state.start!==null?at-state.start:null;
+    var clockDuration=prev.clock!==null&&s.clock!==null&&s.clock<prev.clock-1?prev.clock+dt-s.clock:null;
+    // An SDK lap clock can recover the first observed completion even when the
+    // dashboard was opened partway through that lap.
+    if(!(observed>0)&&clockDuration>0)observed=clockDuration;
+    var exact=s.last!==null&&s.last!==prev.last&&(observed===null||Math.abs(s.last-observed)<1);
+    if(exact)observed=s.last;
+    var bad=state.invalid||prev.invalid||!!rise;
+    if(!state.pit&&!prev.pit&&!s.pit&&observed>0&&observed<86400) {
+      var previousBest=state.best;
+      h2lapOffer(state,observed,bad,!exact);
+      state.pending={seconds:observed,invalid:bad,time:s.time,previousLast:prev.last,previousBest:previousBest};
+    }
+    // Normalized invalidity can clear one packet after the geometric crossing.
+    // Wait briefly for that old flag to clear; fresh raw evidence still counts.
+    state.waitInvalidClear=!!(prev.normalizedInvalid&&s.normalizedInvalid);
+    state.start=at;state.invalid=s.telemetryInvalid||(!state.waitInvalidClear&&s.normalizedInvalid);state.pit=s.pit;
+  }else if(!close||(prev&&(s.p<prev.p-.02||Math.abs(s.p-prev.p)>.1||s.lap<prev.lap))) {
+    state.start=s.clock!==null&&s.clock<=2&&s.clock>=0&&s.p<.02?s.time-s.clock:null;
+    state.invalid=s.invalid;state.waitInvalidClear=false;state.pit=s.pit;state.pending=null;
+  }else {
+    if(state.waitInvalidClear&&(!s.normalizedInvalid||s.time-state.start>2))state.waitInvalidClear=false;
+    state.invalid=state.invalid||s.telemetryInvalid||(!state.waitInvalidClear&&s.normalizedInvalid)||!!rise;state.pit=state.pit||s.pit;
+  }
+  state.previous=s;
+  return h2lapRecordsWrite(state);
+}
+h2raceBest=function() {
+  return h2lapObserve().best||{seconds:null,invalid:false,estimated:false};
+};
+function h2lastValidLapText() {
+  var lap=h2lapObserve().lastValid;
+  return !lap?'—':(lap.estimated?'≈':'')+a27time({TotalSeconds:lap.seconds},true);
+}
+function h2lapValidityLabel(invalid) {
+  if(invalid)return a27t(16);
+  var labels={en:'VALID',ru:'ЗАЧТЁННЫЙ',de:'GÜLTIG',es:'VÁLIDA',fr:'VALIDE',it:'VALIDO','pt-BR':'VÁLIDA',pl:'WAŻNE',cs:'PLATNÉ',tr:'GEÇERLİ',ja:'有効',ko:'유효',zh:'有效'};
+  return labels[a27lang()]||labels.en;
+}
+h2raceBestLabel=function() {return h2t('sessionBest')+' · '+h2lapValidityLabel(h2raceBest().invalid);};
+// The footer runs in every live layout, including menus between stints. The
+// visible lap fields read the same native shared state without separate caches.
+h2footerTime=(function(base){return function(){h2lapObserve();return base();};})(h2footerTime);
+
+// Track fractions map directly onto a shared centerline. Close cars overlap.
+h2fieldLeft=function(index) {
+  var fraction=a27fieldPoint(index);
+  return 32+(fraction===null?0:fraction)*1824;
+};
+function h2lastValidLabel() {
+  var labels={en:'LAST VALID',ru:'ПОСЛЕДНИЙ ЗАЧТЁННЫЙ',de:'LETZTE GÜLTIGE',es:'ÚLTIMA VÁLIDA',fr:'DERNIER VALIDE',it:'ULTIMO VALIDO','pt-BR':'ÚLTIMA VÁLIDA',pl:'OSTATNIE WAŻNE',cs:'POSLEDNÍ PLATNÉ',tr:'SON GEÇERLİ',ja:'直近の有効ラップ',ko:'최근 유효 랩',zh:'上个有效圈'};
+  return labels[a27lang()]||labels.en;
+}
+
+// Limit native pedal charts by elapsed time, not by a session-long sample count.
+function a27pedalTraceState(channel,record) {
+  var key='pedal-time-v1-'+channel,now=Date.now(),state=null;
+  if(typeof getsharedvalueordefault==='function') {
+    try {state=JSON.parse(String(getsharedvalueordefault('APEX27',key,'null')));}catch(e){}
+  } else if(typeof root!=='undefined')state=(root.apexPedalTime||{})[channel];
+  var session=h2sectorSessionKey(),restart=a27yes(a27d('IsSessionRestart'));
+  var active=(a27pedalPanel()||a27stage())&&a27driving()&&a27pedalChartAvailable(channel);
+  if(!state||state.session!==session||now<state.time||(restart&&!state.restart))state={session:session,time:now,restart:restart,times:[]};
+  state.restart=restart;
+  if(!active||now-state.time>250)state.times=[];
+  if(active&&record)state.times.push(now);
+  while(state.times.length&&state.times[0]<now-10000)state.times.shift();
+  // Also bound storage if the host repeats a timestamp during an update.
+  while(state.times.length>201)state.times.shift();
+  state.time=now;
+  if(typeof setsharedvalue==='function')setsharedvalue('APEX27',key,JSON.stringify(state));
+  else {if(!root.apexPedalTime)root.apexPedalTime={};root.apexPedalTime[channel]=state;}
+  return state;
+}
+a27pedalChartValue=function(channel) {
+  a27pedalTraceState(channel,true);
+  return channel==='ABS'?(a27absActive()?1:0):(a27pedal(channel)||0);
+};
+function a27pedalTraceLimit(channel) {
+  // The native collection retains MaxPoints - 1 points. At initial fill it
+  // may retain one fewer, depending on formula order; older samples still age
+  // out by time. No artificial zero samples are inserted.
+  return Math.max(2,a27pedalTraceState(channel,false).times.length+1);
+}
