@@ -21004,7 +21004,7 @@
                   }
                 },
                 {
-                  "$type": "Apex27LiveTrackMap, Apex27LanguagePlugin",
+                  "$type": "Apex27LiveTrackMap, Apex27Plugin",
                   "AlternateTrackSectorColor": "#FFF5F5F5",
                   "CursorColor": "#FFFF0000",
                   "DisplayScale": 1.0,
@@ -27740,7 +27740,7 @@
                   }
                 },
                 {
-                  "$type": "Apex27LiveTrackMap, Apex27LanguagePlugin",
+                  "$type": "Apex27LiveTrackMap, Apex27Plugin",
                   "AlternateTrackSectorColor": "#FFF5F5F5",
                   "CursorColor": "#FFFF0000",
                   "DisplayScale": 1.0,
@@ -32477,7 +32477,7 @@
           "Font": "Segoe UI",
           "FontWeight": "Normal",
           "FontSize": 12,
-          "Text": "v1.1.13",
+          "Text": "v1.1.14",
           "TextColor": "#FF96A6B4",
           "HorizontalAlignment": 2,
           "VerticalAlignment": 1,
@@ -32537,7 +32537,7 @@
     "SimHubVersion": "9.13.3",
     "Title": "APEX 27 Full",
     "Author": "Lord-of-the-Bots",
-    "Description": "v1.1.4 / lap prediction / multiclass relative with class rivals / iRating and safety rating / lap and sector timing / analogue RPM, speed and gear / square map / compact fuel and pedal history / flags",
+    "Description": "v1.1.14 / lap prediction / multiclass relative with class rivals / iRating and safety rating / lap and sector timing / analogue RPM, speed and gear / square map / compact fuel and pedal history / flags",
     "ScreenCount": 1.0,
     "InGameScreensIndexs": [
       0

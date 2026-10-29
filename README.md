@@ -6,7 +6,7 @@ A free SimHub dashboard for a dedicated 16:9 fourth monitor. The 1920 × 1080 la
 
 **iRacing is the focus of this release.** Telemetry handling, standings and update performance have been refined and optimized through roughly 20 races with repeated fixes between sessions. Other games have not received the same refinement and testing in this release cycle. Their existing integrations may work where suitable telemetry is available, but their current behaviour is unverified.
 
-The previews below show an earlier layout. The current release includes the revised traffic table, lap records, field ribbon and pedal graph described here.
+The previews below show the current dashboard rendered by SimHub with demonstration data. They illustrate the interface and are not captures from a live race.
 
 ![APEX 27](assets/standard-race.png)
 
@@ -62,15 +62,21 @@ Previews labelled **SimHub / Demo track** use SimHub's built-in demonstration ma
 
 English, Russian, German, Spanish, French, Italian, Brazilian Portuguese, Polish, Czech, Turkish, Japanese, Korean and Simplified Chinese.
 
-Choose a language in **Language**. Manual selection always takes priority. The included `Apex27LanguagePlugin.dll` provides the live map component and lets **Auto — SimHub** follow SimHub's interface language. Auto falls back to English if the language is unsupported.
+Choose a language in **Language**. Manual selection always takes priority. **Auto — SimHub** follows SimHub's interface language and falls back to English if it is unsupported.
+
+## Required APEX 27 plugin
+
+`Apex27Plugin.dll` is the dashboard's companion plugin. It reads live iRacing telemetry, supplies the map component and its current position labels, saves observed clean lap records per car and track, and provides SimHub's language for automatic language selection. It reads simulator data without sending driving or pit commands.
+
+The plugin is required for both dashboard variants, including when you choose a language manually or use another game. It was previously named `Apex27LanguagePlugin.dll`; the new name reflects its wider role.
 
 ## Installation
 
-Requires **SimHub 9.13.3 or newer** on Windows and the included `Apex27LanguagePlugin.dll`.
+Requires **SimHub 9.13.3 or newer** on Windows and the included `Apex27Plugin.dll`.
 
-Open `APEX 27.simhubdash` or `APEX 27 Full.simhubdash` and confirm the import in SimHub. Open the dashboard on your 16:9 display and choose its settings.
+Download and extract **APEX27-v1.1.14.zip** from the latest release. It contains both dashboards, the required plugin and installation instructions.
 
-Before importing the dashboard, close SimHub and copy `plugins/Apex27LanguagePlugin.dll` beside `SimHubWPF.exe`, replacing the older bridge if present. Restart SimHub and enable **APEX 27 language bridge**. The DLL supplies the map component even when a language is selected manually. See [INSTALL.md](INSTALL.md) for details.
+Close SimHub. If upgrading, remove the old `Apex27LanguagePlugin.dll` from beside `SimHubWPF.exe`, then copy `plugins/Apex27Plugin.dll` into that folder. Do not keep both plugins installed. Restart SimHub and enable **APEX 27 bridge**, then import either file from `dashboards`. Update the dashboard and plugin together: older dashboards still refer to the old plugin name. Open the updated dashboard on your 16:9 display. See [INSTALL.md](INSTALL.md) for details.
 
 ## Feedback
 
@@ -80,7 +86,7 @@ Suggestions for the displayed information, layout and element sizes are welcome 
 
 ## Build
 
-Run `python src/build.py` to create both dashboard files in `releases/dashboards`. Build the required bridge with `src/language-bridge/build.ps1 -SimHubDir "C:\Program Files (x86)\SimHub"` in PowerShell. The bridge output is `src/language-bridge/bin/Apex27LanguagePlugin.dll`; copy it into `releases/plugins` alongside the dashboard folder.
+Build the required plugin with `src/plugin/build.ps1 -SimHubDir "C:\Program Files (x86)\SimHub"` in PowerShell, then run `python src/build.py --release`. This creates both dashboard files, the plugin, instructions and previews under `releases`, plus the versioned ZIP for publication. To rebuild only the dashboard files, run `python src/build.py`.
 
 ## Support
 

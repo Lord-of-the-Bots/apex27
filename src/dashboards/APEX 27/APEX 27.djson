@@ -19731,7 +19731,7 @@
                   }
                 },
                 {
-                  "$type": "Apex27LiveTrackMap, Apex27LanguagePlugin",
+                  "$type": "Apex27LiveTrackMap, Apex27Plugin",
                   "AlternateTrackSectorColor": "#FFF5F5F5",
                   "CursorColor": "#FFFF0000",
                   "DisplayScale": 1.0,
@@ -26708,7 +26708,7 @@
                   }
                 },
                 {
-                  "$type": "Apex27LiveTrackMap, Apex27LanguagePlugin",
+                  "$type": "Apex27LiveTrackMap, Apex27Plugin",
                   "AlternateTrackSectorColor": "#FFF5F5F5",
                   "CursorColor": "#FFFF0000",
                   "DisplayScale": 1.0,
@@ -30925,7 +30925,7 @@
           "Font": "Segoe UI",
           "FontWeight": "Normal",
           "FontSize": 12,
-          "Text": "v1.1.13",
+          "Text": "v1.1.14",
           "TextColor": "#FF96A6B4",
           "HorizontalAlignment": 2,
           "VerticalAlignment": 1,
@@ -30985,7 +30985,7 @@
     "SimHubVersion": "9.13.3",
     "Title": "APEX 27",
     "Author": "Lord-of-the-Bots",
-    "Description": "v1.1.4 / Companion dashboard for external RPM, gear and flag displays / expanded map and pedal history / adaptive session views / multiclass traffic / lap and sector timing",
+    "Description": "v1.1.14 / Companion dashboard for external RPM, gear and flag displays / expanded map and pedal history / adaptive session views / multiclass traffic / lap and sector timing",
     "ScreenCount": 1.0,
     "InGameScreensIndexs": [
       0

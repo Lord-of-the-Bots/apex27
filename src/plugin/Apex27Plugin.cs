@@ -3,15 +3,15 @@ using System.Reflection;
 using SimHub.Plugins;
 using WoteverLocalization;
 
-[assembly: AssemblyVersion("1.1.13.0")]
-[assembly: AssemblyFileVersion("1.1.13.0")]
+[assembly: AssemblyVersion("1.1.14.0")]
+[assembly: AssemblyFileVersion("1.1.14.0")]
 
 // Reads simulator telemetry without sending commands. New observed clean
 // records are saved to the plugin's local history outside the display thread.
-[PluginName("APEX 27 language bridge")]
+[PluginName("APEX 27 bridge")]
 [PluginAuthor("Lord-of-the-Bots")]
-[PluginDescription("Provides APEX 27 live iRacing telemetry, map labels and automatic interface translation.")]
-public sealed class Apex27LanguagePlugin : IPlugin
+[PluginDescription("Provides APEX 27 live iRacing telemetry, map markers, clean lap records and automatic language selection.")]
+public sealed class Apex27Plugin : IPlugin
 {
     private Apex27IRacingTelemetry telemetry;
     private Apex27CleanLapStore cleanLaps;

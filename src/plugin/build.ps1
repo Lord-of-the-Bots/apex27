@@ -15,12 +15,12 @@ foreach ($requiredFile in @($compiler) + $references) {
 }
 $binaryDir = Join-Path $PSScriptRoot 'bin'
 New-Item -ItemType Directory -Path $binaryDir -Force | Out-Null
-$plugin = Join-Path $binaryDir 'Apex27LanguagePlugin.dll'
-$source = Join-Path $PSScriptRoot 'Apex27LanguagePlugin.cs'
+$plugin = Join-Path $binaryDir 'Apex27Plugin.dll'
+$source = Join-Path $PSScriptRoot 'Apex27Plugin.cs'
 $mapSource = Join-Path $PSScriptRoot 'Apex27LiveTrackMap.cs'
 $telemetrySource = Join-Path $PSScriptRoot 'Apex27IRacingTelemetry.cs'
 $cleanLapSource = Join-Path $PSScriptRoot 'Apex27CleanLapStore.cs'
 $referenceArgs = $references | ForEach-Object { "/reference:$_" }
 & $compiler /nologo /target:library /optimize+ "/out:$plugin" $referenceArgs $source $mapSource $telemetrySource $cleanLapSource
-if ($LASTEXITCODE -ne 0) { throw "Language bridge compilation failed: $LASTEXITCODE" }
+if ($LASTEXITCODE -ne 0) { throw "APEX 27 plugin compilation failed: $LASTEXITCODE" }
 Write-Output "Built $plugin (not installed)"

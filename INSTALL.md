@@ -1,4 +1,4 @@
-# Install APEX 27 · v1.1.13
+# Install APEX 27 · v1.1.14
 
 Requires **SimHub 9.13.3 or newer** on Windows, the included bridge DLL and a working telemetry connection to the game.
 
@@ -6,8 +6,8 @@ This release focuses on **iRacing**, with telemetry, standings and update perfor
 
 ## Import and open
 
-1. Open the release folder.
-   Close SimHub, copy `plugins/Apex27LanguagePlugin.dll` beside `SimHubWPF.exe`, replacing an older copy if present, then restart SimHub and enable **APEX 27 language bridge**. Install this DLL before importing a dashboard: it supplies the live map component.
+1. Extract `APEX27-v1.1.14.zip` and open the extracted folder.
+   Close SimHub. For an upgrade, remove the former `Apex27LanguagePlugin.dll` from beside `SimHubWPF.exe`. Copy `plugins/Apex27Plugin.dll` beside `SimHubWPF.exe`, replacing an earlier copy of that same filename if present. Do not leave both plugin DLLs installed. Restart SimHub and enable **APEX 27 bridge**. Install this DLL before importing a dashboard: it supplies the live map component.
 2. Open either dashboard file and confirm the import in SimHub:
    - `APEX 27.simhubdash` — companion layout for wheel or external RPM, gear and flag displays. Includes a large square map, wide pedal graphs and compact fuel information; omits RPM, gear and the general flag panel in every session mode.
    - `APEX 27 Full.simhubdash` — for rigs that need driving instruments on screen, with an analogue tachometer, speed, gear and top-row flags.
@@ -17,14 +17,23 @@ This release focuses on **iRacing**, with telemetry, standings and update perfor
 
 Both variants retain automatic session views, lap prediction, traffic, the field ribbon, ratings and individual opponent flags when available. You may install both variants. Each keeps its own settings. Reimporting a dashboard file updates the matching dashboard. After an update, close and reopen the running dashboard to reload its scripts.
 
-## Language and map bridge
+## What the required plugin does
 
-The bridge DLL is required by the map component and reads the current iRacing telemetry directly from its local shared-memory feed. It sends no commands to the simulator. Automatic language selection is optional; manual selection always takes priority. Update the DLL together with the dashboard; the dashboard version appears in the upper-right corner and the DLL file version is 1.1.13.0.
+`Apex27Plugin.dll` has four roles:
+
+- Read current iRacing telemetry from its local shared-memory feed for the dashboard's live race data.
+- Supply the map component, including current position labels and marker locations.
+- Save observed clean lap records separately for each car and track configuration.
+- Read SimHub's interface language for **Auto — SimHub**.
+
+It sends no driving or pit commands to the simulator. The plugin is required by both dashboard variants even when language selection is manual or another game is used. Only automatic language selection is optional.
+
+The former name, `Apex27LanguagePlugin.dll`, described its original translation role. Version 1.1.14 uses `Apex27Plugin.dll` and appears as **APEX 27 bridge** in SimHub. Update the DLL and dashboard together: older dashboard packages reference the old assembly and property names. Do not merely rename the old DLL. Existing clean records in `PluginsData/APEX27/clean-laps.json` are retained. The dashboard version appears in the upper-right corner; this DLL's file version is 1.1.14.0.
 
 1. Close SimHub.
-2. Copy only `Apex27LanguagePlugin.dll` from the release's `plugins` folder into the SimHub installation folder, beside `SimHubWPF.exe`. Do not copy the entire `plugins` folder.
-3. Restart SimHub and enable **APEX 27 language bridge** in SimHub's plugin settings.
-4. In the dashboard's **Language** setting, select **Auto — SimHub**.
+2. Remove `Apex27LanguagePlugin.dll` if present, then copy only `Apex27Plugin.dll` from the release's `plugins` folder into the SimHub installation folder, beside `SimHubWPF.exe`. Do not copy the entire `plugins` folder.
+3. Restart SimHub and enable **APEX 27 bridge** in SimHub's plugin settings.
+4. Import the updated dashboard. Select **Auto — SimHub** in its **Language** setting if you want automatic language selection; otherwise choose a language manually.
 
 Auto uses English if the bridge is unavailable or SimHub's language is not included. Manual selection always takes priority. The standard and Full dashboards have separate language settings.
 

@@ -19,7 +19,7 @@ function a27languageChoice() {
 function a27lang() {
   var manual=a27normalizeLanguage(a27languageChoice());
   if(manual!=='')return manual;
-  return a27normalizeLanguage(a27p('Apex27LanguagePlugin.Code'))||'en';
+  return a27normalizeLanguage(a27p('Apex27Plugin.Code'))||'en';
 }
 function a27t(index) {
   var values=A27_CATALOGS[a27lang()],fallback=A27_CATALOGS.en;
@@ -1072,10 +1072,10 @@ var H2_WORLD_LABELS={en:'NOT ON TRACK',ru:'НЕ НА ТРАССЕ',de:'NICHT AUF
 function h2irRaw() {
   if(!a27live()||!a27ir())return null;
   try {
-    var raw=NewRawData(),serialized=a27p('Apex27LanguagePlugin.LiveTelemetryJson');
-    var telemetry=serialized?JSON.parse(String(serialized)):a27p('Apex27LanguagePlugin.LiveTelemetry');
+    var raw=NewRawData(),serialized=a27p('Apex27Plugin.LiveTelemetryJson');
+    var telemetry=serialized?JSON.parse(String(serialized)):a27p('Apex27Plugin.LiveTelemetry');
     if(!telemetry) {
-      var status=a27p('Apex27LanguagePlugin.LiveTelemetryStatus');
+      var status=a27p('Apex27Plugin.LiveTelemetryStatus');
       // Do not rewind history to the adapter's retained packet after a direct
       // stream stalls or disconnects. An absent bridge can still use SimHub.
       if(status==='Stale'||status==='Disconnected'||status==='Invalid data'||status==='Updating')return null;
@@ -2431,7 +2431,7 @@ function h2personalContext(){
 }
 function h2personalClean(){
  var key=h2personalContext();if(!key)return null;
- var serialized=String(a27p('Apex27LanguagePlugin.CleanLapRecordsJson')||'{}'),cache=A27_STATE.cleanRecords;
+ var serialized=String(a27p('Apex27Plugin.CleanLapRecordsJson')||'{}'),cache=A27_STATE.cleanRecords;
  if(!cache||cache.json!==serialized){var values={};try{values=JSON.parse(serialized);}catch(e){}cache=A27_STATE.cleanRecords={json:serialized,values:values};}
  var own=A27_STATE.cleanLocal||(A27_STATE.cleanLocal={}),lap=h2lapObserve().bestClean,record=cache.values[key];
  if(record&&record.seconds>0&&(!own[key]||record.seconds<own[key].seconds))own[key]=record;
