@@ -1,26 +1,69 @@
 using System;
+using System.Reflection;
 using SimHub.Plugins;
 using WoteverLocalization;
 
-// Optional read-only bridge. No game/device control, timers, network, settings,
-// or file access. SimHub calls the delegate whenever its property is evaluated.
+[assembly: AssemblyVersion("1.1.13.0")]
+[assembly: AssemblyFileVersion("1.1.13.0")]
+
+// Reads simulator telemetry without sending commands. New observed clean
+// records are saved to the plugin's local history outside the display thread.
 [PluginName("APEX 27 language bridge")]
 [PluginAuthor("Lord-of-the-Bots")]
-[PluginDescription("Exposes the selected SimHub interface language for APEX 27 automatic translation.")]
+[PluginDescription("Provides APEX 27 live iRacing telemetry, map labels and automatic interface translation.")]
 public sealed class Apex27LanguagePlugin : IPlugin
 {
+    private Apex27IRacingTelemetry telemetry;
+    private Apex27CleanLapStore cleanLaps;
     public PluginManager PluginManager { get; set; }
 
     public void Init(PluginManager pluginManager)
     {
         PluginManager = pluginManager;
+        telemetry = new Apex27IRacingTelemetry();
+        cleanLaps = new Apex27CleanLapStore(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PluginsData", "APEX27", "clean-laps.json"));
+        pluginManager.AttachDelegate("CleanLapRecordsJson", GetType(), new Func<string>(ReadCleanLaps));
         pluginManager.AttachDelegate("Code", GetType(), new Func<string>(ReadCode));
+        pluginManager.AttachDelegate("LiveTelemetry", GetType(), new Func<object>(ReadLiveTelemetry));
+        pluginManager.AttachDelegate("LiveTelemetryJson", GetType(), new Func<string>(ReadLiveTelemetryJson));
+        pluginManager.AttachDelegate("LiveTelemetryStatus", GetType(), new Func<string>(ReadTelemetryStatus));
     }
 
     public void End(PluginManager pluginManager)
     {
-        // No event subscription or background work to release.
+        ReadCleanLaps();
+        if (cleanLaps != null) cleanLaps.Flush();
+        cleanLaps = null;
+        if (telemetry != null) telemetry.Dispose();
+        telemetry = null;
         PluginManager = null;
+    }
+
+    private string ReadCleanLaps()
+    {
+        var store = cleanLaps;
+        if (store == null) return "{}";
+        var shared = SimHub.Plugins.OutputPlugins.Dash.TemplatingCommon.NCalcEngineBase.SharedStorage;
+        var offer = shared == null ? null : Convert.ToString(shared.GetOrDefault("APEX27", "clean-best-offer-v1", ""));
+        return store.Read(offer);
+    }
+
+    private object ReadLiveTelemetry()
+    {
+        var reader = telemetry;
+        return reader == null ? null : reader.Read();
+    }
+
+    private string ReadTelemetryStatus()
+    {
+        var reader = telemetry;
+        return reader == null ? "Stopped" : reader.Status;
+    }
+
+    private string ReadLiveTelemetryJson()
+    {
+        var reader = telemetry;
+        return reader == null ? null : reader.ReadJson();
     }
 
     internal static string ReadCode()

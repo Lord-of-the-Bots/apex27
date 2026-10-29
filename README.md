@@ -4,6 +4,10 @@ A free SimHub dashboard for a dedicated 16:9 fourth monitor. The 1920 × 1080 la
 
 [Download](https://github.com/Lord-of-the-Bots/apex27/releases/latest) · [Installation](INSTALL.md) · [Report a bug or suggest a change](https://github.com/Lord-of-the-Bots/apex27/issues)
 
+**iRacing is the focus of this release.** Telemetry handling, standings and update performance have been refined and optimized through roughly 20 races with repeated fixes between sessions. Other games have not received the same refinement and testing in this release cycle. Their existing integrations may work where suitable telemetry is available, but their current behaviour is unverified.
+
+The previews below show an earlier layout. The current release includes the revised traffic table, lap records, field ribbon and pedal graph described here.
+
 ![APEX 27](assets/standard-race.png)
 
 ## Two variants
@@ -18,13 +22,13 @@ Both variants retain automatic session views, lap prediction, the field ribbon, 
 ## Features
 
 - **Full driving instruments:** an analogue tachometer, speed and gear in the upper-right panel, with general flags in the top row. Both variants support pit speed information when available.
-- **Lap timing:** current, previous and predicted lap times, with all-time and session best references where available. The race view also keeps the fastest observed session lap, including invalid laps with an explicit INVALID label. BEST VALID remains the delta reference.
-- **Practice and qualifying:** a large current lap with its prediction below. All-time best and session best appear alongside, each with its own live delta. Sector deltas compare each sector with its independent best in the current session.
-- **Multiclass traffic:** the closest rivals ahead and behind in your class occupy fixed table rows, with nearby track traffic and your car between them. Labels distinguish race gaps from track intervals. Choose seven rows or five rows with larger text.
-- **Field overview:** a bottom ribbon shows cars around the lap when opponent track positions are available. The table includes each driver's last completed lap and individual flags when supplied by the game.
+- **Lap timing:** current, previous and predicted lap times, plus separate all-time personal clean, session inclusive and session clean records. The main iRacing delta uses an available valid all-time reference without waiting for a new session lap; prediction uses an available SimHub reference. Clean records are based on continuously observed laps; they are not an official validity verdict.
+- **Practice and qualifying:** a large current lap with prediction and live delta below, alongside the three best-lap records. Sector deltas compare each sector with its independent best in the current session.
+- **Multiclass traffic:** the closest rivals ahead and behind in your class occupy fixed table rows, with nearby track traffic and your car between them. Each row has one gap field: race gaps for fixed class rivals and track intervals for nearby traffic. Choose eleven compact rows, seven rows or five rows with larger text. Practice and warmup can show the driver table or the detailed timing view.
+- **Field overview:** a bottom ribbon shows cars around the lap when opponent track positions are available. Numbered circles sit at their actual track coordinates on a single rail. Opponents are drawn from last to first place; your larger blue circle is drawn on top. Pit circles are amber. The table includes each driver's last completed lap and individual flags when supplied by the game.
 - **iRacing information:** participant iRating, licence/SR, field size and mean iRating for the session and your class. Includes an approximate ΔiR for the current class finishing order when the session status and participant ratings allow it. Eligibility follows the official/unofficial flags supplied by iRacing; the dashboard does not independently determine the minimum field size of each series.
 - **Track map:** a square map beside the table uses SimHub's track geometry and stays visible in the pits. Tyre information or lap progress can take its place when a map is unavailable.
-- **Fuel and pedals:** compact fuel information and throttle, brake and clutch history, with ABS activity and approximately ten seconds of recent history. The lower-right panel can also show car and tyre information.
+- **Fuel and pedals:** compact fuel information and throttle, brake and clutch history using the original 4thMonitor graph with 400 points per channel, plus an ABS activity indicator. The lower-right panel can also show car and tyre information.
 - **Display settings:** manual or automatic language selection, standard or dim palette, table text size and lower-right panel choice.
 - **Session clock:** local time and the remaining time of the current session phase in the lower-left corner, alongside the field ribbon.
 
@@ -32,13 +36,13 @@ Both variants retain automatic session views, lap prediction, the field ribbon, 
 
 ## Games and telemetry
 
-Game-specific handling covers iRacing, Gran Turismo 7, Assetto Corsa, Assetto Corsa Competizione, Assetto Corsa EVO, Assetto Corsa Rally, Le Mans Ultimate, rFactor 2, Automobilista 2, RaceRoom, F1, DiRT Rally and EA WRC. Available panels follow the telemetry supplied by each game.
+The current refinement and optimization work targets **iRacing**. Existing handling also covers Gran Turismo 7, Assetto Corsa, Assetto Corsa Competizione, Assetto Corsa EVO, Assetto Corsa Rally, Le Mans Ultimate, rFactor 2, Automobilista 2, RaceRoom, F1, DiRT Rally and EA WRC. These other integrations have not been verified in this release cycle. Available panels follow the telemetry supplied by each game.
 
-Panels use the information received by SimHub. Missing times and deltas are shown as a dash. Fuel estimates require usable consumption data. Track maps require geometry saved, loaded or generated by SimHub from telemetry; a missing map does not necessarily indicate a dashboard problem.
+Panels use the information received by SimHub; the included bridge also reads the local iRacing telemetry feed directly for current race data. Missing times and deltas are shown as a dash. Fuel estimates require usable consumption data. Track maps require geometry saved, loaded or generated by SimHub from telemetry; a missing map does not necessarily indicate a dashboard problem.
 
 Sector references are the independent fastest valid sectors of the current session. Live comparison uses a matching trace recorded while the dashboard is open; **≈** marks interpolation between telemetry samples. The first sector starts at lap time zero. Until a matching valid-lap trace is available, live sector delta shows a dash and a recording notice. Missing sector telemetry does not prevent available lap times from being shown.
 
-In multiclass races, other classes are dimmed. Cars a lap ahead are blue; cars a lap behind are red. Fixed class rivals use race gaps, including whole-lap differences such as `1L`; nearby traffic uses track intervals. Mean iRating is an arithmetic mean and is hidden if participant ratings are incomplete.
+In multiclass races, other classes are dimmed. Cars a lap ahead are red; cars a lap behind are blue. Row labels use `+1 lap` for a car ahead and `−1 lap` for a car behind. After your finish, lap colours use the race results or recorded finish crossings rather than cooldown movement. Fixed class rivals use race gaps, including whole-lap differences such as `1L`; nearby traffic uses track intervals. Mean iRating includes all eligible roster entries, including cars in the pits or no longer on track, and is hidden if participant ratings are incomplete.
 
 Individual iRacing flags appear only when the corresponding telemetry is available. A yellow flag is a warning for a participant or their area, not an identification of a crashed car. A session-wide flag is not copied to every participant.
 
@@ -58,15 +62,15 @@ Previews labelled **SimHub / Demo track** use SimHub's built-in demonstration ma
 
 English, Russian, German, Spanish, French, Italian, Brazilian Portuguese, Polish, Czech, Turkish, Japanese, Korean and Simplified Chinese.
 
-Choose a language in **Language**. Manual selection needs no plugin and always takes priority. The optional `Apex27LanguagePlugin.dll` lets **Auto — SimHub** follow SimHub's interface language. Auto falls back to English if the bridge is unavailable or the language is unsupported.
+Choose a language in **Language**. Manual selection always takes priority. The included `Apex27LanguagePlugin.dll` provides the live map component and lets **Auto — SimHub** follow SimHub's interface language. Auto falls back to English if the language is unsupported.
 
 ## Installation
 
-Requires **SimHub 9.12 or newer** on Windows. GT7 position and field size require **SimHub 9.13 or newer**.
+Requires **SimHub 9.13.3 or newer** on Windows and the included `Apex27LanguagePlugin.dll`.
 
 Open `APEX 27.simhubdash` or `APEX 27 Full.simhubdash` and confirm the import in SimHub. Open the dashboard on your 16:9 display and choose its settings.
 
-The `plugins` folder is optional. For **Auto — SimHub**, close SimHub and copy only `plugins/Apex27LanguagePlugin.dll` beside `SimHubWPF.exe`, then restart SimHub and enable **APEX 27 language bridge**. See [INSTALL.md](INSTALL.md) for details.
+Before importing the dashboard, close SimHub and copy `plugins/Apex27LanguagePlugin.dll` beside `SimHubWPF.exe`, replacing the older bridge if present. Restart SimHub and enable **APEX 27 language bridge**. The DLL supplies the map component even when a language is selected manually. See [INSTALL.md](INSTALL.md) for details.
 
 ## Feedback
 
@@ -76,7 +80,7 @@ Suggestions for the displayed information, layout and element sizes are welcome 
 
 ## Build
 
-Run `python src/build.py` to create both dashboard files in `src/dist`. To build the optional language bridge, run `src/language-bridge/build.ps1 -SimHubDir "C:\Program Files (x86)\SimHub"` in PowerShell.
+Run `python src/build.py` to create both dashboard files in `releases/dashboards`. Build the required bridge with `src/language-bridge/build.ps1 -SimHubDir "C:\Program Files (x86)\SimHub"` in PowerShell. The bridge output is `src/language-bridge/bin/Apex27LanguagePlugin.dll`; copy it into `releases/plugins` alongside the dashboard folder.
 
 ## Support
 
