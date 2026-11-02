@@ -1,15 +1,17 @@
-# Install APEX 27 · v1.1.14
+# Install APEX 27 · v1.1.17
 
 Requires **SimHub 9.13.3 or newer** on Windows, the included bridge DLL and a working telemetry connection to the game.
 
-This release focuses on **iRacing**, with telemetry, standings and update performance refined and optimized through roughly 20 races and repeated fixes between sessions. Other games have not received the same refinement and testing in this release cycle. Their existing integrations may work with suitable telemetry, but their current behaviour is unverified.
+This update changes the dashboards only. It uses the existing **Apex27Plugin.dll 1.1.14.0**. If that DLL is already installed, keep it, import the updated dashboard and restart SimHub. The version shown in the dashboard corner should be **v1.1.17**.
+
+APEX 27 focuses on **iRacing**. Other games have not received the same refinement in this release cycle. Their existing integrations may work with suitable telemetry, but their current behaviour is unverified.
 
 ## Import and open
 
-1. Extract `APEX27-v1.1.14.zip` and open the extracted folder.
+1. Open the release folder; if supplied as a ZIP, extract it first. For a dashboard-only update with DLL 1.1.14.0 already installed, skip the DLL steps below.
    Close SimHub. For an upgrade, remove the former `Apex27LanguagePlugin.dll` from beside `SimHubWPF.exe`. Copy `plugins/Apex27Plugin.dll` beside `SimHubWPF.exe`, replacing an earlier copy of that same filename if present. Do not leave both plugin DLLs installed. Restart SimHub and enable **APEX 27 bridge**. Install this DLL before importing a dashboard: it supplies the live map component.
 2. Open either dashboard file and confirm the import in SimHub:
-   - `APEX 27.simhubdash` — companion layout for wheel or external RPM, gear and flag displays. Includes a large square map, wide pedal graphs and compact fuel information; omits RPM, gear and the general flag panel in every session mode.
+   - `APEX 27.simhubdash` — companion layout for wheel or external RPM, gear and flag displays. Includes a large track map, wide pedal graphs and compact fuel information; omits RPM, gear and the general flag panel in every session mode.
    - `APEX 27 Full.simhubdash` — for rigs that need driving instruments on screen, with an analogue tachometer, speed, gear and top-row flags.
 3. Open the dashboard on the intended display. The layout is **1920 × 1080, 16:9**.
 4. Choose a language in **Language** and adjust the dashboard settings.
@@ -28,7 +30,7 @@ Both variants retain automatic session views, lap prediction, traffic, the field
 
 It sends no driving or pit commands to the simulator. The plugin is required by both dashboard variants even when language selection is manual or another game is used. Only automatic language selection is optional.
 
-The former name, `Apex27LanguagePlugin.dll`, described its original translation role. Version 1.1.14 uses `Apex27Plugin.dll` and appears as **APEX 27 bridge** in SimHub. Update the DLL and dashboard together: older dashboard packages reference the old assembly and property names. Do not merely rename the old DLL. Existing clean records in `PluginsData/APEX27/clean-laps.json` are retained. The dashboard version appears in the upper-right corner; this DLL's file version is 1.1.14.0.
+The former name, `Apex27LanguagePlugin.dll`, described its original translation role. Since version 1.1.14 the plugin uses `Apex27Plugin.dll` and appears as **APEX 27 bridge** in SimHub. When upgrading from a version before 1.1.14, update the DLL and dashboard together: older dashboard packages reference the old assembly and property names. Do not merely rename the old DLL. Existing clean records in `PluginsData/APEX27/clean-laps.json` are retained. Dashboard and DLL versions are independent: dashboard 1.1.17 uses DLL 1.1.14.0.
 
 1. Close SimHub.
 2. Remove `Apex27LanguagePlugin.dll` if present, then copy only `Apex27Plugin.dll` from the release's `plugins` folder into the SimHub installation folder, beside `SimHubWPF.exe`. Do not copy the entire `plugins` folder.
@@ -46,7 +48,7 @@ Auto uses English if the bridge is unavailable or SimHub's language is not inclu
 
 Pedal colours are green for throttle, red for brake and blue for clutch. The ABS indicator shows current activity. **ABS —** means unavailable; **ABS ≈** identifies an estimated signal.
 
-The pedal graph uses the original 4thMonitor chart: three overlaid native SimHub traces with 400 points per channel and a scale in 20% steps. It reads SimHub’s Throttle, Brake and Clutch properties. Its time span depends on the incoming update rate. The colours follow the APEX palette; ABS remains a separate current-state indicator.
+In circuit views, both variants give pedal history an 800-pixel-wide panel below the map and fuel information. The graph uses the original 4thMonitor chart: three overlaid native SimHub traces with 400 points per channel and a scale in 20% steps. It reads SimHub’s Throttle, Brake and Clutch properties. Its time span depends on the incoming update rate. The colours follow the APEX palette; ABS remains a separate current-state indicator.
 
 Practice and qualifying automatically replace race-focused information with lap and sector timing. Race and practice views show three separate records: **ALL-TIME BEST · CLEAN**, **SESSION · ALL LAPS**, and **SESSION · CLEAN**. The inclusive session best may come from game timing or an observed completed lap, including a lap with detected errors.
 

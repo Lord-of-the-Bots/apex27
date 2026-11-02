@@ -1121,15 +1121,16 @@ a27race=(function(base){return function() {
   return base();
 };})(a27race);
 function h2irEntrants(raw) {
-  var key=h2irFrameKey(raw)+'|'+h2irNumber(raw,'SessionUniqueID'),cache=typeof A27_STATE!=='undefined'?A27_STATE.h2irRoster:null;
-  if(cache&&cache.key===key)return cache.entries;
+  var key=h2irObservationKey(raw),now=Date.now(),cache=A27_STATE.h2irRoster;
+  // Driver metadata does not change at telemetry frequency.
+  if(cache&&cache.key===key&&now>=cache.created&&now-cache.created<500)return cache.entries;
   var roster=h2irRoster(raw),entries=[],seen={},byCar={};
   for(var i=0,n=h2raceArrayLength(roster);i<n;i++) {
     var d=roster[i],car=h2raceNumber(h2irGet(d,'CarIdx'));
     if(!d||car===null||car<0||car>=512||car!==Math.floor(car)||seen[car]||a27active(h2irGet(d,'IsSpectator'))||a27active(h2irGet(d,'CarIsPaceCar')))continue;
     seen[car]=true;entries.push(d);byCar[car]=d;
   }
-  if(typeof A27_STATE!=='undefined')A27_STATE.h2irRoster={key:key,entries:entries,byCar:byCar};
+  if(typeof A27_STATE!=='undefined')A27_STATE.h2irRoster={key:key,created:Date.now(),entries:entries,byCar:byCar};
   return entries;
 }
 function h2irEntrant(raw,car) {
@@ -1253,9 +1254,8 @@ h2racePlan=(function(base){return function() {
   if(typeof A27_STATE!=='undefined')A27_STATE.h2irPlan={key:key,plan:plan};return plan;
 };})(h2racePlan);
 function h2irClassId(index,raw) {
-  var car=h2irDriver(index,raw),roster=h2irRoster(raw);
-  for(var i=0,n=h2raceArrayLength(roster);i<n;i++)if(h2raceNumber(roster[i].CarIdx)===car)return h2raceString(roster[i].CarClassID);
-  return '';
+  var car=h2irDriver(index,raw),entrant=h2irEntrant(raw,car);
+  return h2raceString(h2irGet(entrant,'CarClassID'));
 }
 function h2irDistance(raw,car) {
   if(car===null||car===undefined)return null;
@@ -1316,12 +1316,8 @@ function h2irPosition(raw,car,ownClass) {
   return null;
 }
 function h2irEstimatedLap(raw,car) {
-  var roster=h2irRoster(raw);
-  for(var i=0,n=h2raceArrayLength(roster);i<n;i++)if(h2raceNumber(roster[i].CarIdx)===car) {
-    var lap=h2raceNumber(h2irGet(roster[i],'CarClassEstLapTime'));
-    if(lap>0&&lap<86400)return lap;
-  }
-  return null;
+  var lap=h2raceNumber(h2irGet(h2irEntrant(raw,car),'CarClassEstLapTime'));
+  return lap>0&&lap<86400?lap:null;
 }
 function h2irRelative(index) {
   var raw=h2irRaw(),car=h2irDriver(index,raw),player=h2irNumber(raw,'PlayerCarIdx');
@@ -1558,15 +1554,51 @@ a27field=(function(base){return function(index,field) {
   return base(index,field);
 };})(a27field);
 function h2fieldDrawOrder() {
-  var key=a27ir()?h2irFrameKey(h2irRaw())+'|'+h2irNumber(h2irRaw(),'SessionUniqueID'):a27game()+'|'+Math.floor(Date.now()/50),cached=typeof A27_STATE!=='undefined'?A27_STATE.h2fieldOrder:null;
+  var ir=a27ir(),raw=ir?h2irRaw():null,standings=ir&&a27race()?h2irLiveStandings(raw):null;
+  var key=standings?standings.session+'|'+standings.frame+'|'+standings.state:ir?h2irObservationKey(raw)+'|'+h2irFrameKey(raw):a27game()+'|'+Math.floor(Date.now()/50);
+  var cached=A27_STATE.h2fieldOrder;
   if(cached&&cached.key===key)return cached.order;
-  var order=[];
-  for(var i=1,n=a27fieldCount();i<=n;i++)if(h2raceValid(i))order.push(i);
-  order.sort(function(a,b){return (h2raceRead(b,'position')||999)-(h2raceRead(a,'position')||999)||b-a;});
-  if(typeof A27_STATE!=='undefined')A27_STATE.h2fieldOrder={key:key,order:order};
-  return order;
+  var order=[],entries=standings?standings.entries.slice():[],i;
+  if(ir&&!standings) {
+    var roster=h2irEntrants(raw);
+    for(i=0;i<roster.length;i++) {
+      var car=h2raceNumber(h2irGet(roster[i],'CarIdx'));
+      entries.push({car:car,position:h2irSnapshotPosition(raw,car,false)});
+    }
+  }else if(!ir) {
+    for(i=1;i<=a27fieldCount();i++)if(h2raceValid(i))entries.push({car:i-1,position:h2raceRead(i,'position')});
+  }
+  // Sort completed values, never telemetry getters inside a comparator.
+  // Every marker property must use the same repetition-to-car mapping.
+  entries.sort(function(a,b){return (b.position||999)-(a.position||999)||b.car-a.car;});
+  for(i=0;i<entries.length;i++)order.push(entries[i].car+1);
+  A27_STATE.h2fieldOrder={key:key,order:order};return order;
 }
-function h2fieldIndex(repetition) {return h2fieldDrawOrder()[repetition-1]||null;}
+function h2fieldBegin() {
+  var now=Date.now(),hadFrozen=Object.prototype.hasOwnProperty.call(A27_STATE,'h2irFrozenRaw');
+  var previous=A27_STATE.h2irFrozenRaw,memoFrame=A27_STATE.h2tableMemoFrame,raw=h2irRaw();
+  A27_STATE.h2irFrozenRaw=raw;A27_STATE.h2tableMemoFrame=Math.floor(now/16);
+  try {
+    var order=h2fieldDrawOrder().slice(),rows=[],player=a27playerIndex();
+    for(var i=0;i<order.length;i++) {
+      var car=order[i];
+      rows.push({label:h2fieldLabel(car),left:h2fieldLeft(car),visible:a27field(car,'visible'),color:a27field(car,'color')});
+    }
+    A27_STATE.h2ribbonOrder=order;
+    A27_STATE.h2ribbonBatch={rows:rows,player:{label:h2fieldLabel(player),left:h2fieldLeft(player),visible:a27fieldPoint(player)!==null}};
+    return order.length;
+  }finally {
+    A27_STATE.h2tableMemoFrame=memoFrame;
+    if(hadFrozen)A27_STATE.h2irFrozenRaw=previous;else delete A27_STATE.h2irFrozenRaw;
+  }
+}
+function h2fieldMarker(repetition,part) {
+  var batch=A27_STATE.h2ribbonBatch,row=batch&&batch.rows[Number(repetition)-1];
+  return row?row[part]:part==='visible'?false:part==='left'?0:part==='color'?'#00000000':'';
+}
+function h2fieldIndex(repetition) {
+  return (A27_STATE.h2ribbonOrder||h2fieldDrawOrder())[repetition-1]||null;
+}
 function h2fieldPlayerIndex(index) {return index!==null&&index===a27playerIndex();}
 function h2fieldLabel(index) {
   var p=h2raceRead(index,'position');return p>0?String(p):'·';
@@ -1705,8 +1737,7 @@ function h2irExtraEntries(raw) {
   return entries;
 }
 function h2irExtraCar(raw,car,field) {
-  var roster=h2irRoster(raw),number='';
-  for(var i=0,n=h2raceArrayLength(roster);i<n;i++)if(h2raceNumber(roster[i].CarIdx)===car){number=h2raceString(roster[i].CarNumber);break;}
+  var number=h2raceString(h2irGet(h2irEntrant(raw,car),'CarNumber'));
   var path=h2irExtraEntries(raw)['$'+number];
   return path?a27p(path+field):null;
 }
@@ -1747,17 +1778,27 @@ function h2irFinishOrder(entries,ownClass) {
 }
 function h2irLiveStandings(raw) {
   if(!raw)return {entries:[],byCar:{}};
-  var replay=a27playback(),storage='standings-v5-'+(replay?'replay':'live'),session=h2irObservationKey(raw),frame=h2irFrameKey(raw),time=h2irNumber(raw,replay?'ReplaySessionTime':'SessionTime'),state=h2irState(raw);
+  var replay=a27playback(),storage='standings-v6-'+(replay?'replay':'live'),session=h2irObservationKey(raw),frame=h2irFrameKey(raw),time=h2irNumber(raw,replay?'ReplaySessionTime':'SessionTime'),state=h2irState(raw);
   if(time===null)time=h2irNumber(raw,'SessionTime');
   var saved=typeof A27_STATE!=='undefined'?A27_STATE.h2irLiveStandings:null;
-  if(saved&&saved.session===session&&saved.frame===frame)return saved;
+  // Classification has a display cadence, independent of the 60 Hz SDK feed.
+  // A packet arriving during a marker pass must not rebuild the whole field.
+  // Phase/session changes and replay seeks invalidate the retained result.
+  var observedAt=Date.now();
+  function reusable(value) {
+    if(!value||value.session!==session||value.state!==state)return false;
+    if(time!==null&&value.time!==null&&time<value.time-.5)return false;
+    return value.frame===frame||(typeof value.observedAt==='number'&&
+      observedAt>=value.observedAt&&observedAt-value.observedAt<500);
+  }
+  if(reusable(saved))return saved;
   // Formula roots are separate in SimHub. Share lost-car observations so map,
   // table and header retain the same distance when a car leaves the world.
   if(typeof getsharedvalueordefault==='function') {
     try {var shared=JSON.parse(String(getsharedvalueordefault('APEX27',storage,'null')));if(shared&&shared.session===session)saved=shared;}catch(e){}
   }
   if(!saved||saved.session!==session||(time!==null&&saved.time!==null&&time<saved.time-.5))saved={session:session,frame:null,time:time,history:{}};
-  if(saved.frame===frame){if(typeof A27_STATE!=='undefined')A27_STATE.h2irLiveStandings=saved;return saved;}
+  if(reusable(saved)){if(typeof A27_STATE!=='undefined')A27_STATE.h2irLiveStandings=saved;return saved;}
   var roster=h2irRoster(raw),entries=[],byCar={},classes={},lapLimit=h2irRaceLapLimit(raw),i,n;
   for(i=0,n=h2raceArrayLength(roster);i<n;i++) {
     var d=roster[i],car=h2raceNumber(h2irGet(d,'CarIdx'));
@@ -1839,7 +1880,7 @@ function h2irLiveStandings(raw) {
     h2irFinishOrder(entries,false);h2irFinishOrder(entries,true);
     entries.sort(function(a,b){return a.position-b.position||a.car-b.car;});
   }
-  saved.frame=frame;saved.time=time;saved.state=state;saved.entries=entries;saved.byCar=byCar;
+  saved.frame=frame;saved.time=time;saved.state=state;saved.entries=entries;saved.byCar=byCar;saved.observedAt=Date.now();
   if(typeof A27_STATE!=='undefined')A27_STATE.h2irLiveStandings=saved;
   if(typeof setsharedvalue==='function')setsharedvalue('APEX27',storage,JSON.stringify(saved));
   return saved;
@@ -2121,6 +2162,7 @@ function h2fieldLeft(index) {
 }
 function h2fieldLegend() { return a27t(215); }
 function h2fieldPlayer(part) {
+  if(A27_STATE.h2ribbonBatch)return A27_STATE.h2ribbonBatch.player[part];
   var index=a27playerIndex(),p=a27fieldPoint(index);
   if(part==='visible')return p!==null;
   if(part==='left')return h2fieldLeft(index);
@@ -2215,9 +2257,9 @@ function h2irFuelRaceRemaining(raw,total) {
 function h2irGaugeMapped(field) {
   return /^(Rpms|SpeedKmh|Gear|Throttle|Brake|Clutch|Fuel|FuelRaw|FuelPercent|MaxFuel|IsInPit|IsInPitLane|PitLimiterOn|ABSActive|BrakeBias|CurrentLapTime|LastLapTime|BestLapTime|SessionTimeLeft|CurrentLap|CompletedLaps|Flag_(Black|Orange|Blue|Checkered|Green|White|Yellow))$/.test(field);
 }
+var H2_IR_GAUGE_CHANNELS={Rpms:'RPM',SpeedKmh:'Speed',Gear:'Gear',Throttle:'Throttle',Brake:'Brake',Clutch:'Clutch',Fuel:'FuelLevel',FuelRaw:'FuelLevel',FuelPercent:'FuelLevelPct',BrakeBias:'dcBrakeBias',ABSActive:'BrakeABSactive',CurrentLapTime:'LapCurrentLapTime',LastLapTime:'LapLastLapTime',BestLapTime:'LapBestLapTime',SessionTimeLeft:'SessionTimeRemain',CurrentLap:'Lap',CompletedLaps:'LapCompleted'};
 function h2irGaugeValue(raw,field,fallback,fuelUnit) {
-  var simple={Rpms:'RPM',SpeedKmh:'Speed',Gear:'Gear',Throttle:'Throttle',Brake:'Brake',Clutch:'Clutch',Fuel:'FuelLevel',FuelRaw:'FuelLevel',FuelPercent:'FuelLevelPct',BrakeBias:'dcBrakeBias',ABSActive:'BrakeABSactive',CurrentLapTime:'LapCurrentLapTime',LastLapTime:'LapLastLapTime',BestLapTime:'LapBestLapTime',SessionTimeLeft:'SessionTimeRemain',CurrentLap:'Lap',CompletedLaps:'LapCompleted'};
-  var value,key=simple[field],number,scale=/^gallons?$/i.test(String(fuelUnit||''))?.264172:1;
+  var value,key=H2_IR_GAUGE_CHANNELS[field],number,scale=/^gallons?$/i.test(String(fuelUnit||''))?.264172:1;
   if(key) {
     value=h2irValue(raw,key);
     if(value===null||value===undefined)return fallback;
@@ -2476,3 +2518,10 @@ function h2ribbonSector(index,part) {
  if(part==='labelLeft')return Math.min(1834,48+1824*sector.pct+4);
  return 0;
 }
+
+// Reuse derived values across the labels and colours of the same render frame.
+a27fuel=h2frameMemo('fuel',a27fuel);
+a27fuelState=h2frameMemo('fuel-state',a27fuelState);
+a27flagList=h2frameMemo('flags',a27flagList);
+h2sectorData=h2frameMemo('sector-data',h2sectorData);
+h2sectorLiveDelta=h2frameMemo('sector-delta',h2sectorLiveDelta);

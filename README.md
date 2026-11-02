@@ -4,7 +4,7 @@ A free SimHub dashboard for a dedicated 16:9 fourth monitor. The 1920 × 1080 la
 
 [Download](https://github.com/Lord-of-the-Bots/apex27/releases/latest) · [Installation](INSTALL.md) · [Report a bug or suggest a change](https://github.com/Lord-of-the-Bots/apex27/issues)
 
-**iRacing is the focus of this release.** Telemetry handling, standings and update performance have been refined and optimized through roughly 20 races with repeated fixes between sessions. Other games have not received the same refinement and testing in this release cycle. Their existing integrations may work where suitable telemetry is available, but their current behaviour is unverified.
+**iRacing is the focus of this release.** Current changes cover live standings, telemetry handling and dashboard update workload. Other games have not received the same refinement in this release cycle. Their existing integrations may work where suitable telemetry is available, but their current behaviour is unverified.
 
 The previews below show the current dashboard rendered by SimHub with demonstration data. They illustrate the interface and are not captures from a live race.
 
@@ -14,8 +14,8 @@ The previews below show the current dashboard rendered by SimHub with demonstrat
 
 | Variant | Purpose |
 | --- | --- |
-| **APEX 27** | For rigs with RPM, gear and flag indicators on the wheel or external displays. A large square map, wide pedal graphs and compact fuel panel use the space; RPM, gear and the general flag panel are omitted in every session mode. |
-| **APEX 27 Full** | For rigs that need driving instruments on screen. Includes an analogue tachometer, speed, gear and top-row flags alongside lap timing, traffic, a square map, fuel and pedal history. |
+| **APEX 27** | For rigs with RPM, gear and flag indicators on the wheel or external displays. A large track map, wide pedal graphs and compact fuel panel use the space; RPM, gear and the general flag panel are omitted in every session mode. |
+| **APEX 27 Full** | For rigs that need driving instruments on screen. Includes an analogue tachometer, speed, gear and top-row flags alongside lap timing, traffic, a track map, fuel and pedal history. |
 
 Both variants retain automatic session views, lap prediction, the field ribbon, ratings and individual opponent flags where telemetry allows. Both include all 13 languages. They install separately and keep separate settings. Importing an update replaces the matching dashboard.
 
@@ -27,8 +27,8 @@ Both variants retain automatic session views, lap prediction, the field ribbon, 
 - **Multiclass traffic:** the closest rivals ahead and behind in your class occupy fixed table rows, with nearby track traffic and your car between them. Each row has one gap field: race gaps for fixed class rivals and track intervals for nearby traffic. Choose eleven compact rows, seven rows or five rows with larger text. Practice and warmup can show the driver table or the detailed timing view.
 - **Field overview:** a bottom ribbon shows cars around the lap when opponent track positions are available. Numbered circles sit at their actual track coordinates on a single rail. Opponents are drawn from last to first place; your larger blue circle is drawn on top. Pit circles are amber. The table includes each driver's last completed lap and individual flags when supplied by the game.
 - **iRacing information:** participant iRating, licence/SR, field size and mean iRating for the session and your class. Includes an approximate ΔiR for the current class finishing order when the session status and participant ratings allow it. Eligibility follows the official/unofficial flags supplied by iRacing; the dashboard does not independently determine the minimum field size of each series.
-- **Track map:** a square map beside the table uses SimHub's track geometry and stays visible in the pits. Tyre information or lap progress can take its place when a map is unavailable.
-- **Fuel and pedals:** compact fuel information and throttle, brake and clutch history using the original 4thMonitor graph with 400 points per channel, plus an ABS activity indicator. The lower-right panel can also show car and tyre information.
+- **Track map:** the map beside the table uses SimHub's track geometry and stays visible in the pits. Tyre information or lap progress can take its place when a map is unavailable.
+- **Fuel and pedals:** fuel information and an 800-pixel-wide pedal panel in circuit views, using the original 4thMonitor graph with 400 points per channel, plus an ABS activity indicator. The lower-right panel can also show car and tyre information.
 - **Display settings:** manual or automatic language selection, standard or dim palette, table text size and lower-right panel choice.
 - **Session clock:** local time and the remaining time of the current session phase in the lower-left corner, alongside the field ribbon.
 
@@ -74,9 +74,11 @@ The plugin is required for both dashboard variants, including when you choose a 
 
 Requires **SimHub 9.13.3 or newer** on Windows and the included `Apex27Plugin.dll`.
 
-Download and extract **APEX27-v1.1.14.zip** from the latest release. It contains both dashboards, the required plugin and installation instructions.
+Download and extract the **APEX27 ZIP** from the latest release. It contains both dashboards, the required plugin and installation instructions.
 
-Close SimHub. If upgrading, remove the old `Apex27LanguagePlugin.dll` from beside `SimHubWPF.exe`, then copy `plugins/Apex27Plugin.dll` into that folder. Do not keep both plugins installed. Restart SimHub and enable **APEX 27 bridge**, then import either file from `dashboards`. Update the dashboard and plugin together: older dashboards still refer to the old plugin name. Open the updated dashboard on your 16:9 display. See [INSTALL.md](INSTALL.md) for details.
+Version **1.1.17** updates the dashboards and retains **Apex27Plugin.dll 1.1.14.0**. If that DLL is already installed, import the updated dashboard and restart SimHub; no DLL replacement is needed.
+
+For a first installation or an upgrade from before 1.1.14, close SimHub, remove the old `Apex27LanguagePlugin.dll` if present, then copy `plugins/Apex27Plugin.dll` beside `SimHubWPF.exe`. Do not keep both plugins installed. Restart SimHub and enable **APEX 27 bridge**, then import either file from `dashboards`. Open the updated dashboard on your 16:9 display. See [INSTALL.md](INSTALL.md) for details.
 
 ## Feedback
 
