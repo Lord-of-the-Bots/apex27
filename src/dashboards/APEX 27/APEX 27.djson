@@ -31220,10 +31220,56 @@
         },
         {
           "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
-          "Name": "Local clock and session countdown",
+          "Name": "Local clock",
           "Left": 25,
+          "Top": 995,
+          "Width": 110,
+          "Height": 30,
+          "Visible": true,
+          "BackgroundColor": "#00000000",
+          "Font": "Segoe UI",
+          "FontSize": 26,
+          "FontWeight": "Bold",
+          "Text": "",
+          "TextColor": "#FFDEE6EC",
+          "HorizontalAlignment": 0,
+          "VerticalAlignment": 1,
+          "TextWrapping": 0,
+          "RenderingSkip": 0,
+          "MinimumRefreshIntervalMS": 1000,
+          "Bindings": {
+            "Font": {
+              "Formula": {
+                "JSExt": 1,
+                "Interpreter": 1,
+                "Expression": "return a27font();"
+              },
+              "Mode": 2
+            },
+            "Text": {
+              "Formula": {
+                "JSExt": 1,
+                "Interpreter": 1,
+                "Expression": "return h2localClock();"
+              },
+              "Mode": 2
+            },
+            "TextColor": {
+              "Formula": {
+                "JSExt": 1,
+                "Interpreter": 1,
+                "Expression": "return a27color(\"#FFDEE6EC\");"
+              },
+              "Mode": 2
+            }
+          }
+        },
+        {
+          "$type": "SimHub.Plugins.OutputPlugins.GraphicalDash.Models.TextItem, SimHub.Plugins",
+          "Name": "Session countdown",
+          "Left": 149,
           "Top": 999,
-          "Width": 865,
+          "Width": 741,
           "Height": 24,
           "Visible": true,
           "BackgroundColor": "#00000000",
@@ -31250,7 +31296,7 @@
               "Formula": {
                 "JSExt": 1,
                 "Interpreter": 1,
-                "Expression": "return h2footerTime();"
+                "Expression": "return h2footerTime(false);"
               },
               "Mode": 2
             },
@@ -31279,7 +31325,7 @@
           "Font": "Segoe UI",
           "FontWeight": "Normal",
           "FontSize": 12,
-          "Text": "v1.1.17",
+          "Text": "v1.1.18",
           "TextColor": "#FF96A6B4",
           "HorizontalAlignment": 2,
           "VerticalAlignment": 1,
@@ -31339,7 +31385,7 @@
     "SimHubVersion": "9.13.3",
     "Title": "APEX 27",
     "Author": "Lord-of-the-Bots",
-    "Description": "v1.1.17 / Companion dashboard for external RPM, gear and flag displays / expanded map and pedal history / adaptive session views / multiclass traffic / lap and sector timing",
+    "Description": "v1.1.18 / Companion dashboard for external RPM, gear and flag displays / expanded map and pedal history / adaptive session views / multiclass traffic / lap and sector timing",
     "ScreenCount": 1.0,
     "InGameScreensIndexs": [
       0

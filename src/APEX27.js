@@ -649,8 +649,11 @@ function h2sectorLiveDeltaColor() { return h2deltaColor(h2sectorLiveDelta()); }
 function h2sectorReferenceNote(current) {
   return current&&h2sectorLiveDelta()===null&&!a27invalid()?h2t('sectorLearning'):h2t('sectorReference');
 }
+function h2localClock() {
+  var now=new Date();return ('0'+now.getHours()).slice(-2)+':'+('0'+now.getMinutes()).slice(-2);
+}
 function h2footerTime() {
-  var now=new Date(),clock=('0'+now.getHours()).slice(-2)+':'+('0'+now.getMinutes()).slice(-2);
+  var clock=h2localClock();
   if(!a27live())return clock;
   var seconds=a27seconds(a27d('SessionTimeLeft')),key=h2sectorSessionKey();
   if(typeof A27_STATE!=='undefined'&&A27_STATE) {
@@ -1645,10 +1648,10 @@ function h2phase() {
   if(seconds!==null&&seconds>=0&&seconds<172800)text=h2duration(seconds);
   return {label:label,text:text};
 }
-h2footerTime=function() {
-  var now=new Date(),clock=('0'+now.getHours()).slice(-2)+':'+('0'+now.getMinutes()).slice(-2);
+h2footerTime=function(showClock) {
+  var clock=showClock===false?'':h2localClock();
   if(!a27live())return clock;
-  var phase=h2phase();return clock+'   ·   '+phase.label+'  '+phase.text;
+  var phase=h2phase();return (clock?clock+'   ·   ':'')+phase.label+'  '+phase.text;
 };
 
 h2raceText=(function(base){return function(slot,field) {
@@ -2063,16 +2066,28 @@ function h2lapOffer(state,seconds,invalid,estimated,covered) {
   if(!state.best||seconds<state.best.seconds-.0005||(!invalid&&Math.abs(seconds-state.best.seconds)<.0005))state.best=lap;
   if(!invalid&&(!a27ir()||covered))state.lastValid=lap;
 }
+function h2lapSuspend(state) {
+  if(state&&(state.previous||state.start!==null||state.pending||state.covered)) {
+    state.previous=null;state.start=null;state.pending=null;state.covered=false;
+    h2lapRecordsWrite(state);
+  }
+}
 function h2lapObserve() {
   var native=h2positiveTime('BestLapTime'),empty={best:native===null?null:{seconds:native,invalid:false,estimated:false,source:'game'},lastValid:null};
-  if(!a27live())return empty;
-  var raw=a27ir()?h2irRaw():null,key=a27ir()?h2irObservationKey(raw):h2sectorSessionKey()+'|'+(a27playback()?'replay':'live');
-  var s=h2lapSample(),state=h2lapRecordsRead(),restart=a27yes(a27d('IsSessionRestart'));
-  if(!state||state.key!==key||(restart&&!state.restart)||(state.previous&&s.time<state.previous.time-.1)) {
+  var state=h2lapRecordsRead(),ir=a27ir(),raw=ir?h2irRaw():null;
+  // A missing packet does not identify a new session. Keep completed records,
+  // but require a newly observed full lap before certifying another clean lap.
+  if(!a27live()||(ir&&!raw)){h2lapSuspend(state);return empty;}
+  var key=ir?h2irObservationKey(raw):h2sectorSessionKey()+'|'+(a27playback()?'replay':'live');
+  if(ir){var identity=key.split('|');if(!identity[1]||!identity[2]||!identity[3]||Number(identity[1])<0||Number(identity[2])<0||Number(identity[3])<0){h2lapSuspend(state);return empty;}}
+  var s=h2lapSample(),restart=a27yes(a27d('IsSessionRestart'));
+  var previousTime=state?(state.observedTime!==undefined?state.observedTime:state.previous?state.previous.time:null):null;
+  if(!state||state.key!==key||(restart&&!state.restart)||(previousTime!==null&&s.time<previousTime-.1)) {
     state={key:key,best:null,bestClean:null,lastValid:null,previous:null,start:null,covered:false,invalid:false,pit:false,pending:null,restart:restart};
     // Earlier lap times have no retained evidence for a clean-lap record.
   }
   state.restart=restart;
+  state.observedTime=s.time;
   if(native!==null&&(!state.best||native<=state.best.seconds))state.best={seconds:native,invalid:false,estimated:false,source:'game'};
   var prev=state.previous;
   if(prev&&s.wall===prev.wall&&s.time===prev.time&&s.p===prev.p&&s.last===prev.last&&s.normalizedInvalid===prev.normalizedInvalid&&s.telemetryInvalid===prev.telemetryInvalid&&s.incident===prev.incident&&s.pit===prev.pit)return state;
@@ -2140,7 +2155,7 @@ function h2lapValidityLabel(invalid) {
 h2raceBestLabel=function() {return h2t('sessionBest')+' · '+h2lapValidityLabel(h2raceBest().invalid);};
 // The footer runs in every live layout, including menus between stints. The
 // visible lap fields read the same native shared state without separate caches.
-h2footerTime=(function(base){return function(){h2lapObserve();return base();};})(h2footerTime);
+h2footerTime=(function(base){return function(showClock){h2lapObserve();return base(showClock);};})(h2footerTime);
 
 function h2lastValidLabel() {
   var labels={en:'LAST VALID',ru:'ПОСЛЕДНИЙ ЗАЧТЁННЫЙ',de:'LETZTE GÜLTIGE',es:'ÚLTIMA VÁLIDA',fr:'DERNIER VALIDE',it:'ULTIMO VALIDO','pt-BR':'ÚLTIMA VÁLIDA',pl:'OSTATNIE WAŻNE',cs:'POSLEDNÍ PLATNÉ',tr:'SON GEÇERLİ',ja:'直近の有効ラップ',ko:'최근 유효 랩',zh:'上个有效圈'};
@@ -2323,8 +2338,58 @@ a27p=(function(base){return function(name) {
   var value=h2irGaugeValue(raw,field,H2_IR_GAUGE_MISSING,fuelUnit);
   return value===H2_IR_GAUGE_MISSING?base(name):value;
 };})(a27p);
+// Separate bindings share the held lap clock, including bindings opened mid-pause.
+function h2irLapClockRead() {
+  var cached=A27_STATE.h2irLapClock;
+  if(typeof getsharedvalueordefault!=='function')return cached?cached.state:null;
+  var text=String(getsharedvalueordefault('APEX27','lap-clock-v1','')||'');
+  if(cached&&cached.text===text)return cached.state;
+  var state=null;
+  if(text)try{state=JSON.parse(text);}catch(e){}
+  A27_STATE.h2irLapClock={text:text,state:state};
+  return state;
+}
+function h2irLapClockWrite(state) {
+  var text=state?JSON.stringify(state):'',cached=A27_STATE.h2irLapClock;
+  if((!cached||cached.text!==text)&&typeof setsharedvalue==='function')setsharedvalue('APEX27','lap-clock-v1',text);
+  A27_STATE.h2irLapClock={text:text,state:state};
+  return state?state.value:null;
+}
+function h2irCurrentLapTime() {
+  var raw=h2irRaw(),previous=h2irLapClockRead();
+  var surface=h2irValue(raw,'PlayerTrackSurface');
+  if(!a27live()||!raw||a27menu()||a27playback()||!a27active(h2irValue(raw,'IsOnTrack'))||
+      h2irTowing(raw)||h2raceNumber(surface)===-1||String(surface).toLowerCase()==='notinworld')return h2irLapClockWrite(null);
+  var clock=h2irNumber(raw,'LapCurrentLapTime'),time=h2irNumber(raw,'SessionTime'),tick=h2irNumber(raw,'SessionTick');
+  if(clock===null||clock<0||clock>=86400||time===null)return h2irLapClockWrite(null);
+  var key=h2irObservationKey(raw),lap=h2irNumber(raw,'Lap'),paused=a27paused();
+  var packet=h2irNumber(raw,'TickCount'),now=Date.now();
+  // Another binding can still hold a packet from its 16 ms raw-data cache.
+  if(previous&&previous.key===key&&packet!==null&&previous.packet!==null&&packet<previous.packet&&
+      now>=previous.observed&&now-previous.observed<32)return previous.value;
+  if(lap===null)lap=h2irArray(raw,'CarIdxLap',h2irNumber(raw,'PlayerCarIdx'));
+  var observed=previous&&previous.key===key&&previous.packet===packet?previous.observed:now;
+  var state={key:key,lap:lap,time:time,tick:tick,packet:packet,observed:observed,raw:clock,value:clock,held:false};
+  if(!previous||previous.key!==key||previous.lap!==lap||time<previous.time||
+      (tick!==null&&previous.tick!==null&&tick<previous.tick))return h2irLapClockWrite(paused?null:state);
+  // Some adapters do not report an iRacing simulation pause. Neither a stopped
+  // simulation clock nor a stopped simulation tick may advance the lap clock.
+  var stopped=paused||time===previous.time||(tick!==null&&previous.tick!==null&&tick===previous.tick);
+  if(stopped) {
+    state.value=previous.value;
+    state.held=previous.held||paused||clock>previous.raw;
+  }else if(previous.held&&clock>=previous.value) {
+    // Discard a lap estimate's paused-time growth; resume on simulation time.
+    var expected=previous.value+time-previous.time;
+    state.held=clock>expected+.05;
+    if(state.held)state.value=expected;
+  }
+  return h2irLapClockWrite(state);
+}
 a27runTime=(function(base){return function() {
-  return a27ir()&&a27playback()?'—':base();
+  if(!a27ir())return base();
+  var seconds=h2irCurrentLapTime();
+  return a27time(seconds>0?{TotalSeconds:seconds}:null,true);
 };})(a27runTime);
 
 var H2_IR_GAUGE_MISSING={};
@@ -2460,13 +2525,18 @@ h2lapTiming=(function(base){return function(){
     if(reference!==null&&allDelta!==null&&isFinite(allDelta)&&Math.abs(allDelta)<86400){out.delta=allDelta;out.seconds=reference;out.kind='personal';out.source='all-time-record';}
   }
  var predicted=h2trackerPrediction();
+ if(!predicted){
+  var sessionBest=h2positiveTime('BestLapTime'),sessionDelta=h2nativeLapDelta('session');
+  if(sessionBest!==null&&sessionDelta!==null)predicted=h2timingPair('iracing-session','session',sessionBest,sessionDelta,sessionBest+sessionDelta);
+ }
   if(predicted){out.prediction=predicted.prediction;out.predictionSource=predicted.source;}
  return out;
 };})(h2lapTiming);
 function h2predictionTitle(){return a27t(144);}
 function h2personalContext(){
  if(!a27ir()||a27playback())return '';
- var raw=h2irRaw(),weekend=h2irSessionSection(raw,'WeekendInfo'),driver=h2irEntrant(raw,h2irNumber(raw,'PlayerCarIdx'));
+ var raw=h2irRaw();if(!raw)return '';
+ var weekend=h2irSessionSection(raw,'WeekendInfo'),driver=h2irEntrant(raw,h2irNumber(raw,'PlayerCarIdx'));
  var track=h2irGet(weekend,'TrackID')||a27d('TrackName'),car=h2irGet(driver,'CarID')||h2irGet(driver,'CarPath')||a27d('CarModel');
  if(!track||!car)return '';
  return JSON.stringify(['iracing',String(track),String(h2irGet(weekend,'TrackConfigName')||a27d('TrackConfig')||''),String(car)]);

@@ -4,7 +4,7 @@ A free SimHub dashboard for a dedicated 16:9 fourth monitor. The 1920 × 1080 la
 
 [Download](https://github.com/Lord-of-the-Bots/apex27/releases/latest) · [Installation](INSTALL.md) · [Report a bug or suggest a change](https://github.com/Lord-of-the-Bots/apex27/issues)
 
-**iRacing is the focus of this release.** Current changes cover live standings, telemetry handling and dashboard update workload. Other games have not received the same refinement in this release cycle. Their existing integrations may work where suitable telemetry is available, but their current behaviour is unverified.
+**iRacing is the focus of this release.** Current changes cover lap timing, record retention and clock readability. Other games have not received the same refinement in this release cycle. Their existing integrations may work where suitable telemetry is available, but their current behaviour is unverified.
 
 The previews below show the current dashboard rendered by SimHub with demonstration data. They illustrate the interface and are not captures from a live race.
 
@@ -22,7 +22,7 @@ Both variants retain automatic session views, lap prediction, the field ribbon, 
 ## Features
 
 - **Full driving instruments:** an analogue tachometer, speed and gear in the upper-right panel, with general flags in the top row. Both variants support pit speed information when available.
-- **Lap timing:** current, previous and predicted lap times, plus separate all-time personal clean, session inclusive and session clean records. The main iRacing delta uses an available valid all-time reference without waiting for a new session lap; prediction uses an available SimHub reference. Clean records are based on continuously observed laps; they are not an official validity verdict.
+- **Lap timing:** current, previous and predicted lap times, plus separate all-time personal clean, session inclusive and session clean records. The current iRacing lap clock holds while simulation time or its tick is stopped and is hidden outside the car or during tow. Completed session records survive temporary telemetry interruptions. The main iRacing delta uses an available valid all-time reference without waiting for a new session lap; prediction uses an available SimHub reference or a matching valid iRacing session-best time and delta. Clean records are based on continuously observed laps; they are not an official validity verdict.
 - **Practice and qualifying:** a large current lap with prediction and live delta below, alongside the three best-lap records. Sector deltas compare each sector with its independent best in the current session.
 - **Multiclass traffic:** the closest rivals ahead and behind in your class occupy fixed table rows, with nearby track traffic and your car between them. Each row has one gap field: race gaps for fixed class rivals and track intervals for nearby traffic. Choose eleven compact rows, seven rows or five rows with larger text. Practice and warmup can show the driver table or the detailed timing view.
 - **Field overview:** a bottom ribbon shows cars around the lap when opponent track positions are available. Numbered circles sit at their actual track coordinates on a single rail. Opponents are drawn from last to first place; your larger blue circle is drawn on top. Pit circles are amber. The table includes each driver's last completed lap and individual flags when supplied by the game.
@@ -30,7 +30,7 @@ Both variants retain automatic session views, lap prediction, the field ribbon, 
 - **Track map:** the map beside the table uses SimHub's track geometry and stays visible in the pits. Tyre information or lap progress can take its place when a map is unavailable.
 - **Fuel and pedals:** fuel information and an 800-pixel-wide pedal panel in circuit views, using the original 4thMonitor graph with 400 points per channel, plus an ABS activity indicator. The lower-right panel can also show car and tyre information.
 - **Display settings:** manual or automatic language selection, standard or dim palette, table text size and lower-right panel choice.
-- **Session clock:** local time and the remaining time of the current session phase in the lower-left corner, alongside the field ribbon.
+- **Session clock:** larger, bold local time in the lower-left corner, with the current session phase and its remaining time shown separately beside it.
 
 ![APEX 27 standard practice view](assets/standard-practice.png)
 
@@ -76,7 +76,7 @@ Requires **SimHub 9.13.3 or newer** on Windows and the included `Apex27Plugin.dl
 
 Download and extract the **APEX27 ZIP** from the latest release. It contains both dashboards, the required plugin and installation instructions.
 
-Version **1.1.17** updates the dashboards and retains **Apex27Plugin.dll 1.1.14.0**. If that DLL is already installed, import the updated dashboard and restart SimHub; no DLL replacement is needed.
+Version **1.1.18** updates the dashboards and retains **Apex27Plugin.dll 1.1.14.0**. If that DLL is already installed, import the updated dashboard and restart SimHub; no DLL replacement is needed.
 
 For a first installation or an upgrade from before 1.1.14, close SimHub, remove the old `Apex27LanguagePlugin.dll` if present, then copy `plugins/Apex27Plugin.dll` beside `SimHubWPF.exe`. Do not keep both plugins installed. Restart SimHub and enable **APEX 27 bridge**, then import either file from `dashboards`. Open the updated dashboard on your 16:9 display. See [INSTALL.md](INSTALL.md) for details.
 
